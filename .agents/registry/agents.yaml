@@ -1,16 +1,17 @@
 agents:
-  driver:
-    skill: driver
-    type: orchestrator
-
-  solver: { skill: skills/solver }
-  skeptic: { skill: skills/skeptic }
-  verifier: { skill: skills/verifier }
-  minimalist: { skill: skills/minimalist }
-  compliance_risk: { skill: skills/compliance-risk }
-  memory_agent: { skill: skills/memory-agent }
+  driver: { skill: driver, type: orchestrator }
+  spec_agent: { skill: skills/spec-agent, type: spec }
+  test_agent: { skill: skills/test-agent, type: test }
+  solver: { skill: skills/solver, type: generator }
+  skeptic: { skill: skills/skeptic, type: critic }
+  verifier: { skill: skills/verifier, type: validator }
+  memory_agent: { skill: skills/memory-agent, type: memory }
+  approval_gate: { skill: skills/approval-gate, type: governance }
 
 domain_experts:
-  security_iam: { skill: skills/domain/security-iam }
-  devops_platform: { skill: skills/domain/devops-platform }
-  backend_architect: { skill: skills/domain/backend-architect }
+  security_iam: { skill: skills/domain/security-iam, type: domain }
+  devops_platform: { skill: skills/domain/devops-platform, type: domain }
+  backend_architect: { skill: skills/domain/backend-architect, type: domain }
+
+agents:
+  nfr_agent: { skill: skills/nfr-agent, type: non_functional }

@@ -43,6 +43,20 @@ Never mix modes.
 4. High-risk actions require Decision Card + approval.
 5. No hidden state. Repo is source of truth.
 
+## Ordering Constraint (Non-negotiable)
+SPEC must exist before SOLVER planning.
+TEST must exist before any execution/build steps.
+VERIFIER PASS must exist before any memory write.
+
+## Required sequence per workflow
+1) SpecAgent produces SPEC Card
+2) TestAgent produces TEST Card
+3) Solver produces plan
+4) Skeptic challenges
+5) Verifier issues receipt
+6) ApprovalGate issues decision cards if required
+7) MemoryAgent may write only if receipt PASS
+
 ## Week 1 Behavior
 - Only Driver Position Card is allowed.
 - Verifier assumed missing → all verification = PENDING.
