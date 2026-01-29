@@ -52,6 +52,18 @@ Read these:
 
 ---
 
+### 🤝 **Org Adoption & Change Management?**
+
+Start here:
+1. [adoption/README.md](adoption/README.md) — Adoption narrative anchor
+2. [adoption/team_onboarding.md](adoption/team_onboarding.md) — Engineer onboarding
+3. [adoption/manager_faq.md](adoption/manager_faq.md) — Manager FAQ
+4. [adoption/first_30_days.md](adoption/first_30_days.md) — First 30 days plan
+5. [adoption/anti_patterns.md](adoption/anti_patterns.md) — Anti-patterns to avoid
+6. [adoption/success_metrics.md](adoption/success_metrics.md) — Adoption success metrics
+
+---
+
 ## Document Directory
 
 ### Root Level
@@ -62,6 +74,17 @@ Read these:
 | `PLANNING.md` | Complete 18-week roadmap | Want full delivery plan |
 | `CONTEXT_COMPLETE.md` | What context has been created | Want to know what's ready |
 | `NAVIGATION_MAP.md` | This file | You are here |
+
+### `adoption/` (Org Adoption Playbook)
+
+| File | Purpose | Read If |
+|------|---------|---------|
+| `adoption/README.md` | Adoption narrative anchor | You need the why, fast |
+| `adoption/team_onboarding.md` | Engineer onboarding | You want low-friction onboarding |
+| `adoption/manager_faq.md` | Manager FAQs | You need manager alignment |
+| `adoption/first_30_days.md` | First 30 days plan | You want a staged rollout |
+| `adoption/anti_patterns.md` | What not to do | You want to avoid backlash |
+| `adoption/success_metrics.md` | Success metrics | You need adoption KPIs |
 
 ### `.agents/docs/` (Core Architecture)
 
@@ -119,6 +142,15 @@ Read these:
 - **How to customize?** → [.agents/docs/DISTRIBUTION.md](.agents/docs/DISTRIBUTION.md#constraint-1-always-distribute-source)
 - **Org adoption?** → [.agents/docs/DISTRIBUTION.md](.agents/docs/DISTRIBUTION.md#internal-adoption-strategy-for-your-organization)
 
+### 🤝 **Org Adoption Playbook**
+
+- **What is the adoption story?** → [adoption/README.md](adoption/README.md)
+- **Engineer onboarding?** → [adoption/team_onboarding.md](adoption/team_onboarding.md)
+- **Manager FAQ?** → [adoption/manager_faq.md](adoption/manager_faq.md)
+- **30-day rollout?** → [adoption/first_30_days.md](adoption/first_30_days.md)
+- **Anti-patterns?** → [adoption/anti_patterns.md](adoption/anti_patterns.md)
+- **Success metrics?** → [adoption/success_metrics.md](adoption/success_metrics.md)
+
 ### 📅 **Delivery Schedule**
 
 - **18-week roadmap?** → [PLANNING.md](PLANNING.md#18-week-sprint-roadmap)
@@ -148,6 +180,7 @@ sdlc_agent_swarm/
 ├─ PLANNING.md                         ← 18-week roadmap
 ├─ CONTEXT_COMPLETE.md                 ← What's been created
 ├─ NAVIGATION_MAP.md                   ← This file
+├─ adoption/                           ← Org adoption playbook
 │
 ├─ .agents/
 │  ├─ docs/

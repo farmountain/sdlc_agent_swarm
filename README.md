@@ -102,6 +102,15 @@ Output: Next 3 Actions + Evidence Log
 10. **[`.agents/docs/DISTRIBUTION.md`](.agents/docs/DISTRIBUTION.md)** — Phase 1 (repo-native) + Phase 2 (extension) strategy
 11. **[`.agents/docs/WEEK1_CONSTRAINTS.md`](.agents/docs/WEEK1_CONSTRAINTS.md)** — 5 critical design constraints that keep the system extensible
 
+### 🤝 Org Adoption Playbook
+
+12. **[adoption/README.md](adoption/README.md)** — Adoption narrative anchor
+13. **[adoption/team_onboarding.md](adoption/team_onboarding.md)** — Engineer onboarding
+14. **[adoption/manager_faq.md](adoption/manager_faq.md)** — Manager FAQ
+15. **[adoption/first_30_days.md](adoption/first_30_days.md)** — First 30 days rollout plan
+16. **[adoption/anti_patterns.md](adoption/anti_patterns.md)** — Anti-patterns to avoid
+17. **[adoption/success_metrics.md](adoption/success_metrics.md)** — Adoption success metrics
+
 ## 🤖 Agent Roles
 
 | Role | Type | Responsibility |
@@ -205,6 +214,9 @@ Human responds: ✅ APPROVE | ❌ REJECT | 🔁 REVISE
 - [EXTENSION_READINESS.md](.agents/docs/EXTENSION_READINESS.md) — Future-proof for VS Code extension conversion
 - [DISTRIBUTION.md](.agents/docs/DISTRIBUTION.md) — Phase 1 (repo-native) + Phase 2 (extension) strategy
 - [WEEK1_CONSTRAINTS.md](.agents/docs/WEEK1_CONSTRAINTS.md) — 5 critical design constraints that keep the system extensible
+- [adoption/README.md](adoption/README.md) — Org adoption narrative
+- [adoption/team_onboarding.md](adoption/team_onboarding.md) — Engineer onboarding
+- [adoption/manager_faq.md](adoption/manager_faq.md) — Manager FAQ
 
 ---
 
