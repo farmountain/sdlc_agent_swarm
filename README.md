@@ -1,2 +1,211 @@
-# sdlc_agent_swarm
-A quick replicate of my Codex Boaster project using VS code no code agentic framework
+# SDLC Agent Swarm
+
+A **no-code, text-driven multi-agent swarm** for end-to-end SDLC orchestration inside VS Code using **Agent Skills** (Markdown/YAML) as the open standard. A quick replicate of my private Codex Boaster project using VS Code's no-code agentic framework.
+
+## 🎯 Vision
+
+**Collective intelligence with safe consensus collapse**: 
+- Solver proposes → Skeptic challenges → Domain Experts enforce → Minimalist simplifies → Verifier validates → Memory persists
+- **Human approval gates** for critical decisions
+- **Enterprise world model** backing all decisions (requirements, invariants, compliance)
+- **No code required** — pure Markdown/YAML configuration
+
+## 🏗️ Architecture
+
+```
+AGENT SWARM ORCHESTRATION
+
+User Request
+    ↓
+┌───────────────────────────────────────────────┐
+│           DRIVER AGENT (Orchestrator)         │
+│   Reads: workflows.yaml, agents.yaml          │
+└───────────────────────────────────────────────┘
+    ↓
+Parallel Ideation + Critique:
+  [Solver] [Skeptic] [Domain Experts]
+    ↓
+  [Minimalist] [Verifier]
+    ↓
+Collapse Policy (Weighted Consensus)
+    ↓
+Approval Gate (if needed) → Human Decision
+    ↓
+Memory Agent (Verification Receipt Required)
+    ↓
+Output: Next 3 Actions + Evidence Log
+```
+
+## 🗂️ Directory Structure
+
+```
+.agents/
+├── registry/                    # Skill map + workflow definitions
+│   ├── agents.yaml             # All agent roles and permissions
+│   ├── workflows.yaml          # SDLC recipes (plan_to_prd, code_change, infra_deploy, security_review)
+│   ├── risk_policy.yaml        # Risk categorization
+│   └── collapse_policy.md      # Weighted consensus rules
+├── driver/                      # Entry point + orchestration
+│   ├── skill.md                # Driver agent definition
+│   ├── runbook.md              # Step-by-step protocol
+│   └── approval.md             # Approval gate definitions
+├── memory/                      # Persistent enterprise state
+│   ├── world_model.yaml        # Enterprise requirements & invariants
+│   ├── evidence_log.md         # Evidence references
+│   ├── decisions_log.md        # Decision history
+│   └── snapshots/              # Timestamped state records
+├── skills/                      # Agent implementations (TBD)
+│   ├── solver/
+│   ├── skeptic/
+│   ├── minimalist/
+│   ├── verifier/
+│   ├── domain/
+│   │   ├── backend-architect/
+│   │   ├── frontend-architect/
+│   │   ├── devops-platform/
+│   │   ├── security-iam/
+│   │   └── data-architect/
+│   ├── compliance-risk/
+│   └── memory-agent/
+└── docs/                        # Full documentation
+    ├── ARCHITECTURE.md          # System design & orchestration flow
+    ├── WORKFLOWS.md             # Workflow specifications
+    ├── AGENT_ROLES.md           # Agent role definitions
+    └── GETTING_STARTED.md       # Quick start & usage examples
+```
+
+## 📚 Documentation
+
+### 🚀 Quick Start
+
+1. **[NAVIGATION_MAP.md](NAVIGATION_MAP.md)** — Find what you need (guided navigation)
+2. **[PLANNING.md](PLANNING.md)** — Complete 18-week delivery roadmap
+3. **[CONTEXT_DELIVERY_CHECKLIST.md](CONTEXT_DELIVERY_CHECKLIST.md)** — What's been created
+
+### 📖 Core Documentation
+
+1. **[`.agents/docs/ARCHITECTURE.md`](.agents/docs/ARCHITECTURE.md)** — System design, orchestration flow, and core principles
+2. **[`.agents/docs/WORKFLOWS.md`](.agents/docs/WORKFLOWS.md)** — Available workflows (plan_to_prd, code_change, infra_deploy, security_review)
+3. **[`.agents/docs/AGENT_ROLES.md`](.agents/docs/AGENT_ROLES.md)** — What each agent does (Solver, Skeptic, Verifier, Domain Experts, Memory Agent)
+4. **[`.agents/docs/GETTING_STARTED.md`](.agents/docs/GETTING_STARTED.md)** — Usage examples and quick start guide
+
+### 🔐 Governance & Extensibility
+
+5. **[`.agents/docs/THIN_EXTENSION_CONTRACT.md`](.agents/docs/THIN_EXTENSION_CONTRACT.md)** — What the VS Code extension will/won't do (wrapper only)
+6. **[`.agents/docs/EXTENSION_STABLE_INTERFACE.md`](.agents/docs/EXTENSION_STABLE_INTERFACE.md)** — Fixed paths, protocols, schemas (ESI-1 through ESI-7)
+7. **[`.agents/docs/SDLC_AGENTIC_LIFECYCLE.md`](.agents/docs/SDLC_AGENTIC_LIFECYCLE.md)** — 7-stage lifecycle (SPEC → TEST → PLAN → EXECUTE → VERIFY → RECORD → REFLECT)
+8. **[`.agents/docs/DUAL_LOOP_DESIGN.md`](.agents/docs/DUAL_LOOP_DESIGN.md)** — Loop 1 (builder/product) vs Loop 2 (user/runtime)
+
+### 📦 Strategy & Planning
+
+9. **[`.agents/docs/EXTENSION_READINESS.md`](.agents/docs/EXTENSION_READINESS.md)** — Future-proof for VS Code extension conversion
+10. **[`.agents/docs/DISTRIBUTION.md`](.agents/docs/DISTRIBUTION.md)** — Phase 1 (repo-native) + Phase 2 (extension) strategy
+11. **[`.agents/docs/WEEK1_CONSTRAINTS.md`](.agents/docs/WEEK1_CONSTRAINTS.md)** — 5 critical design constraints that keep the system extensible
+
+## 🤖 Agent Roles
+
+| Role | Type | Responsibility |
+|------|------|-----------------|
+| **Driver** | Orchestrator | Entry point; manages workflow orchestration & consensus |
+| **Solver** | Generator | Proposes solution + plan |
+| **Skeptic** | Critic | Challenges assumptions; finds failure modes |
+| **Minimalist** | Simplifier | Reduces to smallest viable solution |
+| **Verifier** | Validator | Validates against world model invariants |
+| **Domain Experts** | Specialist | Backend, Frontend, DevOps, Security, Data architects |
+| **Memory Agent** | Memory | Persists decisions (with Verifier receipt only) |
+| **Compliance-Risk** | Risk | Flags regulatory/security risks |
+
+## 🔄 Workflows
+
+Four core SDLC workflows (extensible):
+
+1. **`plan_to_prd`** — Generate PRD with full risk assessment → `prd_signoff` gate
+2. **`code_change`** — Plan implementation with minimal ceremony → `merge_approval` gate
+3. **`infra_deploy`** — Deploy to production with high governance → `prod_deploy` gate
+4. **`security_review`** — Security assessment of changes → `security_signoff` gate
+
+## 🚀 How to Use (Once Built)
+
+In Copilot Chat / Agent Mode:
+
+```
+Use Driver. Workflow: plan_to_prd. 
+Product: "Real-time notification service". 
+Constraints: "Sub-100ms latency, multi-tenant, HIPAA compliant"
+```
+
+Driver will:
+1. Invoke swarm (Solver → Backend Architect → Skeptic → Verifier)
+2. Collect Position Cards from each agent
+3. Apply collapse policy (weighted consensus)
+4. Produce Decision Card with approval gate
+5. After human approval → update memory
+
+**Output includes**:
+- Next 3 actions
+- Risk assessment
+- Rollback plan
+- Approval status
+
+## 🏛️ Enterprise World Model
+
+All decisions validated against:
+
+```yaml
+enterprise_requirements:
+  identity_access: [OIDC, SAML, RBAC, ABAC, secrets rotation]
+  tenancy: [logical isolation, row-level security, per-tenant rate limits]
+  deployment: [multi-cluster, blue-green, canary, rollback required]
+  cicd: [pipelines, SAST, dependency scan, IaaC scan]
+  observability: [logs, metrics, tracing]
+  compliance: [PII handling, audit logs, retention]
+
+invariants:
+  - "All write operations require audit trail"
+  - "AuthZ must gate every sensitive endpoint"
+  - "Tenancy boundaries enforced at data + API layers"
+```
+
+**Memory Agent writes only if Verifier ✅ and all invariants satisfied.**
+
+## ✅ Approval Gates
+
+Human-in-the-loop decisions:
+
+- **`prd_signoff`** — PRD scope, budget, implications
+- **`merge_approval`** — Code changes to core modules
+- **`prod_deploy`** — Production deployments, infra mutations
+- **`security_signoff`** — AuthN/AuthZ, PII, compliance
+- **`data_migration`** — Schema changes, irreversible transforms
+
+Human responds: ✅ APPROVE | ❌ REJECT | 🔁 REVISE
+
+## 🔐 Key Principles
+
+1. **Text First** — Everything is YAML/Markdown. No code required.
+2. **Verifier Guards Memory** — Memory only writes with Verification Receipt.
+3. **Collapse = Consensus** — Driver uses weighted collapse policy for safe agreement.
+4. **Human Approval on Risk** — Risky decisions gated by human approval.
+5. **Evidence is Traceable** — All decisions link to files, PRs, standards.
+6. **Invariants are Hard** — World model rules are non-negotiable.
+
+## 📋 Development Phases
+
+- **Phase 1** ✅ **Documentation** (NOW) — Architecture, workflows, agent roles, getting started
+- **Phase 2** (Next) — Registry (`agents.yaml`, `workflows.yaml`) + World Model + Driver skill
+- **Phase 3** — Agent skills (Solver, Skeptic, Verifier, Domain Experts, Memory Agent)
+- **Phase 4** — Operational excellence (automation, integration, monitoring)
+
+## 🔗 Quick Links
+
+- [ARCHITECTURE.md](.agents/docs/ARCHITECTURE.md) — Read this first
+- [WORKFLOWS.md](.agents/docs/WORKFLOWS.md) — See workflow specs
+- [AGENT_ROLES.md](.agents/docs/AGENT_ROLES.md) — Understand agent responsibilities
+- [GETTING_STARTED.md](.agents/docs/GETTING_STARTED.md) — Usage examples & quick start
+- [EXTENSION_READINESS.md](.agents/docs/EXTENSION_READINESS.md) — Future-proof for VS Code extension conversion
+- [DISTRIBUTION.md](.agents/docs/DISTRIBUTION.md) — Phase 1 (repo-native) + Phase 2 (extension) strategy
+- [WEEK1_CONSTRAINTS.md](.agents/docs/WEEK1_CONSTRAINTS.md) — 5 critical design constraints that keep the system extensible
+
+---
+
+**A quick replicate of the Codex Boaster project using VS Code's no-code agentic framework.**

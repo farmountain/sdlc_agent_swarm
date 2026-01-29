@@ -1,0 +1,12 @@
+workflows:
+  plan_to_prd:
+    intent: "Spec-first PRD creation"
+    approvals: [prd_signoff]
+
+  architecture_review:
+    intent: "Validate against enterprise invariants"
+    approvals: [security_signoff]
+
+  release_readiness:
+    intent: "Evidence-gated release"
+    approvals: [prod_deploy]

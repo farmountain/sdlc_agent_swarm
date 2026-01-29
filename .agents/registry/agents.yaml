@@ -1,0 +1,16 @@
+agents:
+  driver:
+    skill: driver
+    type: orchestrator
+
+  solver: { skill: skills/solver }
+  skeptic: { skill: skills/skeptic }
+  verifier: { skill: skills/verifier }
+  minimalist: { skill: skills/minimalist }
+  compliance_risk: { skill: skills/compliance-risk }
+  memory_agent: { skill: skills/memory-agent }
+
+domain_experts:
+  security_iam: { skill: skills/domain/security-iam }
+  devops_platform: { skill: skills/domain/devops-platform }
+  backend_architect: { skill: skills/domain/backend-architect }

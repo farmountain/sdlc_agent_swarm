@@ -1,0 +1,4 @@
+invariants:
+  - "No hidden state"
+  - "No memory write without verification"
+  - "Extension compatibility preserved"
