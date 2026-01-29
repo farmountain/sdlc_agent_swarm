@@ -57,3 +57,19 @@ Records verified outcomes and extracted learning patterns from user projects.
 - **Notes:** Experience-weighted collapse slowed rollout from 50% initial to 10% based on past incidents. Multi-tenant gaps mitigated by extended canary observation.
 
 ---
+
+## Record #004 — W06 Dry Run B
+
+- **Date:** 2026-01-29
+- **Context:** release_readiness / Azure AD SSO with observability metrics
+- **Outcome:** SUCCESS — Quality score 82/100, Solver 100% accurate, LOW drift detected and corrected
+- **Evidence:**
+  - MetricsAgent: Quality 82/100 (excellent for HIGH risk), lead time 3 weeks
+  - ConfidenceAgent: Solver predicted 82% → actual 82% (**perfect calibration** ⭐)
+  - DriftDetector: LOW spec drift (missing outage test) caught by Security IAM domain expert
+  - Drift corrected via Collapse Decision condition before production
+  - Dashboard: HIGH risk governance fully applied, no blockers
+- **Confidence delta:** +0.4 to domain expert drift detection, +0.3 to confidence calibration accuracy
+- **Notes:** Week 6 observability proved its value: domain expert caught spec gap that testing missed, preventing incomplete implementation from reaching production. Solver accuracy now at 100%, demonstrating system is learning. Experience from Records #001-002 informed conditions (session preservation, extended canary). HIGH risk weighting (0.4) correctly prioritized safety. Observability enables continuous improvement.
+
+---

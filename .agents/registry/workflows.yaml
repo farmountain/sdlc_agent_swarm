@@ -27,6 +27,10 @@ workflows:
       - risk_scorer
       - collapse_agent
       - verifier
+      - metrics_agent
+      - confidence_agent
+      - drift_detector
+      - dashboard_agent
       - approval_gate
       - memory_agent
     approvals: [security_signoff]
@@ -45,6 +49,10 @@ workflows:
       - risk_scorer
       - collapse_agent
       - verifier
+      - metrics_agent
+      - confidence_agent
+      - drift_detector
+      - dashboard_agent
       - release_manager
       - memory_agent
     approvals: [prod_deploy]

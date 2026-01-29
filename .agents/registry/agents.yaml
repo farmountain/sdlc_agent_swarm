@@ -20,3 +20,7 @@ agents:
   experience_agent: { skill: skills/experience-agent, type: learning }
   collapse_agent: { skill: skills/collapse-agent, type: convergence }
   risk_scorer: { skill: skills/risk-scorer, type: risk }
+  metrics_agent: { skill: skills/metrics-agent, type: metrics }
+  confidence_agent: { skill: skills/confidence-agent, type: calibration }
+  drift_detector: { skill: skills/drift-detector, type: guard }
+  dashboard_agent: { skill: skills/dashboard-agent, type: reporting }

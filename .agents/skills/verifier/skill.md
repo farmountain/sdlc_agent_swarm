@@ -55,3 +55,12 @@ Verifier must confirm:
 - No unresolved conflicts remain
 
 Missing → FAIL.
+
+## Observability Checks (Week 6+)
+
+Verifier must ensure:
+- MetricsAgent and ConfidenceAgent outputs exist
+- DriftDetector has been run
+- Any HIGH drift is acknowledged or blocked
+
+Unacknowledged HIGH drift → FAIL.
