@@ -2,3 +2,12 @@ invariants:
   - "No hidden state"
   - "No memory write without verification"
   - "Extension compatibility preserved"
+
+extension_principles:
+  architecture: "Registry-based plugin system"
+  versioning: "Semantic versioning with pinning required"
+  isolation: "Sandboxed execution for third-party skills"
+  discovery: "Dynamic registry scanning at runtime"
+  safety: "Failed extensions must not crash core swarm"
+  decided: "2026-01-29 (W05 Dry Run A)"
+  risk_score: 65

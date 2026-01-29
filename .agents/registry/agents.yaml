@@ -17,3 +17,6 @@ agents:
   nfr_agent: { skill: skills/nfr-agent, type: non_functional }  cicd_agent: { skill: skills/cicd-agent, type: pipeline }
   release_manager: { skill: skills/release-manager, type: release }
   prod_safety: { skill: skills/prod-safety-agent, type: safety }
+  experience_agent: { skill: skills/experience-agent, type: learning }
+  collapse_agent: { skill: skills/collapse-agent, type: convergence }
+  risk_scorer: { skill: skills/risk-scorer, type: risk }

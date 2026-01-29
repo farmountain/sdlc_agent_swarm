@@ -45,3 +45,13 @@ Verifier must confirm:
 - Required approvals identified and present
 
 If any missing → FAIL.
+
+## Convergence Checks (Week 5+)
+
+Verifier must confirm:
+- Collapse Decision exists
+- Weighting rationale is explicit
+- Risk score aligns with applied gates
+- No unresolved conflicts remain
+
+Missing → FAIL.
