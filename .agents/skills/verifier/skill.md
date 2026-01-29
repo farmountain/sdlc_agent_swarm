@@ -35,3 +35,13 @@ Verifier must explicitly check:
 - Evidence pointers are concrete (repo paths)
 
 If any item fails → Status=FAIL.
+## Release Verification Checklist (Week 4+)
+
+Verifier must confirm:
+- CI/CD Evidence Card exists
+- All TEST + NFR tests have pipeline coverage
+- Production Safety Card exists
+- Rollback plan is documented
+- Required approvals identified and present
+
+If any missing → FAIL.

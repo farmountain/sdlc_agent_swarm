@@ -29,14 +29,16 @@ workflows:
     approvals: [security_signoff]
 
   release_readiness:
-    intent: "Enterprise release readiness"
+    intent: "Evidence-gated production release"
     steps:
       - driver
       - test_agent
       - nfr_agent
+      - cicd_agent
+      - prod_safety
       - domain_experts.devops_platform
       - skeptic
       - verifier
-      - approval_gate
+      - release_manager
       - memory_agent
     approvals: [prod_deploy]

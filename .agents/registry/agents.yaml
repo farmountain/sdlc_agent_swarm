@@ -14,4 +14,6 @@ domain_experts:
   backend_architect: { skill: skills/domain/backend-architect, type: domain }
 
 agents:
-  nfr_agent: { skill: skills/nfr-agent, type: non_functional }
+  nfr_agent: { skill: skills/nfr-agent, type: non_functional }  cicd_agent: { skill: skills/cicd-agent, type: pipeline }
+  release_manager: { skill: skills/release-manager, type: release }
+  prod_safety: { skill: skills/prod-safety-agent, type: safety }
