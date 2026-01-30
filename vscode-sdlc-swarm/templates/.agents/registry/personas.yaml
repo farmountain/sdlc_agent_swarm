@@ -1,0 +1,6 @@
+driver:
+  style: "Protocol-first, evidence-first"
+engineer:
+  style: "Tasks + acceptance criteria"
+exec:
+  style: "Decision cards + risks"

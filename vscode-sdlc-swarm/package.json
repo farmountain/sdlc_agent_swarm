@@ -1,0 +1,146 @@
+{
+  "name": "sdlc-swarm",
+  "displayName": "SDLC Swarm (No-Code, Evidence-Gated)",
+  "description": "Agentic SDLC assistant for VS Code. Spec-first. Test-first. Evidence-gated.",
+  "version": "0.1.0",
+  "publisher": "sdlc-swarm",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "sdlc",
+    "agent",
+    "swarm",
+    "evidence",
+    "planning",
+    "architecture",
+    "release"
+  ],
+  "activationEvents": [
+    "onCommand:sdlc.initializeWorkspace",
+    "onCommand:sdlc.planToPrd",
+    "onCommand:sdlc.architectureReview",
+    "onCommand:sdlc.releaseReadiness",
+    "onCommand:sdlc.showDashboard",
+    "onCommand:swarm.planNextSprint",
+    "onCommand:swarm.architectureReview",
+    "onCommand:swarm.releaseReadiness",
+    "onCommand:swarm.showDashboard"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sdlc.initializeWorkspace",
+        "title": "SDLC: Initialize Workspace",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.planToPrd",
+        "title": "SDLC: Plan to PRD",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.architectureReview",
+        "title": "SDLC: Architecture Review",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.releaseReadiness",
+        "title": "SDLC: Release Readiness",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.showDashboard",
+        "title": "SDLC: Show Project Dashboard",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "swarm.planNextSprint",
+        "title": "Swarm: Plan Next Sprint",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "swarm.architectureReview",
+        "title": "Swarm: Architecture Review",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "swarm.releaseReadiness",
+        "title": "Swarm: Release Readiness",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "swarm.showDashboard",
+        "title": "Swarm: Show Swarm Dashboard",
+        "category": "SDLC Swarm"
+      }
+    ],
+    "chatParticipants": [
+      {
+        "id": "sdlc.driver",
+        "name": "SDLC-Driver",
+        "description": "SDLC Swarm Driver - orchestrates workflows",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "plan",
+            "description": "Plan a feature or sprint"
+          },
+          {
+            "name": "review",
+            "description": "Review architecture or design"
+          },
+          {
+            "name": "release",
+            "description": "Check release readiness"
+          }
+        ]
+      },
+      {
+        "id": "sdlc.verifier",
+        "name": "Verifier",
+        "description": "Evidence and quality verification specialist",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.security",
+        "name": "Security",
+        "description": "Security and IAM domain expert",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.release",
+        "name": "Release",
+        "description": "Release management and deployment specialist",
+        "isSticky": false
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.6",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/sdlc-swarm"
+  },
+  "license": "MIT"
+}

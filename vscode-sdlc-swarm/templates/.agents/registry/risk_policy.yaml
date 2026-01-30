@@ -1,0 +1,6 @@
+rules:
+  - trigger: "AuthN/AuthZ or tenancy change"
+    approvals: [security_signoff]
+  - trigger: "Production deploy"
+    approvals: [prod_deploy]  - trigger: "Rollback disabled or manual"
+    approvals: [prod_deploy, security_signoff]

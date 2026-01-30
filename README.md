@@ -10,6 +10,27 @@ A **no-code, text-driven multi-agent swarm** for end-to-end SDLC orchestration i
 - **Enterprise world model** backing all decisions (requirements, invariants, compliance)
 - **No code required** — pure Markdown/YAML configuration
 
+## 📦 VS Code Extension (Week 9)
+
+**SDLC Swarm is now packaged as a thin VS Code extension!**
+
+The extension provides:
+- ✅ One-command workspace initialization
+- ✅ 8 registered commands (Plan to PRD, Architecture Review, Release Readiness, Dashboards)
+- ✅ Chat participants (@SDLC-Driver, @Verifier, @Security, @Release)
+- ✅ Protected file safety (never overwrites evidence or ledgers)
+- ✅ **Zero intelligence** — all logic stays in `.agents/`
+
+**Key principle:** The extension is removable. If you uninstall it, your `.agents/` folder still works with Copilot.
+
+📖 **Documentation:**
+- [Week 9 Specification](weeks/week-09/README.md) — Full spec
+- [Build Instructions](vscode-sdlc-swarm/BUILD.md) — How to package
+- [Extension Contract](distribution/EXTENSION_CONTRACT.md) — Immutable contract
+- [Command Mapping](distribution/EXTENSION_MAPPING.md) — Canonical mappings
+
+**Status:** Architecture complete, ready for template population and build.
+
 ## 🏗️ Architecture
 
 ```

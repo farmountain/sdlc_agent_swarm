@@ -1,0 +1,9 @@
+enterprise_requirements:
+  iam: [oidc, saml, rbac]
+  tenancy: [logical_isolation]
+  cicd: required
+  observability: required
+
+invariants:
+  - "Security changes require approval"
+  - "Audit logs required"

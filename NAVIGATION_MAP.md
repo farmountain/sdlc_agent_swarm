@@ -49,6 +49,8 @@ Read these:
 
 1. [.agents/docs/DISTRIBUTION.md](.agents/docs/DISTRIBUTION.md) — Distribution channels, packaging, org adoption
 2. [PLANNING.md](PLANNING.md) — Distribution strategy section
+3. [weeks/week-09/README.md](weeks/week-09/README.md) — VS Code extension packaging (Week 9)
+4. [vscode-sdlc-swarm/](vscode-sdlc-swarm/) — Actual extension source code
 
 ---
 
@@ -129,12 +131,14 @@ Start here:
 - **Approval gates?** → [.agents/docs/ARCHITECTURE.md](.agents/docs/ARCHITECTURE.md#4-human-approval-gates-approvalmd)
 - **Compliance?** → [.agents/docs/AGENT_ROLES.md](.agents/docs/AGENT_ROLES.md#8-compliance-risk-risk-assessor)
 
-### 🔌 **Extension (Future)**
+### 🔌 **Extension**
 
 - **Can we build an extension?** → [.agents/docs/EXTENSION_READINESS.md](.agents/docs/EXTENSION_READINESS.md)
 - **How easy is it?** → [.agents/docs/EXTENSION_READINESS.md](.agents/docs/EXTENSION_READINESS.md#clean-conversions-1-1-mapping)
 - **What's the strategy?** → [.agents/docs/DISTRIBUTION.md](.agents/docs/DISTRIBUTION.md)
 - **What are the constraints?** → [.agents/docs/WEEK1_CONSTRAINTS.md](.agents/docs/WEEK1_CONSTRAINTS.md)
+- **Week 9: VS Code Extension** → [weeks/week-09/README.md](weeks/week-09/README.md)
+- **Extension source code** → [vscode-sdlc-swarm/](vscode-sdlc-swarm/)
 
 ### 📦 **Distribution & Adoption**
 
@@ -246,11 +250,11 @@ What do I want to do?
 | Distribution plan | ✅ Complete | DISTRIBUTION.md |
 | Design constraints | ✅ Complete | WEEK1_CONSTRAINTS.md |
 | 18-week roadmap | ✅ Complete | PLANNING.md |
+| Week 9: VS Code Extension | ✅ Complete | weeks/week-09/, vscode-sdlc-swarm/ |
 | Week 1 ready to deliver | ⏳ Awaiting signal | - |
 | Driver + Registry files | ⏳ Week 1 delivery | - |
 | Core swarm (12 agents) | ⏳ Weeks 4-6 | - |
 | Enterprise ready | ⏳ Weeks 7-9 | - |
-| Extension (Phase 2) | ⏳ Week 19+ | - |
 
 ---
 

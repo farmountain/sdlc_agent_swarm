@@ -1,0 +1,26 @@
+agents:
+  driver: { skill: driver, type: orchestrator }
+  spec_agent: { skill: skills/spec-agent, type: spec }
+  test_agent: { skill: skills/test-agent, type: test }
+  solver: { skill: skills/solver, type: generator }
+  skeptic: { skill: skills/skeptic, type: critic }
+  verifier: { skill: skills/verifier, type: validator }
+  memory_agent: { skill: skills/memory-agent, type: memory }
+  approval_gate: { skill: skills/approval-gate, type: governance }
+
+domain_experts:
+  security_iam: { skill: skills/domain/security-iam, type: domain }
+  devops_platform: { skill: skills/domain/devops-platform, type: domain }
+  backend_architect: { skill: skills/domain/backend-architect, type: domain }
+
+agents:
+  nfr_agent: { skill: skills/nfr-agent, type: non_functional }  cicd_agent: { skill: skills/cicd-agent, type: pipeline }
+  release_manager: { skill: skills/release-manager, type: release }
+  prod_safety: { skill: skills/prod-safety-agent, type: safety }
+  experience_agent: { skill: skills/experience-agent, type: learning }
+  collapse_agent: { skill: skills/collapse-agent, type: convergence }
+  risk_scorer: { skill: skills/risk-scorer, type: risk }
+  metrics_agent: { skill: skills/metrics-agent, type: metrics }
+  confidence_agent: { skill: skills/confidence-agent, type: calibration }
+  drift_detector: { skill: skills/drift-detector, type: guard }
+  dashboard_agent: { skill: skills/dashboard-agent, type: reporting }
