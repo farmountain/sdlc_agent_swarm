@@ -82,41 +82,33 @@
     ],
     "chatParticipants": [
       {
-        "id": "sdlc.driver",
-        "name": "SDLC-Driver",
-        "description": "SDLC Swarm Driver - orchestrates workflows",
-        "isSticky": true,
-        "commands": [
-          {
-            "name": "plan",
-            "description": "Plan a feature or sprint"
-          },
-          {
-            "name": "review",
-            "description": "Review architecture or design"
-          },
-          {
-            "name": "release",
-            "description": "Check release readiness"
-          }
-        ]
+        "id": "sdlc.planToPRD",
+        "name": "PlanToPRD",
+        "description": "Generate PRD from vision with full risk assessment and stakeholder sign-off",
+        "isSticky": true
       },
       {
-        "id": "sdlc.verifier",
-        "name": "Verifier",
-        "description": "Evidence and quality verification specialist",
+        "id": "sdlc.codeChange",
+        "name": "CodeChange",
+        "description": "Plan and validate code changes with testing and rollback strategy",
         "isSticky": false
       },
       {
-        "id": "sdlc.security",
-        "name": "Security",
-        "description": "Security and IAM domain expert",
+        "id": "sdlc.infraDeploy",
+        "name": "InfraDeploy",
+        "description": "Infrastructure deployment planning with monitoring and rollback runbook",
         "isSticky": false
       },
       {
-        "id": "sdlc.release",
-        "name": "Release",
-        "description": "Release management and deployment specialist",
+        "id": "sdlc.securityReview",
+        "name": "SecurityReview",
+        "description": "Security-focused review (authN/authZ/PII/compliance/tenancy)",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.dashboard",
+        "name": "Dashboard",
+        "description": "Show project status, metrics, and evidence ledger",
         "isSticky": false
       }
     ]

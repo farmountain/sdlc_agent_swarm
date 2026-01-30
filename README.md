@@ -17,7 +17,7 @@ A **no-code, text-driven multi-agent swarm** for end-to-end SDLC orchestration i
 The extension provides:
 - ✅ One-command workspace initialization
 - ✅ 8 registered commands (Plan to PRD, Architecture Review, Release Readiness, Dashboards)
-- ✅ Chat participants (@SDLC-Driver, @Verifier, @Security, @Release)
+- ✅ Chat participants (@PlanToPRD, @CodeChange, @InfraDeploy, @SecurityReview, @Dashboard)
 - ✅ Protected file safety (never overwrites evidence or ledgers)
 - ✅ **Zero intelligence** — all logic stays in `.agents/`
 

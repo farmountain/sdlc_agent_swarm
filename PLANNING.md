@@ -297,7 +297,7 @@ These ensure extension conversion (Week 19) is mechanical, not architectural.
 
 - ✅ VS Code Marketplace
 - ✅ Command palette entries
-- ✅ Chat participant: @SDLC-Driver
+- ✅ Chat participants: @PlanToPRD, @CodeChange, @InfraDeploy, @SecurityReview, @Dashboard (map to workflows)
 - ✅ Approval modals (optional)
 - ✅ Evidence sidebar viewer (optional)
 

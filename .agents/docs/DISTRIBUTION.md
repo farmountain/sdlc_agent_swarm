@@ -96,7 +96,7 @@ releases/
    - `SDLC: Plan Feature`
    - `SDLC: Code Review`
    - `SDLC: Deploy`
-3. **Chat participant**: `@SDLC-Driver`
+3. **Chat participants**: `@PlanToPRD`, `@CodeChange`, `@InfraDeploy`, `@SecurityReview`, `@Dashboard`
 4. **Approval modal UI** (optional)
 5. **Evidence ledger sidebar** (optional)
 
@@ -111,7 +111,7 @@ If .agents/ missing: "Initialize Swarm" button
 ↓
 User clicks → .agents/ copied to workspace
 ↓
-Use: Commands or @SDLC-Driver in chat
+Use: Commands or chat participants (@PlanToPRD, @CodeChange, etc.)
 ```
 
 ---

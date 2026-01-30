@@ -109,19 +109,20 @@ No retries.
 
 ---
 
-## 5️⃣ Chat participants (aliases, not agents)
+## 5️⃣ Chat participants (workflow agents)
 
-Register these aliases:
+Register these SDLC workflow agents:
 
-| Alias          | Maps to                    |
-| -------------- | -------------------------- |
-| `@SDLC-Driver` | `.agents/driver/skill.md`  |
-| `@Verifier`    | verifier role context      |
-| `@Security`    | security-iam domain expert |
-| `@Release`     | release-manager            |
+| Chat Participant   | Workflow          | Purpose                                  |
+| ------------------ | ----------------- | ---------------------------------------- |
+| `@PlanToPRD`       | `plan_to_prd`     | Generate PRD with risk assessment        |
+| `@CodeChange`      | `code_change`     | Plan and validate code changes           |
+| `@InfraDeploy`     | `infra_deploy`    | Infrastructure deployment planning       |
+| `@SecurityReview`  | `security_review` | Security review (authN/authZ/PII)        |
+| `@Dashboard`       | `dashboard_view`  | Show project status and metrics          |
 
-These just prepend context.  
-They do not execute logic.
+These map to end-to-end SDLC workflows.  
+Internal agents (Driver, Verifier, Domain Experts) work behind the scenes.
 
 ---
 

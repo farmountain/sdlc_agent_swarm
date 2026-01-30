@@ -6,7 +6,7 @@
 - Workspace initialization command
 - RUN_SDLC workflow commands (Plan to PRD, Architecture Review, Release Readiness)
 - BUILD_SWARM workflow commands
-- Chat participants (@SDLC-Driver, @Verifier, @Security, @Release)
+- Chat participants (@PlanToPRD, @CodeChange, @InfraDeploy, @SecurityReview, @Dashboard)
 - Dashboard viewer
 - Protected file safety rails
 - Template-based workspace scaffolding

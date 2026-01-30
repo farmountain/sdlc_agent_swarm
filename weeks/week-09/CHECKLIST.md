@@ -101,18 +101,20 @@ cp -r ../adoption ./templates/
 
 ## ✅ 5) Chat Participants (Nice-to-have, but recommended)
 
-- [x] `@SDLC-Driver`
-- [x] `@Verifier`
-- [x] `@Security`
-- [x] `@Release`
+- [x] `@PlanToPRD`
+- [x] `@CodeChange`
+- [x] `@InfraDeploy`
+- [x] `@SecurityReview`
+- [x] `@Dashboard`
 
-Each alias must be:
+Each participant must:
 
-- [x] a context shortcut only
-- [x] not a hidden tool runner
-- [x] not a separate logic layer
+- [x] map to an end-to-end SDLC workflow
+- [x] not expose internal agents (Driver, Verifier, Domain Experts)
+- [x] not be a hidden tool runner
+- [x] not contain separate logic layer
 
-**Status:** ✅ PASS - Declared in package.json, no custom handlers (pure aliases)
+**Status:** ✅ PASS - Declared in package.json, map to workflows, no custom handlers
 
 ---
 

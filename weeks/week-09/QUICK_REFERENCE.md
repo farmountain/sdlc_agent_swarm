@@ -119,16 +119,18 @@ EvidencePointers=<detected paths>
 
 ---
 
-## 🎭 Chat Participants (Aliases Only)
+## 🎭 Chat Participants (Workflow Agents)
 
 ```
-@SDLC-Driver  → Routes to driver skill
-@Verifier     → Evidence specialist context
-@Security     → Security expert context
-@Release      → Release manager context
+@PlanToPRD       → plan_to_prd workflow
+@CodeChange      → code_change workflow
+@InfraDeploy     → infra_deploy workflow
+@SecurityReview  → security_review workflow
+@Dashboard       → dashboard_view workflow
 ```
 
-**These are shortcuts, not separate agents.**
+**These map to end-to-end SDLC workflows.**  
+**Internal agents (Driver, Verifier, Domain Experts) work behind the scenes.**
 
 ---
 

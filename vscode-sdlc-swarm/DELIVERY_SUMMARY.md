@@ -34,12 +34,13 @@ vscode-sdlc-swarm/
 - `swarm.releaseReadiness` — Swarm release check
 - `swarm.showDashboard` — Swarm dashboard
 
-### Chat Participants
+### Chat Participants (Workflow Agents)
 
-- `@SDLC-Driver` — Main orchestrator
-- `@Verifier` — Evidence specialist
-- `@Security` — Security expert
-- `@Release` — Release manager
+- `@PlanToPRD` — Generate PRD from vision
+- `@CodeChange` — Plan and validate code changes
+- `@InfraDeploy` — Infrastructure deployment planning
+- `@SecurityReview` — Security review
+- `@Dashboard` — Project status and metrics
 
 ### Safety Rails Implemented
 

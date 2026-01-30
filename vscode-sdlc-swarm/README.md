@@ -43,12 +43,13 @@ This extension only exposes it.
 
 ## Chat Participants
 
-Talk to specialized agents directly:
+Talk to SDLC workflow agents directly:
 
-- **@SDLC-Driver** - Main orchestrator (routes to Driver skill)
-- **@Verifier** - Evidence and quality specialist
-- **@Security** - Security and IAM expert
-- **@Release** - Release management specialist
+- **@PlanToPRD** - Generate PRD from vision with risk assessment
+- **@CodeChange** - Plan and validate code changes
+- **@InfraDeploy** - Infrastructure deployment planning
+- **@SecurityReview** - Security review (authN/authZ/PII/compliance)
+- **@Dashboard** - Show project status and metrics
 
 ## Architecture Principles
 
