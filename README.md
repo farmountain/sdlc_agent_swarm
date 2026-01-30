@@ -28,8 +28,10 @@ The extension provides:
 - [Build Instructions](vscode-sdlc-swarm/BUILD.md) — How to package
 - [Extension Contract](distribution/EXTENSION_CONTRACT.md) — Immutable contract
 - [Command Mapping](distribution/EXTENSION_MAPPING.md) — Canonical mappings
+- [Validation Report](weeks/week-09/VALIDATION_REPORT.md) — DoD validation
+- [Quick Reference](weeks/week-09/QUICK_REFERENCE.md) — Cheat sheet
 
-**Status:** Architecture complete, ready for template population and build.
+**Status:** ✅ **Week 9 COMPLETE** — Extension built and packaged (`sdlc-swarm-0.1.0.vsix`, 159KB). Ready for installation and user testing.
 
 ## 🏗️ Architecture
 
