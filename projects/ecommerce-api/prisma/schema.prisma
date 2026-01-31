@@ -1,0 +1,166 @@
+// Prisma schema for multi-tenant e-commerce API
+// INV-005, INV-006: All tables include tenant_id
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  subdomain String   @unique
+  apiKey    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  products    Product[]
+  orders      Order[]
+  payments    Payment[]
+  auditLogs   AuditLog[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String
+  email        String
+  passwordHash String
+  role         UserRole
+  mfaSecret    String?
+  mfaEnabled   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id])
+  orders    Order[]
+  auditLogs AuditLog[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+}
+
+enum UserRole {
+  ADMIN
+  MERCHANT
+  CUSTOMER
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  sku         String
+  category    String?
+  imageUrls   String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id])
+  inventory  Inventory?
+  orderItems OrderItem[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId, category])
+  @@index([tenantId, isActive])
+}
+
+model Inventory {
+  id        String   @id @default(uuid())
+  tenantId  String
+  productId String   @unique
+  quantity  Int      @default(0)
+  threshold Int      @default(10)
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([tenantId])
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  tenantId        String
+  customerId      String
+  status          OrderStatus @default(PENDING)
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  customerName    String
+  customerEmail   String
+  shippingAddress Json
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  tenant   Tenant      @relation(fields: [tenantId], references: [id])
+  customer User        @relation(fields: [customerId], references: [id])
+  items    OrderItem[]
+  payment  Payment?
+
+  @@index([tenantId, status])
+  @@index([tenantId, customerId])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FULFILLED
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String
+  productId   String
+  quantity    Int
+  priceAtTime Decimal @db.Decimal(10, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id                  String        @id @default(uuid())
+  tenantId            String
+  orderId             String        @unique
+  stripePaymentIntent String        @unique
+  amount              Decimal       @db.Decimal(10, 2)
+  status              PaymentStatus @default(PENDING)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  order  Order  @relation(fields: [orderId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  tenantId   String
+  userId     String?
+  action     String
+  resource   String
+  resourceId String
+  changes    Json
+  timestamp  DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, timestamp])
+  @@index([resourceId])
+}

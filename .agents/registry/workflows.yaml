@@ -56,3 +56,81 @@ workflows:
       - release_manager
       - memory_agent
     approvals: [prod_deploy]
+
+  # Code Generation & Implementation Workflows
+  build_feature:
+    intent: "End-to-end feature implementation from PRD to working code"
+    steps:
+      - driver
+      - spec_agent
+      - test_generator
+      - code_generator
+      - language_experts.typescript_expert
+      - language_experts.rust_expert
+      - language_experts.python_expert
+      - skeptic
+      - build_validator
+      - verifier
+      - memory_agent
+    approvals: [code_review]
+
+  generate_code:
+    intent: "Generate production-ready code with tests"
+    steps:
+      - driver
+      - spec_agent
+      - test_generator
+      - code_generator
+      - language_experts.typescript_expert
+      - language_experts.frontend_expert
+      - language_experts.database_expert
+      - build_validator
+      - verifier
+      - memory_agent
+    approvals: []
+
+  refactor_code:
+    intent: "Refactor existing code with safety checks"
+    steps:
+      - driver
+      - test_agent
+      - refactor_agent
+      - language_experts.typescript_expert
+      - skeptic
+      - build_validator
+      - verifier
+      - memory_agent
+    approvals: []
+
+  build_integration:
+    intent: "Build API integrations and service connections"
+    steps:
+      - driver
+      - api_designer
+      - integration_builder
+      - test_generator
+      - language_experts.backend_architect
+      - domain_experts.security_iam
+      - skeptic
+      - build_validator
+      - verifier
+      - memory_agent
+    approvals: [security_review]
+
+  multi_language_project:
+    intent: "Orchestrate multi-language project (e.g., TypeScript + Rust + Python)"
+    steps:
+      - driver
+      - spec_agent
+      - domain_experts.backend_architect
+      - language_experts.typescript_expert
+      - language_experts.rust_expert
+      - language_experts.python_expert
+      - test_generator
+      - code_generator
+      - integration_builder
+      - skeptic
+      - build_validator
+      - verifier
+      - memory_agent
+    approvals: [architecture_review]

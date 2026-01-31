@@ -63,9 +63,7 @@ vscode-sdlc-swarm/
 
 ## 3️⃣ Commands to register (exact)
 
-Use **only these** to start:
-
-### RUN_SDLC
+### RUN_SDLC (Governance & Planning)
 
 ```
 sdlc.planToPrd
@@ -74,13 +72,24 @@ sdlc.releaseReadiness
 sdlc.showDashboard
 ```
 
-### BUILD_SWARM
+### BUILD_FEATURE (Code Generation) ⚡ NEW
+
+```
+sdlc.buildFeature
+sdlc.generateCode
+sdlc.refactorCode
+sdlc.buildIntegration
+sdlc.multiLanguageProject
+```
+
+### BUILD_SWARM (Alternative Namespace)
 
 ```
 swarm.planNextSprint
 swarm.architectureReview
 swarm.releaseReadiness
 swarm.showDashboard
+swarm.buildFeature
 ```
 
 Each command is a **thin wrapper** around a prompt.
@@ -113,6 +122,8 @@ No retries.
 
 Register these SDLC workflow agents:
 
+### Governance & Planning Workflows
+
 | Chat Participant   | Workflow          | Purpose                                  |
 | ------------------ | ----------------- | ---------------------------------------- |
 | `@PlanToPRD`       | `plan_to_prd`     | Generate PRD with risk assessment        |
@@ -120,6 +131,16 @@ Register these SDLC workflow agents:
 | `@InfraDeploy`     | `infra_deploy`    | Infrastructure deployment planning       |
 | `@SecurityReview`  | `security_review` | Security review (authN/authZ/PII)        |
 | `@Dashboard`       | `dashboard_view`  | Show project status and metrics          |
+
+### Code Generation Workflows ⚡ NEW
+
+| Chat Participant      | Workflow                | Purpose                                           |
+| --------------------- | ----------------------- | ------------------------------------------------- |
+| `@BuildFeature`       | `build_feature`         | End-to-end feature implementation with tests      |
+| `@GenerateCode`       | `generate_code`         | Generate production-ready code from specs         |
+| `@RefactorCode`       | `refactor_code`         | Refactor existing code with safety checks         |
+| `@BuildIntegration`   | `build_integration`     | Build API integrations and service connections    |
+| `@MultiLanguage`      | `multi_language_project`| Orchestrate multi-language projects (TS+Rust+etc) |
 
 These map to end-to-end SDLC workflows.  
 Internal agents (Driver, Verifier, Domain Experts) work behind the scenes.

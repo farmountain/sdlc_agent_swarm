@@ -14,7 +14,8 @@ domain_experts:
   backend_architect: { skill: skills/domain/backend-architect, type: domain }
 
 agents:
-  nfr_agent: { skill: skills/nfr-agent, type: non_functional }  cicd_agent: { skill: skills/cicd-agent, type: pipeline }
+  nfr_agent: { skill: skills/nfr-agent, type: non_functional }  
+  cicd_agent: { skill: skills/cicd-agent, type: pipeline }
   release_manager: { skill: skills/release-manager, type: release }
   prod_safety: { skill: skills/prod-safety-agent, type: safety }
   experience_agent: { skill: skills/experience-agent, type: learning }
@@ -24,3 +25,21 @@ agents:
   confidence_agent: { skill: skills/confidence-agent, type: calibration }
   drift_detector: { skill: skills/drift-detector, type: guard }
   dashboard_agent: { skill: skills/dashboard-agent, type: reporting }
+
+# Code Generation & Implementation Agents
+code_generator: { skill: skills/code-generator, type: generator }
+test_generator: { skill: skills/test-generator, type: generator }
+refactor_agent: { skill: skills/refactor-agent, type: optimizer }
+integration_builder: { skill: skills/integration-builder, type: generator }
+api_designer: { skill: skills/api-designer, type: designer }
+build_validator: { skill: skills/build-validator, type: validator }
+
+# Language-Specific Domain Experts
+language_experts:
+  typescript_expert: { skill: skills/domain/typescript-expert, type: domain }
+  rust_expert: { skill: skills/domain/rust-expert, type: domain }
+  python_expert: { skill: skills/domain/python-expert, type: domain }
+  java_expert: { skill: skills/domain/java-expert, type: domain }
+  go_expert: { skill: skills/domain/go-expert, type: domain }
+  frontend_expert: { skill: skills/domain/frontend-expert, type: domain }
+  database_expert: { skill: skills/domain/database-expert, type: domain }

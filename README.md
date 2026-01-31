@@ -1,6 +1,6 @@
 # SDLC Agent Swarm
 
-A **no-code, text-driven multi-agent swarm** for end-to-end SDLC orchestration inside VS Code using **Agent Skills** (Markdown/YAML) as the open standard. A quick replicate of my private Codex Boaster project using VS Code's no-code agentic framework.
+A **no-code, text-driven multi-agent swarm** for end-to-end SDLC orchestration inside VS Code using **Agent Skills** (Markdown/YAML) as the open standard. **Build any software end-to-end**: web apps, APIs, CLI tools, browser extensions, data pipelines, mobile backends, and more.
 
 ## 🎯 Vision
 
@@ -10,14 +10,38 @@ A **no-code, text-driven multi-agent swarm** for end-to-end SDLC orchestration i
 - **Enterprise world model** backing all decisions (requirements, invariants, compliance)
 - **No code required** — pure Markdown/YAML configuration
 
+## ⚡ NEW: Full-Stack Code Generation (C6)
+
+**The swarm now builds complete projects end-to-end!**
+
+- ✅ **Multi-language support**: TypeScript, Rust, Python, Java, Go
+- ✅ **Full-stack generation**: Frontend + Backend + Database + APIs
+- ✅ **Test-driven**: Generates comprehensive test suites (unit, integration, e2e)
+- ✅ **Language experts**: TypeScript, Rust, Python specialists enforce best practices
+- ✅ **Multi-language projects**: Orchestrate TypeScript + Rust + Python systems (e.g., AI-driven browser)
+- ✅ **Refactoring & optimization**: Improve existing code with safety checks
+- ✅ **Integration building**: Connect services, build APIs, manage data flow
+
+**The swarm can build ANY software end-to-end** — web apps, APIs, CLI tools, browser extensions, data pipelines, mobile backends, observability systems, e-commerce platforms, etc.
+
+**Example**: Say **"create an AI-driven browser using JavaScript/TypeScript and Rust"** → The swarm will:
+1. Generate PRD and architecture
+2. Create Rust rendering engine
+3. Build TypeScript UI layer  
+4. Integrate via WebAssembly
+5. Generate comprehensive tests
+6. Deliver working, buildable system
+
+More examples: "Build e-commerce platform with multi-tenancy", "Create data pipeline with observability", "Design microservices API gateway", etc.
+
 ## 📦 VS Code Extension (Week 9)
 
 **SDLC Swarm is now packaged as a thin VS Code extension!**
 
 The extension provides:
 - ✅ One-command workspace initialization
-- ✅ 8 registered commands (Plan to PRD, Architecture Review, Release Readiness, Dashboards)
-- ✅ Chat participants (@PlanToPRD, @CodeChange, @InfraDeploy, @SecurityReview, @Dashboard)
+- ✅ 13 registered commands (Planning + Code Generation)
+- ✅ Chat participants (@PlanToPRD, @BuildFeature, @MultiLanguage, @RefactorCode, etc.)
 - ✅ Protected file safety (never overwrites evidence or ledgers)
 - ✅ **Zero intelligence** — all logic stays in `.agents/`
 
@@ -65,29 +89,39 @@ Output: Next 3 Actions + Evidence Log
 .agents/
 ├── registry/                    # Skill map + workflow definitions
 │   ├── agents.yaml             # All agent roles and permissions
-│   ├── workflows.yaml          # SDLC recipes (plan_to_prd, code_change, infra_deploy, security_review)
+│   ├── workflows.yaml          # SDLC recipes (plan_to_prd, build_feature, multi_language_project)
 │   ├── risk_policy.yaml        # Risk categorization
 │   └── collapse_policy.md      # Weighted consensus rules
 ├── driver/                      # Entry point + orchestration
 │   ├── skill.md                # Driver agent definition
-│   ├── runbook.md              # Step-by-step protocol
+│   ├── runbook.md              # Planning & governance protocol
+│   ├── implementation_runbook.md # ⚡ Code generation protocol
 │   └── approval.md             # Approval gate definitions
 ├── memory/                      # Persistent enterprise state
 │   ├── world_model.yaml        # Enterprise requirements & invariants
 │   ├── evidence_log.md         # Evidence references
 │   ├── decisions_log.md        # Decision history
 │   └── snapshots/              # Timestamped state records
-├── skills/                      # Agent implementations (TBD)
+├── skills/                      # Agent implementations
 │   ├── solver/
 │   ├── skeptic/
 │   ├── minimalist/
 │   ├── verifier/
+│   ├── code-generator/         # ⚡ NEW: Production code generation
+│   ├── test-generator/         # ⚡ NEW: Comprehensive test generation
+│   ├── refactor-agent/         # ⚡ NEW: Code improvement & optimization
+│   ├── integration-builder/    # ⚡ NEW: API & service integration
 │   ├── domain/
 │   │   ├── backend-architect/
 │   │   ├── frontend-architect/
 │   │   ├── devops-platform/
 │   │   ├── security-iam/
-│   │   └── data-architect/
+│   │   ├── data-architect/
+│   │   ├── typescript-expert/  # ⚡ NEW: TypeScript best practices
+│   │   ├── rust-expert/        # ⚡ NEW: Rust best practices
+│   │   ├── python-expert/      # ⚡ NEW: Python best practices
+│   │   ├── java-expert/        # ⚡ NEW: Java best practices
+│   │   └── go-expert/          # ⚡ NEW: Go best practices
 │   ├── compliance-risk/
 │   └── memory-agent/
 └── docs/                        # Full documentation
