@@ -1,9 +1,9 @@
 /**
  * Lock Manager
- *  
+ *
  * Manages database advisory locks to prevent concurrent migration runs.
  * Wraps database adapter lock methods with error handling and retry logic.
- * 
+ *
  * Architecture: Component Diagram - LockManager Component
  * ADR-005: Advisory Locks for Concurrency Control
  */
@@ -16,9 +16,9 @@ export class LockManager {
     private readonly adapter: IDatabaseAdapter,
     private readonly logger: ILogger,
     private readonly lockKey: number = 12345,
-    private readonly lockTimeout: number = 30
+    private readonly lockTimeout: number = 30,
   ) {}
-  
+
   /**
    * Acquire advisory lock with timeout.
    * Blocks until lock is acquired or timeout expires.
@@ -29,10 +29,10 @@ export class LockManager {
       lockKey: this.lockKey,
       timeout: this.lockTimeout,
     });
-    
+
     try {
       await this.adapter.acquireLock(this.lockKey, this.lockTimeout);
-      
+
       this.logger.info('Advisory lock acquired', {
         lockKey: this.lockKey,
       });
@@ -41,15 +41,15 @@ export class LockManager {
         lockKey: this.lockKey,
         error: (error as Error).message,
       });
-      
+
       throw new Error(
         `Failed to acquire migration lock (key: ${this.lockKey}, timeout: ${this.lockTimeout}s).\n` +
-        `Another migration may be in progress. Wait for it to complete and try again.\n` +
-        `Error: ${(error as Error).message}`
+          `Another migration may be in progress. Wait for it to complete and try again.\n` +
+          `Error: ${(error as Error).message}`,
       );
     }
   }
-  
+
   /**
    * Release advisory lock.
    * Safe to call even if lock not held (no-op).
@@ -58,10 +58,10 @@ export class LockManager {
     this.logger.info('Releasing advisory lock', {
       lockKey: this.lockKey,
     });
-    
+
     try {
       await this.adapter.releaseLock(this.lockKey);
-      
+
       this.logger.info('Advisory lock released', {
         lockKey: this.lockKey,
       });
@@ -72,7 +72,7 @@ export class LockManager {
       });
     }
   }
-  
+
   /**
    * Execute function with advisory lock held.
    * Automatically acquires lock before execution and releases after (even on error).
@@ -81,7 +81,7 @@ export class LockManager {
    */
   async withLock<T>(fn: () => Promise<T>): Promise<T> {
     await this.acquireLock();
-    
+
     try {
       return await fn();
     } finally {

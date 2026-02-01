@@ -1,9 +1,9 @@
 /**
  * Checksum Validator
- * 
+ *
  * Calculates SHA-256 checksums for migration files to detect tampering.
  * If a migration file is modified after being applied, the checksum will not match.
- * 
+ *
  * Architecture: Component Diagram - ChecksumValidator Component
  * ADR-004: Checksum validation prevents tampering
  */
@@ -17,12 +17,9 @@ export class ChecksumValidator {
    * @returns Hexadecimal SHA-256 hash
    */
   calculate(sql: string): string {
-    return crypto
-      .createHash('sha256')
-      .update(sql, 'utf-8')
-      .digest('hex');
+    return crypto.createHash('sha256').update(sql, 'utf-8').digest('hex');
   }
-  
+
   /**
    * Validate migration checksum against stored value.
    * @param expectedChecksum Checksum stored in migrations_history table
@@ -33,7 +30,7 @@ export class ChecksumValidator {
     const actualChecksum = this.calculate(actualSql);
     return expectedChecksum === actualChecksum;
   }
-  
+
   /**
    * Validate migration with detailed error message on mismatch.
    * @param migrationName Migration name for error reporting
@@ -44,13 +41,13 @@ export class ChecksumValidator {
   validateOrThrow(migrationName: string, expectedChecksum: string, actualSql: string): void {
     if (!this.validate(expectedChecksum, actualSql)) {
       const actualChecksum = this.calculate(actualSql);
-      
+
       throw new Error(
         `Checksum mismatch for migration: ${migrationName}\n` +
-        `Expected: ${expectedChecksum}\n` +
-        `Actual:   ${actualChecksum}\n\n` +
-        `This migration was modified after being applied!\n` +
-        `Do NOT edit applied migrations. Create a new migration instead.`
+          `Expected: ${expectedChecksum}\n` +
+          `Actual:   ${actualChecksum}\n\n` +
+          `This migration was modified after being applied!\n` +
+          `Do NOT edit applied migrations. Create a new migration instead.`,
       );
     }
   }

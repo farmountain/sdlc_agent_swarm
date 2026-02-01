@@ -1,9 +1,9 @@
 /**
  * State Tracker
- * 
+ *
  * Tracks which migrations have been applied by reading/writing the migrations_history table.
  * Provides methods to query, mark applied, and mark rolled back.
- * 
+ *
  * Architecture: Component Diagram - StateTracker Component
  */
 
@@ -12,9 +12,9 @@ import { IDatabaseAdapter, AppliedMigration, MigrationStatus, ILogger } from '..
 export class StateTracker {
   constructor(
     private readonly adapter: IDatabaseAdapter,
-    private readonly logger: ILogger
+    private readonly logger: ILogger,
   ) {}
-  
+
   /**
    * Ensure migrations_history table exists.
    * Safe to call multiple times (creates if not exists).
@@ -22,7 +22,7 @@ export class StateTracker {
   async ensureTable(): Promise<void> {
     await this.adapter.ensureMigrationsTable();
   }
-  
+
   /**
    * Get all applied migrations from migrations_history table.
    * @returns Array of applied migrations sorted by applied_at DESC
@@ -40,7 +40,7 @@ export class StateTracker {
         error_message: string | null;
       }>
     >('SELECT * FROM migrations_history ORDER BY applied_at DESC');
-    
+
     return rows.map((row) => ({
       id: row.id,
       name: row.name,
@@ -52,7 +52,7 @@ export class StateTracker {
       errorMessage: row.error_message,
     }));
   }
-  
+
   /**
    * Get set of applied migration names for quick lookups.
    * @returns Set of migration names
@@ -61,7 +61,7 @@ export class StateTracker {
     const applied = await this.getAppliedMigrations();
     return new Set(applied.map((m) => m.name));
   }
-  
+
   /**
    * Mark a migration as successfully applied.
    * @param name Migration name
@@ -73,20 +73,20 @@ export class StateTracker {
     name: string,
     checksum: string,
     durationMs: number,
-    appliedBy: string
+    appliedBy: string,
   ): Promise<void> {
     this.logger.info('Marking migration as applied', {
       migration: name,
       durationMs,
     });
-    
+
     await this.adapter.executeQuery(
       `INSERT INTO migrations_history (name, checksum, duration_ms, applied_by, status)
        VALUES (?, ?, ?, ?, 'SUCCESS')`,
-      [name, checksum, durationMs, appliedBy]
+      [name, checksum, durationMs, appliedBy],
     );
   }
-  
+
   /**
    * Mark a migration as failed.
    * @param name Migration name
@@ -100,21 +100,21 @@ export class StateTracker {
     checksum: string,
     durationMs: number,
     errorMessage: string,
-    appliedBy: string
+    appliedBy: string,
   ): Promise<void> {
     this.logger.error('Marking migration as failed', {
       migration: name,
       durationMs,
       error: errorMessage,
     });
-    
+
     await this.adapter.executeQuery(
       `INSERT INTO migrations_history (name, checksum, duration_ms, error_message, applied_by, status)
        VALUES (?, ?, ?, ?, ?, 'FAILED')`,
-      [name, checksum, durationMs, errorMessage, appliedBy]
+      [name, checksum, durationMs, errorMessage, appliedBy],
     );
   }
-  
+
   /**
    * Mark a migration as rolled back.
    * Deletes the row from migrations_history table.
@@ -124,19 +124,16 @@ export class StateTracker {
     this.logger.info('Marking migration as rolled back', {
       migration: name,
     });
-    
-    await this.adapter.executeQuery(
-      'DELETE FROM migrations_history WHERE name = ?',
-      [name]
-    );
+
+    await this.adapter.executeQuery('DELETE FROM migrations_history WHERE name = ?', [name]);
   }
-  
+
   /**
    * Get the last applied migration.
    * @returns Last applied migration or null if none
    */
   async getLastApplied(): Promise<AppliedMigration | null> {
     const applied = await this.getAppliedMigrations();
-    return applied.length > 0 ? applied[0] : null;
+    return applied.length > 0 ? applied[0]! : null;
   }
 }
