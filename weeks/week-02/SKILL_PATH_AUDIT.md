@@ -80,8 +80,8 @@
 | AGT-010 | api_designer | skills/api-designer | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-011 | cost_estimator | skills/cost-estimator | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-013 | refactor_agent | skills/refactor-agent | Create skill | ✅ CREATED (2026-02-02) |
-| AGT-014 | integration_builder | skills/integration-builder | Create skill | PENDING (Week 5) |
-| AGT-015 | build_validator | skills/build-validator | Create skill | PENDING (Week 5) |
+| AGT-014 | integration_builder | skills/integration-builder | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-015 | build_validator | skills/build-validator | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-017 | unit_test_runner | skills/unit-test-runner | Create skill | PENDING (Week 6) |
 | AGT-018 | integration_test_runner | skills/integration-test-runner | Create skill | PENDING (Week 6) |
 | AGT-019 | e2e_test_runner | skills/e2e-test-runner | Create skill | PENDING (Week 6) |
@@ -97,11 +97,12 @@
 | AGT-029 | rollback_orchestrator | skills/rollback-orchestrator | Create skill | PENDING (Week 8) |
 | AGT-030 | change_approver | skills/change-approver | Create skill | PENDING (Week 8) |
 
-**Progress**: 12 of 18 critical skills created (66.7% complete)  
+**Progress**: 14 of 18 critical skills created (77.8% complete)  
 **Newly Created (2026-02-02)**: backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent  
 **Newly Created (2026-02-02 Evening)**: cost_estimator, competitor_analyst, tech_radar, secrets_manager, compliance_checker  
 **Newly Created (2026-02-02 Week 4)**: sbom_generator, vulnerability_scanner  
-**Remaining**: 6 skills (phased creation in Weeks 5-8)
+**Newly Created (2026-02-02 Week 5)**: integration_builder, build_validator  
+**Remaining**: 4 skills (phased creation in Weeks 6-8)
 
 ### 📁 EXISTING SKILLS NOT IN REGISTRY (9 skills)
 
