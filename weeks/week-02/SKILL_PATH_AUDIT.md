@@ -91,16 +91,17 @@
 | AGT-023 | test_reporter | skills/test-reporter | Create skill | PENDING (Week 6) |
 | AGT-024 | secrets_manager | skills/secrets-manager | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-025 | compliance_checker | skills/compliance-checker | Create skill | ✅ CREATED (2026-02-02) |
-| AGT-026 | sbom_generator | skills/sbom-generator | Create skill | PENDING (Week 4) |
-| AGT-027 | vulnerability_scanner | skills/vulnerability-scanner | Create skill | PENDING (Week 4) |
+| AGT-026 | sbom_generator | skills/sbom-generator | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-027 | vulnerability_scanner | skills/vulnerability-scanner | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-028 | deployment_manager | skills/deployment-manager | Create skill | PENDING (Week 8) |
 | AGT-029 | rollback_orchestrator | skills/rollback-orchestrator | Create skill | PENDING (Week 8) |
 | AGT-030 | change_approver | skills/change-approver | Create skill | PENDING (Week 8) |
 
-**Progress**: 10 of 18 critical skills created (55.6% complete)  
+**Progress**: 12 of 18 critical skills created (66.7% complete)  
 **Newly Created (2026-02-02)**: backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent  
 **Newly Created (2026-02-02 Evening)**: cost_estimator, competitor_analyst, tech_radar, secrets_manager, compliance_checker  
-**Remaining**: 8 skills (phased creation in Weeks 4-8)
+**Newly Created (2026-02-02 Week 4)**: sbom_generator, vulnerability_scanner  
+**Remaining**: 6 skills (phased creation in Weeks 5-8)
 
 ### 📁 EXISTING SKILLS NOT IN REGISTRY (9 skills)
 
