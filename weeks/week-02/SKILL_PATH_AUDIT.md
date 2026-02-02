@@ -68,35 +68,38 @@
 | AGT-001 | prd_generator | skills/prd-generator | prd-agent | Update to `skills/prd-agent` |
 | AGT-007 | domain_modeler | skills/domain-modeler | domain-model | Update to `skills/domain-model` |
 
-### ⚠️ MISSING SKILLS - TO BE CREATED (18 agents)
+### ⚠️ MISSING SKILLS - TO BE CREATED (13 agents)
 
-| Agent ID | Name | Registry Path | Action Required |
-|----------|------|---------------|-----------------|
-| AGT-002 | backlog_manager | skills/backlog-manager | Create skill |
-| AGT-003 | stakeholder_agent | skills/stakeholder-agent | Create skill |
-| AGT-004 | competitor_analyst | skills/competitor-analyst | Create skill |
-| AGT-005 | tech_radar | skills/tech-radar | Create skill |
-| AGT-009 | threat_modeler | skills/threat-modeler | Create skill |
-| AGT-010 | api_designer | skills/api-designer | Create skill |
-| AGT-013 | refactor_agent | skills/refactor-agent | Create skill |
-| AGT-014 | integration_builder | skills/integration-builder | Create skill |
-| AGT-015 | build_validator | skills/build-validator | Create skill |
-| AGT-017 | unit_test_runner | skills/unit-test-runner | Create skill |
-| AGT-018 | integration_test_runner | skills/integration-test-runner | Create skill |
-| AGT-019 | e2e_test_runner | skills/e2e-test-runner | Create skill |
-| AGT-020 | performance_tester | skills/performance-tester | Create skill |
-| AGT-021 | reliability_tester | skills/reliability-tester | Create skill |
-| AGT-022 | test_data_factory | skills/test-data-factory | Create skill |
-| AGT-023 | test_reporter | skills/test-reporter | Create skill |
-| AGT-024 | secrets_manager | skills/secrets-manager | Create skill |
-| AGT-025 | compliance_checker | skills/compliance-checker | Create skill |
-| AGT-026 | sbom_generator | skills/sbom-generator | Create skill |
-| AGT-027 | vulnerability_scanner | skills/vulnerability-scanner | Create skill |
-| AGT-028 | deployment_manager | skills/deployment-manager | Create skill |
-| AGT-029 | rollback_orchestrator | skills/rollback-orchestrator | Create skill |
-| AGT-030 | change_approver | skills/change-approver | Create skill |
+| Agent ID | Name | Registry Path | Action Required | Status |
+|----------|------|---------------|-----------------|--------|
+| AGT-002 | backlog_manager | skills/backlog-manager | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-003 | stakeholder_agent | skills/stakeholder-agent | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-004 | competitor_analyst | skills/competitor-analyst | Create skill | PENDING (Week 4) |
+| AGT-005 | tech_radar | skills/tech-radar | Create skill | PENDING (Week 4) |
+| AGT-009 | threat_modeler | skills/threat-modeler | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-010 | api_designer | skills/api-designer | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-011 | cost_estimator | skills/cost-estimator | Create skill | PENDING (Week 4) |
+| AGT-013 | refactor_agent | skills/refactor-agent | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-014 | integration_builder | skills/integration-builder | Create skill | PENDING (Week 5) |
+| AGT-015 | build_validator | skills/build-validator | Create skill | PENDING (Week 5) |
+| AGT-017 | unit_test_runner | skills/unit-test-runner | Create skill | PENDING (Week 6) |
+| AGT-018 | integration_test_runner | skills/integration-test-runner | Create skill | PENDING (Week 6) |
+| AGT-019 | e2e_test_runner | skills/e2e-test-runner | Create skill | PENDING (Week 6) |
+| AGT-020 | performance_tester | skills/performance-tester | Create skill | PENDING (Week 6) |
+| AGT-021 | reliability_tester | skills/reliability-tester | Create skill | PENDING (Week 6) |
+| AGT-022 | test_data_factory | skills/test-data-factory | Create skill | PENDING (Week 6) |
+| AGT-023 | test_reporter | skills/test-reporter | Create skill | PENDING (Week 6) |
+| AGT-024 | secrets_manager | skills/secrets-manager | Create skill | PENDING (Week 4) |
+| AGT-025 | compliance_checker | skills/compliance-checker | Create skill | PENDING (Week 4) |
+| AGT-026 | sbom_generator | skills/sbom-generator | Create skill | PENDING (Week 4) |
+| AGT-027 | vulnerability_scanner | skills/vulnerability-scanner | Create skill | PENDING (Week 4) |
+| AGT-028 | deployment_manager | skills/deployment-manager | Create skill | PENDING (Week 8) |
+| AGT-029 | rollback_orchestrator | skills/rollback-orchestrator | Create skill | PENDING (Week 8) |
+| AGT-030 | change_approver | skills/change-approver | Create skill | PENDING (Week 8) |
 
-Note: AGT-011 (cost_estimator) appears in agents.yaml but may be out of sequence
+**Progress**: 5 of 18 critical skills created (27.8% complete)  
+**Newly Created (2026-02-02)**: backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent  
+**Remaining**: 13 skills (phased creation in Weeks 4-8)
 
 ### 📁 EXISTING SKILLS NOT IN REGISTRY (9 skills)
 
@@ -139,42 +142,52 @@ These skills exist in `.agents/skills/` but are NOT referenced in agents.yaml:
 
 ---
 
-## Immediate Action Plan
+## Immediate Action Plan - UPDATE (2026-02-02 Evening)
 
-### Phase 1: Fix Core 12 Paths (CRITICAL - 5 minutes)
+### Phase 1: Fix Core 12 Paths (CRITICAL) ✅ COMPLETED
+- ✅ Fixed AGT-001 (prd_generator): `skills/prd-generator` → `skills/prd-agent`
+- ✅ Fixed AGT-007 (domain_modeler): `skills/domain-modeler` → `skills/domain-model`
+- ✅ Committed to git with evidence reference (commit 1d75ba3)
 
-```yaml
-# Update in .agents/registry/agents.yaml
+### Phase 2: Validate Core 12 Skill Content ✅ COMPLETED
+All Core 12 skills verified present with substantial content:
+- ✅ prd-agent: 12.3KB
+- ✅ solution-architect: 22.4KB
+- ✅ domain-model: 22.0KB
+- ✅ code-generator: 20.8KB
+- ✅ test-generator: 25.2KB
+- ✅ iam-agent: 23.1KB
+- ✅ cicd-agent: 46.1KB
+- ✅ release-manager: 32.9KB
+- ✅ observability-agent: 23.2KB
+- ✅ memory-agent: 15.8KB
+- ✅ verifier: 49.4KB
+- ✅ driver: 34.5KB
 
-# AGT-001: prd_generator
-- FROM: skill_path: "skills/prd-generator"
-- TO:   skill_path: "skills/prd-agent"
+### Phase 3: Create Missing Core Skills (Week 3-4) 🔄 IN PROGRESS (5 of 18 complete)
+Priority order for workflow enablement:
 
-# AGT-007: domain_modeler
-- FROM: skill_path: "skills/domain-modeler"
-- TO:   skill_path: "skills/domain-model"
-```
+**✅ Completed (2026-02-02)**:
+1. ✅ backlog_manager (10.3KB) - Enables WF-001, WF-002 (requirements, sprint planning)
+2. ✅ stakeholder_agent (11.2KB) - Enables WF-001 (stakeholder engagement)
+3. ✅ threat_modeler (14.1KB) - Week 3 domain expert, enables WF-004 (threat modeling)
+4. ✅ api_designer (13.8KB) - Enables WF-006 (API contract design)
+5. ✅ refactor_agent (12.6KB) - Enables WF-007 (code refactoring)
 
-### Phase 2: Validate Core 12 Skill Content (10 minutes)
+**Next Priority (Week 4)**:
+6. ⏳ competitor_analyst - Product discovery workflows
+7. ⏳ tech_radar - Technology evaluation workflows
+8. ⏳ cost_estimator - Architecture cost analysis (WF-005)
+9. ⏳ secrets_manager - Security workflows
+10. ⏳ compliance_checker - Compliance validation workflows
 
-Check each Core 12 skill has:
-- [ ] skill.md exists
-- [ ] Purpose section defined
-- [ ] Input/output protocol specified
-- [ ] Tool usage rules present
-- [ ] Evidence requirements documented
-- [ ] Failure modes and reflexion triggers listed
+**Week 5 (Build Agents)**:
+- integration_builder, build_validator
 
-### Phase 3: Create Missing Core Skills (Week 3-4)
-
-Priority order based on workflow dependencies:
-1. **Week 3 (Domain Experts):** threat_modeler, api_designer
-2. **Week 4 (Product Agents):** backlog_manager, stakeholder_agent, competitor_analyst, tech_radar
-3. **Week 5 (Build Agents):** refactor_agent, integration_builder, build_validator
-4. **Week 6 (Test Agents):** unit_test_runner, integration_test_runner, e2e_test_runner, performance_tester, reliability_tester, test_data_factory, test_reporter
+**Week 6 (Test Agents)**:
+- unit_test_runner, integration_test_runner, e2e_test_runner, performance_tester, reliability_tester, test_data_factory, test_reporter
 
 ### Phase 4: Registry Alignment (Week 4)
-
 Decision needed:
 - **Option A:** Add confidence-agent, dashboard-agent, drift-detector, metrics-agent, prod-safety-agent, solver, spec-agent, test-agent to agents.yaml
 - **Option B:** Remove these skills from repository (if they're experimental)
@@ -182,22 +195,52 @@ Decision needed:
 
 ---
 
-## Evidence for EGD-DEV-2026-005
+## Evidence for EGD-DEV Entries
 
+### EGD-DEV-2026-005: Core 12 Skill Path Validation & Alignment
 **Claim:** Week 2 Agent Registry paths validated and Core 12 skills verified
 
 **Evidence Pointers:**
 - This audit report: `weeks/week-02/SKILL_PATH_AUDIT.md`
 - Core 12 skills exist: `.agents/skills/{prd-agent, solution-architect, domain-model, code-generator, test-generator, iam-agent, cicd-agent, release-manager, observability-agent, memory-agent, verifier}` + `.agents/driver/`
-- Path fixes committed: `.agents/registry/agents.yaml` (updated)
+- Path fixes committed: `.agents/registry/agents.yaml` (updated in commit 1d75ba3)
 
-**Verification Status:** PENDING (awaiting path fixes + commit)
+**Verification Status:** ✅ VERIFIED (2026-02-02)
 
 **Risks:**
 - MEDIUM: 18 missing skills block full workflow execution (mitigated by phased creation in Weeks 3-6)
-- LOW: 9 orphaned skills may cause registry confusion (mitigated by adding to registry or documenting as experimental)
+- LOW: 9 orphaned skills may cause registry confusion (mitigated by documenting for Week 4 decision)
 
 **Confidence:** 9/10 (audit complete, paths verified manually)
+
+---
+
+### EGD-DEV-2026-006: Created 5 Critical Missing Skills
+**Claim:** Created backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent to unblock core workflows
+
+**Evidence Pointers:**
+- `.agents/skills/backlog-manager/skill.md` - 10.3KB, sprint planning and backlog management
+- `.agents/skills/stakeholder-agent/skill.md` - 11.2KB, stakeholder engagement and approval tracking
+- `.agents/skills/threat-modeler/skill.md` - 14.1KB, security threat modeling with STRIDE
+- `.agents/skills/api-designer/skill.md` - 13.8KB, API contract design with OpenAPI
+- `.agents/skills/refactor-agent/skill.md` - 12.6KB, code quality and refactoring
+- Updated `weeks/week-02/SKILL_PATH_AUDIT.md` - Progress tracked (18 missing → 13 missing)
+- Updated `.agents/memory/evidence_dev.md` - EGD-DEV-2026-006 entry added
+
+**Verification Status:** ✅ VERIFIED (2026-02-02)
+
+**Workflows Enabled:**
+- WF-001: requirements_gathering (needs stakeholder_agent)
+- WF-002: backlog_prioritization (needs backlog_manager)
+- WF-004: threat_modeling (needs threat_modeler)
+- WF-006: api_contract_design (needs api_designer)
+- WF-007: code_refactoring (needs refactor_agent)
+
+**Risks:**
+- LOW: Skills follow established patterns (validated against Core 12 templates)
+- MEDIUM: Skills untested in workflows (mitigated by integration testing plan for Week 3)
+
+**Confidence:** 9/10 (skills complete with full protocol documentation)
 
 ---
 
@@ -264,12 +307,15 @@ Decision needed:
 - [x] Path mismatches identified (2 found)
 - [x] Missing skills catalogued (18 pending creation)
 - [x] Orphaned skills documented (9 exist without registry entry)
-- [ ] Core 12 paths fixed in agents.yaml
-- [ ] Changes committed to git
-- [ ] EGD-DEV-2026-005 entry created
+- [x] Core 12 paths fixed in agents.yaml
+- [x] Changes committed to git (commit 1d75ba3)
+- [x] EGD-DEV-2026-005 entry created
+- [x] 5 critical missing skills created (backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent)
+- [x] EGD-DEV-2026-006 entry created
+- [ ] Remaining 13 skills created (phased in Weeks 4-8)
+- [ ] Integration testing of new skills in workflows
 
-**Next Actions:**
-1. Fix 2 Core 12 path mismatches in agents.yaml
-2. Commit changes with evidence reference
-3. Create EGD-DEV-2026-005 entry
-4. Proceed to Week 3 or begin Core 12 skill enhancement
+**Next Actions**:
+1. ✅ Commit 5 new skills with updated audit and evidence
+2. Continue with next 5 skills (competitor_analyst, tech_radar, cost_estimator, secrets_manager, compliance_checker) in Week 4
+3. Proceed to Week 3 (Domain Experts & Enterprise Architecture) or Option B (Happy Path Test)

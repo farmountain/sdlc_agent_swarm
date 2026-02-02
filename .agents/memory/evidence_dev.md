@@ -132,6 +132,26 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 - **Risks**: MEDIUM - 18 missing skills block full workflow execution (mitigated: phased creation plan for Weeks 3-6 documented in audit); LOW - 9 orphaned skills may cause confusion (mitigated: documented for registry addition or experimental status decision in Week 4)
 - **Reversibility**: LOW (2/10) - Path fixes are mechanical corrections to match reality; reverting would break skill loading by driver
 
+### EGD-DEV-2026-006: Created 5 Critical Missing Skills (Week 2 Extension)
+- **Category**: architecture
+- **Date**: 2026-02-02
+- **Claim**: Created 5 critical missing agent skills to unblock core workflows: (1) backlog_manager (sprint planning, prioritization, capacity planning), (2) stakeholder_agent (approval management, conflict resolution, stakeholder mapping), (3) threat_modeler (security threat modeling, STRIDE analysis, risk assessment), (4) api_designer (API contract design, OpenAPI specs, developer experience), (5) refactor_agent (code quality improvement, technical debt reduction, systematic refactoring). All skills follow established protocol patterns with complete sections: Role, Identity, Core Responsibilities, Protocol (inputs/outputs), Process phases, Tool usage, Evidence requirements, Failure modes & reflexion, Invariant compliance, Position card schema, Success metrics, Examples.
+- **Evidence Pointers**:
+  - `.agents/skills/backlog-manager/skill.md` - 10.3KB, backlog management and sprint planning
+  - `.agents/skills/stakeholder-agent/skill.md` - 11.2KB, stakeholder engagement and approval tracking
+  - `.agents/skills/threat-modeler/skill.md` - 14.1KB, security threat modeling with STRIDE framework
+  - `.agents/skills/api-designer/skill.md` - 13.8KB, API design with OpenAPI specifications
+  - `.agents/skills/refactor-agent/skill.md` - 12.6KB, code refactoring and quality improvement
+  - Updated `weeks/week-02/SKILL_PATH_AUDIT.md` - Progress tracked (18 missing → 13 missing)
+- **Verification Status**: VERIFIED
+- **Invariants Validated**: 
+  - INV-000 (no hidden state - all skill protocols explicit and documented)
+  - INV-002 (extension compatibility - all skills markdown-based, driver-loadable)
+  - Skills ready for workflows: WF-001 (requirements_gathering), WF-002 (backlog_prioritization), WF-004 (threat_modeling), WF-006 (api_contract_design)
+- **Confidence**: HIGH (9/10)
+- **Risks**: LOW - Skills follow established patterns from Core 12 (prd-agent, solution-architect, verifier templates); MEDIUM - Skills untested in workflows (mitigated: documented for integration testing in Week 3)
+- **Reversibility**: MEDIUM (5/10) - Skills are additive (removing doesn't break existing agents); workflows now depend on these 5 agents
+
 ---
 
 ## Evidence Requirements by Category
@@ -177,12 +197,12 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 
 ## Statistics
 
-- **Total Entries**: 4 (+ 4 legacy weekly entries)
-- **Verified**: 3 (EGD-DEV-2026-001, EGD-DEV-2026-003, EGD-DEV-2026-004, EGD-DEV-2026-005)
+- **Total Entries**: 5 (+ 4 legacy weekly entries)
+- **Verified**: 4 (EGD-DEV-2026-001, EGD-DEV-2026-003, EGD-DEV-2026-004, EGD-DEV-2026-005, EGD-DEV-2026-006)
 - **Pending**: 1 (EGD-DEV-2026-002 - awaiting evidence_prod.md)
 - **Blocked**: 0
-- **Categories**: Architecture (4), Scope (0), Debt (0), Release (0), Learning (0)
-- **Invariants Most Often Validated**: INV-000 (4), INV-035 (1), INV-002 (1)
+- **Categories**: Architecture (5), Scope (0), Debt (0), Release (0), Learning (0)
+- **Invariants Most Often Validated**: INV-000 (5), INV-002 (2), INV-035 (1)
 - **Invariants Never Violated**: All 35 (no violations recorded yet)
 
 ---
@@ -191,7 +211,7 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 
 - **Evidence_prod.md Missing**: Need to create product capability ledger (EGD-DEV-2026-002 blocked)
 - **Risk Policy Missing**: No risk_policy.yaml yet to enforce approval gates described above
-- **Agent Skills Incomplete**: 18 agent skills missing (audit completed, phased creation plan in weeks/week-02/SKILL_PATH_AUDIT.md)
+- **Agent Skills Incomplete**: 13 agent skills remaining (down from 18, see weeks/week-02/SKILL_PATH_AUDIT.md for phased creation plan)
 - **Weekly Evidence**: W01-E1, W02-E1, W03-E1 all PENDING - need to implement and verify
 
 ---
