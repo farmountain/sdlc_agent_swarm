@@ -115,6 +115,23 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 - **Risks**: LOW - Comprehensive validation completed; only minor numbering offset between agents.yaml invariant IDs and world_model.yaml (non-blocking, mapping clear)
 - **Reversibility**: MEDIUM (4/10) - Registry is core contract for swarm; reverting breaks all workflow orchestration
 
+### EGD-DEV-2026-005: Core 12 Skill Path Validation & Alignment (Week 2 Post-Completion)
+- **Category**: architecture
+- **Date**: 2026-02-02
+- **Claim**: Validated all Core 12 agent skills exist with complete content and fixed 2 skill path misalignments in agents.yaml registry to match actual .agents/skills/ directory structure. Audit identified: (1) All 12 Core agents have skill.md files (12KB-49KB each) with complete protocols, (2) 2 path mismatches fixed (prd_generator: "prd-generator"→"prd-agent", domain_modeler: "domain-modeler"→"domain-model"), (3) 18 missing skills identified for phased creation (Weeks 3-6), (4) 9 orphaned skills documented (confidence-agent, dashboard-agent, drift-detector, metrics-agent, prod-safety-agent, solver, spec-agent, test-agent, plus 5 domain experts - candidates for registry addition in Week 4).
+- **Evidence Pointers**:
+  - `weeks/week-02/SKILL_PATH_AUDIT.md` - Comprehensive audit report with 38-agent validation matrix
+  - `.agents/registry/agents.yaml` - Updated skill paths (AGT-001, AGT-007 corrected)
+  - All Core 12 skills verified: `.agents/skills/{prd-agent, solution-architect, domain-model, code-generator, test-generator, iam-agent, cicd-agent, release-manager, observability-agent, memory-agent, verifier}` + `.agents/driver/skill.md`
+  - PowerShell validation: All 12 skill.md files exist with substantial content
+- **Verification Status**: VERIFIED
+- **Invariants Validated**: 
+  - INV-000 (no hidden state - all skill paths explicit and auditable)
+  - INV-002 (extension compatibility preserved - all path changes backward compatible)
+- **Confidence**: HIGH (9/10)
+- **Risks**: MEDIUM - 18 missing skills block full workflow execution (mitigated: phased creation plan for Weeks 3-6 documented in audit); LOW - 9 orphaned skills may cause confusion (mitigated: documented for registry addition or experimental status decision in Week 4)
+- **Reversibility**: LOW (2/10) - Path fixes are mechanical corrections to match reality; reverting would break skill loading by driver
+
 ---
 
 ## Evidence Requirements by Category
@@ -160,12 +177,12 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 
 ## Statistics
 
-- **Total Entries**: 3 (+ 4 legacy weekly entries)
-- **Verified**: 2 (EGD-DEV-2026-001, EGD-DEV-2026-003)
+- **Total Entries**: 4 (+ 4 legacy weekly entries)
+- **Verified**: 3 (EGD-DEV-2026-001, EGD-DEV-2026-003, EGD-DEV-2026-004, EGD-DEV-2026-005)
 - **Pending**: 1 (EGD-DEV-2026-002 - awaiting evidence_prod.md)
 - **Blocked**: 0
-- **Categories**: Architecture (3), Scope (0), Debt (0), Release (0), Learning (0)
-- **Invariants Most Often Validated**: INV-000 (3), INV-035 (1)
+- **Categories**: Architecture (4), Scope (0), Debt (0), Release (0), Learning (0)
+- **Invariants Most Often Validated**: INV-000 (4), INV-035 (1), INV-002 (1)
 - **Invariants Never Violated**: All 35 (no violations recorded yet)
 
 ---
@@ -174,7 +191,7 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 
 - **Evidence_prod.md Missing**: Need to create product capability ledger (EGD-DEV-2026-002 blocked)
 - **Risk Policy Missing**: No risk_policy.yaml yet to enforce approval gates described above
-- **Agent Skills Incomplete**: Only 6/12 Core agents have skills (missing PRD, SolutionArchitect, DomainModel, IAM, Observability, Memory)
+- **Agent Skills Incomplete**: 18 agent skills missing (audit completed, phased creation plan in weeks/week-02/SKILL_PATH_AUDIT.md)
 - **Weekly Evidence**: W01-E1, W02-E1, W03-E1 all PENDING - need to implement and verify
 
 ---

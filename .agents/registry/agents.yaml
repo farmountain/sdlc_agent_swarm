@@ -29,7 +29,7 @@ discovery_product:
       - "Stakeholder approval"
       - "Success metrics defined"
     invariants_checked: []
-    skill_path: "skills/prd-generator"
+    skill_path: "skills/prd-agent"
 
   - id: backlog_manager
     name: "Backlog Manager"
@@ -134,7 +134,7 @@ architecture_design:
       - "Domain model validation"
       - "Entity relationship diagram"
     invariants_checked: [INV-007]
-    skill_path: "skills/domain-modeler"
+    skill_path: "skills/domain-model"
 
   - id: nfr_agent
     name: "NFR Agent"
