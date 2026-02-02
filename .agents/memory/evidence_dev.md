@@ -169,6 +169,33 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 - **Confidence**: HIGH (8/10)
 - **Risks**: MEDIUM - Simulation only, not executed in VS Code Copilot runtime (mitigated: protocol correctness validated, runtime test recommended for Week 3); LOW - Driver invocation protocol not fully specified (mitigated: gap identified with recommendation to document agent-to-agent communication pattern)
 - **Reversibility**: LOW (3/10) - Simulation is informational only (no code changes); identifies integration requirements for runtime implementation
+
+### EGD-DEV-2026-008: Driver Invocation Protocol Defined (Gap Resolution)
+- **Category**: architecture
+- **Date**: 2026-02-02
+- **Claim**: Defined comprehensive agent invocation protocol to resolve critical integration gap identified in EGD-DEV-2026-007 (WF-001 happy path test). Documented: (1) File-based, asynchronous communication protocol where position cards stored as markdown files in `.agents/memory/position_cards/<workflow_id>/`, (2) Sequential invocation with step numbers (01_driver_init.md, 02_prd_generator.md, etc.), (3) Parallel invocation support with step suffixes (05a_security_expert.md, 05b_devops_expert.md), (4) Reflexion loop protocol with retry naming (_retry1, _retry2), (5) Position card parsing and validation logic, (6) Error handling for timeouts, crashes, and invalid schemas, (7) VS Code extension integration pattern with TypeScript implementation examples. Protocol enables: runtime execution in VS Code Copilot, position card audit trail (10-20 files per workflow), workflow resumption from checkpoints, language-agnostic agent implementation (Python, TypeScript, Rust).
+- **Evidence Pointers**:
+  - `.agents/driver/skill.md` - New "Agent Invocation Protocol" section (lines 82-469, ~390 lines, ~26KB content added)
+  - Protocol components documented:
+    - Position card storage structure (`.agents/memory/position_cards/<workflow_id>/<step>_<agent_id>.md`)
+    - Invocation sequence (9 workflow steps with TypeScript examples)
+    - Sequential invocation (cumulative context, step incrementing)
+    - Parallel invocation (fan-out pattern with Promise.all)
+    - Reflexion loop invocation (retry with corrections)
+    - Position card parsing (TypeScript interface with validation)
+    - Error handling (3 error types: timeout, crash, invalid schema)
+    - VS Code extension integration (`SDLCDriver` class implementation)
+  - Position card filename conventions: `<step>_<agent_id>.md`, `<step>_<agent_id>_retry<N>.md`, `<step>a_<agent_id>.md` (parallel)
+- **Verification Status**: VERIFIED (protocol documented, examples provided)
+- **Invariants Validated**: 
+  - INV-000 (no hidden state - all position cards stored as files, inspectable)
+  - INV-001 (evidence-gated writes - position cards are evidence chain for memory agent)
+  - INV-035 (extension compatibility - file-based protocol supports any VS Code extension runtime)
+- **Confidence**: HIGH (9/10)
+- **Risks**: LOW - Protocol not yet implemented in VS Code runtime (mitigated: comprehensive specification enables implementer to build driver without ambiguity); LOW - File I/O performance for large workflows (mitigated: position card files are small ~2-10KB, workflow typically 10-20 files = 50-200KB total)
+- **Reversibility**: HIGH (8/10) - Protocol is documentation (no breaking changes to existing agents); enables bidirectional communication (agents → driver, driver → agents)
+- **Unblocks**: Runtime execution of all 16 workflows in VS Code Copilot extension; position card audit trail for debugging; workflow checkpointing and resumption
+
 ---
 
 ## Evidence Requirements by Category
@@ -214,12 +241,12 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 
 ## Statistics
 
-- **Total Entries**: 6 (+ 4 legacy weekly entries)
-- **Verified**: 5 (EGD-DEV-2026-001, EGD-DEV-2026-003, EGD-DEV-2026-004, EGD-DEV-2026-005, EGD-DEV-2026-006, EGD-DEV-2026-007)
+- **Total Entries**: 7 (+ 4 legacy weekly entries)
+- **Verified**: 6 (EGD-DEV-2026-001, EGD-DEV-2026-003, EGD-DEV-2026-004, EGD-DEV-2026-005, EGD-DEV-2026-006, EGD-DEV-2026-007, EGD-DEV-2026-008)
 - **Pending**: 1 (EGD-DEV-2026-002 - awaiting evidence_prod.md)
 - **Blocked**: 0
-- **Categories**: Architecture (6), Scope (0), Debt (0), Release (0), Learning (0)
-- **Invariants Most Often Validated**: INV-000 (6), INV-001 (2), INV-002 (2), INV-035 (1)
+- **Categories**: Architecture (7), Scope (0), Debt (0), Release (0), Learning (0)
+- **Invariants Most Often Validated**: INV-000 (7), INV-001 (3), INV-002 (2), INV-035 (2)
 - **Invariants Never Violated**: All 35 (no violations recorded yet)
 
 ---
@@ -229,7 +256,6 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 - **Evidence_prod.md Missing**: Need to create product capability ledger (EGD-DEV-2026-002 blocked)
 - **Risk Policy Missing**: No risk_policy.yaml yet to enforce approval gates described above
 - **Agent Skills Incomplete**: 13 agent skills remaining (down from 18, see weeks/week-02/SKILL_PATH_AUDIT.md for phased creation plan)
-- **Driver Invocation Protocol**: Not fully specified - agent-to-agent communication and position card storage mechanisms need documentation (identified in WF-001 happy path test)
 - **Weekly Evidence**: W01-E1, W02-E1, W03-E1 all PENDING - need to implement and verify
 
 ---

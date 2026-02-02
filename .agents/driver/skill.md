@@ -94,6 +94,641 @@ All agents must produce Position Cards following this exact schema:
 
 ---
 
+## Agent Invocation Protocol (CRITICAL FOR RUNTIME)
+
+### Protocol Overview
+
+The driver orchestrates agents using a **file-based, asynchronous protocol** where:
+1. Position cards are stored as markdown files in `.agents/memory/position_cards/`
+2. Each agent receives input via file paths (previous position cards + context)
+3. Each agent returns output by creating a new position card file
+4. The driver monitors position card files and proceeds when complete
+
+**Design Rationale:**
+- **Inspectable**: All agent communication is in version-controlled files
+- **Debuggable**: Can inspect position cards at any time during workflow
+- **Resumable**: Workflow can resume from last checkpoint using existing position cards
+- **Language-agnostic**: Agents can be implemented in any language (Python, TypeScript, Rust)
+- **Parallel-safe**: Multiple agents can write position cards concurrently without conflicts
+
+---
+
+### Position Card Storage Structure
+
+**Directory Structure:**
+```
+.agents/memory/position_cards/<workflow_id>/
+  ├── 01_driver_init.md          # Driver initialization (workflow context)
+  ├── 02_prd_generator.md        # PRD Agent output
+  ├── 03_stakeholder_agent.md    # Stakeholder Agent output
+  ├── 04_nfr_agent.md            # NFR Agent output
+  ├── 05_domain_modeler.md       # Domain Modeler output
+  ├── 06_skeptic.md              # Skeptic challenge
+  ├── 07_verifier.md             # Verification receipt
+  ├── 08_approval_gate.md        # Approval decision
+  └── 09_memory_agent.md         # Final evidence write
+```
+
+**Workflow ID Format:** `<workflow_name>_<timestamp>`
+- Example: `requirements_gathering_20260131_142300`
+
+**Position Card Filename Convention:** `<step_number>_<agent_id>.md`
+- Step number: 2-digit zero-padded (01, 02, 03...)
+- Agent ID: from `.agents/registry/agents.yaml` (e.g., `prd_generator`, `skeptic`)
+
+---
+
+### Invocation Sequence (Step-by-Step)
+
+#### Step 1: Driver Initialization
+**Trigger:** User invokes workflow
+
+**Action:** Driver creates workflow context file
+
+**File:** `.agents/memory/position_cards/<workflow_id>/01_driver_init.md`
+
+**Content:**
+```markdown
+# Workflow Initialization: Requirements Gathering
+
+## Workflow Metadata
+- **Workflow ID**: requirements_gathering_20260131_142300
+- **Workflow Name**: requirements_gathering
+- **Mode**: RUN_SDLC
+- **Timestamp**: 2026-01-31T14:23:00Z
+- **User Request**: "Build user authentication system with JWT and social login"
+
+## User Context
+- **Project Path**: projects/auth-system/
+- **Constraints**: 
+  - Must support OAuth2 (Google, GitHub)
+  - Must use bcrypt for password hashing
+  - Must have MFA support
+- **Budget**: $50,000
+- **Timeline**: 4 weeks
+- **Stakeholders**: ["Product Manager", "Tech Lead", "Security Lead", "DevOps Lead"]
+
+## Workflow Steps
+1. **driver** (current) → Initialization complete
+2. **prd_generator** (next) → Create PRD with stakeholder interviews
+3. **stakeholder_agent** → Gather approvals
+4. **nfr_agent** → Define performance/security targets
+5. **domain_modeler** → Create domain model
+6. **skeptic** → Challenge assumptions
+7. **verifier** → Validate evidence chain
+8. **approval_gate** → Check approval requirements
+9. **memory_agent** → Write to evidence ledger
+
+## Available Context Files
+- None (new project)
+```
+
+**Driver State:** Workflow initialized, ready to invoke first agent (prd_generator)
+
+---
+
+#### Step 2: Agent Invocation (PRD Generator Example)
+
+**Trigger:** Driver determines next agent from workflow definition
+
+**Action:** Driver invokes PRD Generator agent
+
+**Invocation Command (TypeScript Runtime):**
+```typescript
+// Driver invokes agent via VS Code API (or CLI if standalone)
+const agentResult = await vscode.lm.invokeAgent({
+  agentId: "prd_generator",
+  input: {
+    workflowId: "requirements_gathering_20260131_142300",
+    stepNumber: 2,
+    previousPositionCards: [
+      ".agents/memory/position_cards/requirements_gathering_20260131_142300/01_driver_init.md"
+    ],
+    contextFiles: [],
+    mode: "RUN_SDLC",
+    expectedOutput: ".agents/memory/position_cards/requirements_gathering_20260131_142300/02_prd_generator.md"
+  }
+});
+```
+
+**Agent Receives:**
+- `workflowId`: Unique identifier for this workflow execution
+- `stepNumber`: Current step in workflow (for sequential ordering)
+- `previousPositionCards`: Array of file paths to read for context
+- `contextFiles`: Additional context (existing PRD, code, etc.)
+- `mode`: BUILD_SWARM or RUN_SDLC (determines memory routing)
+- `expectedOutput`: File path where agent must write its position card
+
+**Agent Processing:**
+1. Read `01_driver_init.md` to understand user request
+2. Generate PRD with user stories, functional requirements, NFRs
+3. Interview stakeholders (4 stakeholders: PM, Tech Lead, Security, DevOps)
+4. Map requirements to enterprise invariants
+5. Create position card with Claims, Plan, Evidence pointers, Risks
+
+**Agent Output:** Creates `.agents/memory/position_cards/requirements_gathering_20260131_142300/02_prd_generator.md`
+
+**Position Card Content:**
+```markdown
+# Position Card: PRD Generator
+
+## Agent Metadata
+- **Agent ID**: prd_generator
+- **Workflow ID**: requirements_gathering_20260131_142300
+- **Step Number**: 2
+- **Timestamp**: 2026-01-31T14:25:30Z
+- **Duration**: 2.5 minutes
+
+## Position Card
+- **Claims**:
+  - User requires authentication system with JWT + social login (Google, GitHub)
+  - Must support 5 functional requirements: registration, login, MFA, password reset, OAuth2
+  - Must satisfy 5 non-functional requirements: <200ms login latency, 99.9% uptime, bcrypt hashing
+  - Stakeholders: Product Manager (business requirements), Tech Lead (architecture), Security Lead (compliance), DevOps Lead (deployment)
+
+- **Plan**:
+  - Create PRD.md with 3 user stories (User Registration, User Login, Account Security)
+  - Interview 4 stakeholders for approval requirements
+  - Map to 9 enterprise invariants (INV-001 JWT, INV-002 RBAC, INV-003 MFA, INV-006 bcrypt, INV-008 PII masking, INV-009 rate limiting, INV-010 audit logging, INV-014 webhook signatures, INV-029 7-year retention)
+  - Define success metrics: 1000 users in first month, <5% support tickets for auth issues
+
+- **Evidence pointers**:
+  - projects/auth-system/PRD.md (480 lines with 3 user stories, 5 FRs, 5 NFRs)
+  - projects/auth-system/stakeholder_interviews.md (summary of 4 stakeholder conversations)
+
+- **Risks**:
+  - OAuth2 provider downtime (Google/GitHub APIs unavailable)
+  - MFA UX friction (users may disable if too complex)
+  - Timeline tight (4 weeks for 5 features may require scope reduction)
+
+- **Confidence**: 0.90 (requirements clear from user, stakeholders aligned)
+- **Cost**: Low (2.5 hours to generate PRD + interview stakeholders)
+- **Reversibility**: Easy (PRD is documentation, no code written)
+- **Invariant violations**: None
+- **Required approvals**: ["prd_signoff"]
+
+## Next Steps
+- **Next Agent**: stakeholder_agent (gather formal approvals from 4 stakeholders)
+- **Input for Next Agent**: This position card + 01_driver_init.md + projects/auth-system/PRD.md
+```
+
+**Driver Monitoring:**
+- Driver polls for file: `.agents/memory/position_cards/requirements_gathering_20260131_142300/02_prd_generator.md`
+- File detected → Driver parses position card
+- Driver validates schema (all required fields present)
+- Driver checks: agent completed successfully (no ERROR state)
+- Driver proceeds to next step
+
+---
+
+#### Step 3: Sequential Agent Invocation (Stakeholder Agent)
+
+**Trigger:** PRD Generator completed successfully
+
+**Action:** Driver invokes Stakeholder Agent
+
+**Invocation Command:**
+```typescript
+const agentResult = await vscode.lm.invokeAgent({
+  agentId: "stakeholder_agent",
+  input: {
+    workflowId: "requirements_gathering_20260131_142300",
+    stepNumber: 3,
+    previousPositionCards: [
+      ".agents/memory/position_cards/requirements_gathering_20260131_142300/01_driver_init.md",
+      ".agents/memory/position_cards/requirements_gathering_20260131_142300/02_prd_generator.md"
+    ],
+    contextFiles: [
+      "projects/auth-system/PRD.md",
+      "projects/auth-system/stakeholder_interviews.md"
+    ],
+    mode: "RUN_SDLC",
+    expectedOutput: ".agents/memory/position_cards/requirements_gathering_20260131_142300/03_stakeholder_agent.md"
+  }
+});
+```
+
+**Key Changes:**
+- `stepNumber`: 3 (incremented)
+- `previousPositionCards`: **Array now includes 02_prd_generator.md** (cumulative context)
+- `contextFiles`: Includes PRD.md created by PRD Generator
+- `expectedOutput`: 03_stakeholder_agent.md
+
+**Agent Processing:**
+1. Read position cards: 01_driver_init.md, 02_prd_generator.md
+2. Read context files: PRD.md, stakeholder_interviews.md
+3. Gather approvals from 4 stakeholders (PM, Tech Lead, Security, DevOps)
+4. Map stakeholders to RACI matrix (Responsible, Accountable, Consulted, Informed)
+5. Track approval status: APPROVED, APPROVED_WITH_CONDITIONS, REJECTED
+6. Create position card with approval results
+
+**Agent Output:** Creates `03_stakeholder_agent.md` with approval tracking
+
+---
+
+### Parallel Agent Invocation (Fan-Out Pattern)
+
+**Scenario:** Multiple domain experts reviewing architecture simultaneously
+
+**Step 5:** Domain experts in parallel
+
+**Invocation Commands (parallel):**
+```typescript
+// Driver invokes 3 agents in parallel
+const parallelResults = await Promise.all([
+  vscode.lm.invokeAgent({
+    agentId: "security_iam_expert",
+    input: {
+      workflowId: "architecture_review_20260131_150000",
+      stepNumber: 5,
+      previousPositionCards: ["01_driver_init.md", "02_solver.md", "03_skeptic.md"],
+      contextFiles: ["projects/ecommerce-api/ARCHITECTURE.md"],
+      mode: "RUN_SDLC",
+      expectedOutput: ".agents/memory/position_cards/architecture_review_20260131_150000/05a_security_iam_expert.md"
+    }
+  }),
+  vscode.lm.invokeAgent({
+    agentId: "devops_platform_expert",
+    input: {
+      workflowId: "architecture_review_20260131_150000",
+      stepNumber: 5,
+      previousPositionCards: ["01_driver_init.md", "02_solver.md", "03_skeptic.md"],
+      contextFiles: ["projects/ecommerce-api/ARCHITECTURE.md"],
+      mode: "RUN_SDLC",
+      expectedOutput: ".agents/memory/position_cards/architecture_review_20260131_150000/05b_devops_platform_expert.md"
+    }
+  }),
+  vscode.lm.invokeAgent({
+    agentId: "backend_architect_expert",
+    input: {
+      workflowId: "architecture_review_20260131_150000",
+      stepNumber: 5,
+      previousPositionCards: ["01_driver_init.md", "02_solver.md", "03_skeptic.md"],
+      contextFiles: ["projects/ecommerce-api/ARCHITECTURE.md"],
+      mode: "RUN_SDLC",
+      expectedOutput: ".agents/memory/position_cards/architecture_review_20260131_150000/05c_backend_architect_expert.md"
+    }
+  })
+]);
+```
+
+**Key Points:**
+- All 3 agents have **same stepNumber** (5) - indicates parallelism
+- Filenames use suffix (05a, 05b, 05c) to distinguish parallel agents
+- All 3 agents read same previous position cards (shared context)
+- Driver waits for ALL 3 position cards before continuing to step 6
+
+---
+
+### Reflexion Loop (Agent Retry with Feedback)
+
+**Scenario:** Verifier FAIL → Driver retries agent with corrections
+
+**Step 7:** Verifier detects missing evidence
+
+**Verifier Output:** `07_verifier.md` with receipt status FAIL
+
+```markdown
+# Position Card: Verifier
+
+## Verification Receipt
+- **Status**: FAIL
+- **Timestamp**: 2026-01-31T14:45:00Z
+- **Checks Performed**: 7
+- **Passed**: 5
+- **Failed**: 2
+
+## Failed Checks
+1. ❌ Evidence Pointer Missing
+   - Expected: projects/auth-system/src/routes/auth.ts
+   - Actual: File does not exist
+   - Required By: Code Generator position card
+
+2. ❌ Invariant Violation
+   - Invariant: INV-008 (PII masking in logs)
+   - Violation: Logger configuration does not redact email addresses
+   - Required Fix: Add email redaction to logging middleware
+
+## Required Corrections
+- Agent: code_generator
+- Action: Retry with corrections for checks 1 and 2
+- Max Retries: 3 (current attempt: 1)
+```
+
+**Driver Response:**
+
+```typescript
+// Driver detects FAIL receipt
+const verifierCard = parsePositionCard("07_verifier.md");
+if (verifierCard.status === "FAIL") {
+  // Extract corrections needed
+  const corrections = verifierCard.failedChecks;
+  const targetAgent = verifierCard.requiredCorrections.agent; // "code_generator"
+  
+  // Check max retries
+  const currentAttempt = getAttemptCount(workflowId, targetAgent); // 1
+  const maxRetries = getWorkflowConfig(workflowId).maxRetries; // 3
+  
+  if (currentAttempt < maxRetries) {
+    // Re-invoke agent with corrections
+    await vscode.lm.invokeAgent({
+      agentId: targetAgent, // "code_generator"
+      input: {
+        workflowId: "requirements_gathering_20260131_142300",
+        stepNumber: 6, // Re-invoke at same step (retry)
+        previousPositionCards: ["01_driver_init.md", "02_prd_generator.md", ...],
+        contextFiles: ["projects/auth-system/PRD.md", ...],
+        mode: "RUN_SDLC",
+        expectedOutput: ".agents/memory/position_cards/requirements_gathering_20260131_142300/06_code_generator_retry1.md",
+        corrections: corrections, // Pass failed checks to agent
+        retryAttempt: 1
+      }
+    });
+  } else {
+    // Max retries exceeded → escalate to user
+    await escalateToUser({
+      workflow: workflowId,
+      agent: targetAgent,
+      error: "Max retries exceeded (3), agent cannot satisfy verifier requirements",
+      failedChecks: corrections
+    });
+  }
+}
+```
+
+**Retry Position Card Naming:** `<step>_<agent_id>_retry<N>.md`
+- Example: `06_code_generator_retry1.md`, `06_code_generator_retry2.md`
+
+---
+
+### Position Card Parsing (Driver Implementation)
+
+**Driver Function:** `parsePositionCard(filepath: string): PositionCard`
+
+```typescript
+interface PositionCard {
+  agentId: string;
+  workflowId: string;
+  stepNumber: number;
+  timestamp: string;
+  duration: string;
+  
+  // Position card fields
+  claims: string[];
+  plan: string[];
+  evidencePointers: string[];
+  risks: string[];
+  confidence: number;
+  cost: "Low" | "Med" | "High";
+  reversibility: "Easy" | "Med" | "Hard";
+  invariantViolations: string[];
+  requiredApprovals: string[];
+  
+  // Next steps
+  nextAgent?: string;
+  status?: "COMPLETE" | "WAITING_FOR_APPROVAL" | "FAIL" | "ERROR";
+}
+
+function parsePositionCard(filepath: string): PositionCard {
+  const content = fs.readFileSync(filepath, "utf-8");
+  
+  // Extract metadata
+  const agentId = extractSection(content, "## Agent Metadata", "Agent ID");
+  const workflowId = extractSection(content, "## Agent Metadata", "Workflow ID");
+  
+  // Extract position card fields
+  const claims = extractListSection(content, "## Position Card", "Claims");
+  const plan = extractListSection(content, "## Position Card", "Plan");
+  const evidencePointers = extractListSection(content, "## Position Card", "Evidence pointers");
+  const risks = extractListSection(content, "## Position Card", "Risks");
+  const confidence = parseFloat(extractField(content, "Confidence"));
+  const cost = extractField(content, "Cost") as "Low" | "Med" | "High";
+  const reversibility = extractField(content, "Reversibility") as "Easy" | "Med" | "Hard";
+  const invariantViolations = extractListSection(content, "## Position Card", "Invariant violations");
+  const requiredApprovals = extractListSection(content, "## Position Card", "Required approvals");
+  
+  // Extract next steps
+  const nextAgent = extractField(content, "Next Agent");
+  const status = extractField(content, "Status") as "COMPLETE" | "WAITING_FOR_APPROVAL" | "FAIL" | "ERROR" | undefined;
+  
+  return {
+    agentId,
+    workflowId,
+    stepNumber,
+    timestamp,
+    duration,
+    claims,
+    plan,
+    evidencePointers,
+    risks,
+    confidence,
+    cost,
+    reversibility,
+    invariantViolations,
+    requiredApprovals,
+    nextAgent,
+    status
+  };
+}
+```
+
+---
+
+### Error Handling in Invocation Protocol
+
+#### Error Type 1: Agent Timeout (No Position Card Produced)
+
+**Detection:** Driver polls for position card file, timeout after 5 minutes
+
+```typescript
+async function invokeAgentWithTimeout(agentId: string, input: AgentInput, timeout: number = 300000): Promise<PositionCard> {
+  const startTime = Date.now();
+  const expectedFile = input.expectedOutput;
+  
+  // Invoke agent (non-blocking)
+  await vscode.lm.invokeAgent({ agentId, input });
+  
+  // Poll for position card file
+  while (Date.now() - startTime < timeout) {
+    if (fs.existsSync(expectedFile)) {
+      // Position card created → parse and return
+      return parsePositionCard(expectedFile);
+    }
+    await sleep(1000); // Poll every 1 second
+  }
+  
+  // Timeout exceeded
+  throw new AgentTimeoutError(`Agent ${agentId} did not produce position card within ${timeout}ms`);
+}
+```
+
+**Recovery:** Retry with simplified scope or escalate to user
+
+---
+
+#### Error Type 2: Agent Crashed (ERROR Status)
+
+**Detection:** Position card exists but has ERROR status
+
+```typescript
+const positionCard = parsePositionCard("05_code_generator.md");
+if (positionCard.status === "ERROR") {
+  const errorMessage = positionCard.errorDetails; // Extract from position card
+  
+  // Log error to decisions_log.md
+  await logDecision({
+    type: "AGENT_ERROR",
+    agent: positionCard.agentId,
+    workflow: positionCard.workflowId,
+    error: errorMessage,
+    action: "RETRY"
+  });
+  
+  // Retry with error context
+  await invokeAgent({
+    agentId: positionCard.agentId,
+    input: {
+      ...previousInput,
+      retryAttempt: 1,
+      previousError: errorMessage
+    }
+  });
+}
+```
+
+---
+
+#### Error Type 3: Invalid Position Card Schema
+
+**Detection:** Position card file exists but missing required fields
+
+```typescript
+function validatePositionCard(card: PositionCard): ValidationResult {
+  const errors: string[] = [];
+  
+  // Required fields
+  if (!card.claims || card.claims.length === 0) errors.push("Missing required field: claims");
+  if (!card.plan || card.plan.length === 0) errors.push("Missing required field: plan");
+  if (!card.evidencePointers) errors.push("Missing required field: evidencePointers");
+  if (card.confidence === undefined || card.confidence < 0 || card.confidence > 1) {
+    errors.push("Invalid confidence value (must be 0.0 to 1.0)");
+  }
+  if (!["Low", "Med", "High"].includes(card.cost)) errors.push("Invalid cost value");
+  if (!["Easy", "Med", "Hard"].includes(card.reversibility)) errors.push("Invalid reversibility value");
+  
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
+// Usage
+const card = parsePositionCard("05_solver.md");
+const validation = validatePositionCard(card);
+if (!validation.valid) {
+  throw new InvalidPositionCardError(`Agent produced invalid position card: ${validation.errors.join(", ")}`);
+}
+```
+
+---
+
+### Integration with VS Code Extension
+
+**Extension Entry Point:** `extension.ts`
+
+```typescript
+import * as vscode from 'vscode';
+
+export function activate(context: vscode.ExtensionContext) {
+  // Register driver command
+  const driverCommand = vscode.commands.registerCommand('sdlc-swarm.runWorkflow', async (workflowName: string, userRequest: string) => {
+    const driver = new SDLCDriver(context);
+    await driver.executeWorkflow(workflowName, userRequest);
+  });
+  
+  context.subscriptions.push(driverCommand);
+}
+
+class SDLCDriver {
+  constructor(private context: vscode.ExtensionContext) {}
+  
+  async executeWorkflow(workflowName: string, userRequest: string) {
+    // 1. Initialize workflow
+    const workflowId = `${workflowName}_${Date.now()}`;
+    const workflowDir = `.agents/memory/position_cards/${workflowId}`;
+    fs.mkdirSync(workflowDir, { recursive: true });
+    
+    // 2. Create driver init position card
+    await this.createDriverInit(workflowId, workflowName, userRequest);
+    
+    // 3. Load workflow definition
+    const workflow = await this.loadWorkflow(workflowName);
+    
+    // 4. Execute workflow steps
+    for (const step of workflow.steps) {
+      const positionCard = await this.invokeAgent(workflowId, step);
+      
+      // Check for errors
+      if (positionCard.status === "ERROR") {
+        await this.handleAgentError(workflowId, step, positionCard);
+      }
+      
+      // Check for verification failure
+      if (step.agentId === "verifier" && positionCard.status === "FAIL") {
+        await this.handleVerificationFailure(workflowId, positionCard);
+      }
+      
+      // Check for approval requirement
+      if (positionCard.requiredApprovals.length > 0) {
+        await this.waitForApprovals(workflowId, positionCard);
+      }
+    }
+    
+    // 5. Workflow complete
+    vscode.window.showInformationMessage(`Workflow ${workflowName} completed successfully!`);
+  }
+  
+  private async invokeAgent(workflowId: string, step: WorkflowStep): Promise<PositionCard> {
+    // Implementation: invoke agent via VS Code language model API
+    // ...
+  }
+}
+```
+
+---
+
+### Summary: Invocation Protocol
+
+**Key Principles:**
+1. **File-Based Communication**: Position cards stored as markdown files (inspectable, debuggable)
+2. **Asynchronous Invocation**: Driver invokes agent, polls for output file
+3. **Cumulative Context**: Each agent receives ALL previous position cards (full history)
+4. **Sequential Ordering**: Step numbers enforce workflow order (01, 02, 03...)
+5. **Parallel Support**: Same step number with suffixes (05a, 05b, 05c) for fan-out
+6. **Retry Support**: Filename suffix `_retry<N>` for reflexion loops
+7. **Schema Validation**: Driver validates position card schema before proceeding
+8. **Error Propagation**: Agents can return ERROR status for driver to handle
+
+**Files Created Per Workflow:**
+- `.agents/memory/position_cards/<workflow_id>/` directory (1)
+- `01_driver_init.md` (driver initialization card) (1)
+- `<step>_<agent_id>.md` per agent invocation (~9-15 per workflow)
+- Total: ~10-20 files per workflow execution (full audit trail)
+
+**Performance:**
+- Sequential invocation: ~2-5 minutes per agent (typical)
+- Parallel invocation: 3 agents in parallel = ~3x speedup
+- Workflow with 9 agents sequential: ~20-45 minutes
+- Workflow with 3 parallel stages (3 agents each): ~10-20 minutes
+
+**Traceability:**
+- Every agent invocation produces position card (audit trail)
+- Can replay workflow by reading position card files sequentially
+- Can resume from any step by reading previous position cards
+- Can debug failures by inspecting position card that produced ERROR
+
+---
+
 ## Operating Rules (Non-Negotiable)
 
 ### 1. Spec-First Rule
