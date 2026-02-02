@@ -232,6 +232,390 @@ def test_sort_always_produces_sorted_list(numbers: list[int]):
     assert sorted(sorted_nums) == sorted(numbers)
 ```
 
+## Branch Coverage Strategies (from migrate-cli)
+
+### Understanding Coverage Metrics
+
+**Coverage Types (in priority order):**
+1. **Branch Coverage** (MOST IMPORTANT) - Tests all conditional paths (if/else, switch, ternary)
+2. **Statement Coverage** - Tests all executable statements
+3. **Function Coverage** - Tests all functions are called
+4. **Line Coverage** - Tests all lines of code are executed
+
+**Why Branch Coverage Matters Most:**
+- ✅ Catches untested error paths
+- ✅ Validates edge case handling
+- ✅ Ensures all conditional logic tested
+- ✅ Prevents bugs in rarely-executed paths
+
+**Example: 72.95% Branch Coverage Achievement (migrate-cli)**
+- Started at 67.62% (below 70% threshold)
+- Identified 42 untested branches in database clients
+- Added error path tests (connection failures, query errors)
+- Result: 72.95% (exceeded threshold)
+
+### Branch Coverage Thinking Pattern
+
+**For every function, systematically identify branches:**
+
+#### Step 1: Map All Conditional Branches
+```typescript
+// Example function with 6 branches
+async function createUser(data: UserData): Promise<User> {
+  // Branch 1 & 2: Email validation
+  if (!data.email || !isValidEmail(data.email)) {
+    throw new ValidationError('email', 'Invalid email format');
+  }
+  
+  // Branch 3 & 4: Name validation
+  if (!data.name || data.name.length < 2) {
+    throw new ValidationError('name', 'Name too short');
+  }
+  
+  try {
+    // Branch 5: Success path
+    return await userRepository.save(data);
+  } catch (error) {
+    // Branch 6: Database error path
+    if (isDatabaseError(error) && error.code === '23505') {
+      throw new DuplicateUserError('User already exists');
+    }
+    throw new DatabaseError('Failed to create user', { cause: error });
+  }
+}
+```
+
+**Branch Inventory:**
+1. Missing email → ValidationError
+2. Invalid email format → ValidationError
+3. Missing name → ValidationError
+4. Name too short → ValidationError
+5. Successful save → User returned
+6. Duplicate key error → DuplicateUserError
+7. Other database error → DatabaseError
+
+#### Step 2: Create Test Cases for ALL Branches
+```typescript
+describe('createUser - Branch Coverage', () => {
+  // Branch 1: Missing email
+  it('should throw ValidationError when email is missing', async () => {
+    const data = { name: 'John Doe' } as UserData;
+    await expect(createUser(data)).rejects.toThrow(ValidationError);
+    await expect(createUser(data)).rejects.toThrow('Invalid email format');
+  });
+  
+  // Branch 2: Invalid email format
+  it('should throw ValidationError when email format is invalid', async () => {
+    const data = { email: 'invalid-email', name: 'John Doe' };
+    await expect(createUser(data)).rejects.toThrow(ValidationError);
+  });
+  
+  // Branch 3: Missing name
+  it('should throw ValidationError when name is missing', async () => {
+    const data = { email: 'john@example.com' } as UserData;
+    await expect(createUser(data)).rejects.toThrow(ValidationError);
+    await expect(createUser(data)).rejects.toThrow('Name too short');
+  });
+  
+  // Branch 4: Name too short
+  it('should throw ValidationError when name is too short', async () => {
+    const data = { email: 'john@example.com', name: 'J' };
+    await expect(createUser(data)).rejects.toThrow(ValidationError);
+  });
+  
+  // Branch 5: Success path
+  it('should create user when data is valid', async () => {
+    const data = { email: 'john@example.com', name: 'John Doe' };
+    const user = await createUser(data);
+    expect(user.email).toBe('john@example.com');
+    expect(user.name).toBe('John Doe');
+  });
+  
+  // Branch 6: Duplicate key error
+  it('should throw DuplicateUserError when email already exists', async () => {
+    const data = { email: 'existing@example.com', name: 'John Doe' };
+    // Setup: Create user first
+    await createUser(data);
+    // Test: Try to create again
+    await expect(createUser(data)).rejects.toThrow(DuplicateUserError);
+  });
+  
+  // Branch 7: General database error
+  it('should throw DatabaseError when database operation fails', async () => {
+    const data = { email: 'john@example.com', name: 'John Doe' };
+    // Mock database failure
+    jest.spyOn(userRepository, 'save').mockRejectedValueOnce(new Error('Connection lost'));
+    await expect(createUser(data)).rejects.toThrow(DatabaseError);
+  });
+});
+```
+
+#### Step 3: Test Error Paths (Often Missed)
+**Common error paths that need testing:**
+
+```typescript
+// 1. Connection Failures
+describe('DatabaseClient - Error Paths', () => {
+  it('should throw DatabaseConnectionError when connection fails', async () => {
+    const client = new DatabaseClient({ connectionString: 'invalid' });
+    await expect(client.connect()).rejects.toThrow(DatabaseConnectionError);
+  });
+  
+  it('should throw when querying without connection', async () => {
+    const client = new DatabaseClient(config);
+    // Don't connect first
+    await expect(client.query('SELECT 1')).rejects.toThrow('Not connected');
+  });
+});
+
+// 2. Async Operation Errors
+describe('MigrationRunner - Async Errors', () => {
+  it('should handle migration execution failure', async () => {
+    const runner = new MigrationRunner();
+    const badMigration = { name: '001', sql: 'INVALID SQL' };
+    await expect(runner.executeMigration(badMigration))
+      .rejects.toThrow(MigrationExecutionError);
+  });
+  
+  it('should cleanup connection even if migration fails', async () => {
+    const runner = new MigrationRunner();
+    const disconnectSpy = jest.spyOn(DatabaseClient.prototype, 'disconnect');
+    
+    try {
+      await runner.run({ migrations: [badMigration] });
+    } catch {
+      // Expected to fail
+    }
+    
+    // But should still cleanup
+    expect(disconnectSpy).toHaveBeenCalled();
+  });
+});
+
+// 3. Null/Undefined Checks
+describe('ConfigLoader - Null Handling', () => {
+  it('should throw when config file does not exist', () => {
+    expect(() => loadConfig('/nonexistent/config.json'))
+      .toThrow(ConfigurationError);
+  });
+  
+  it('should throw when config JSON is invalid', () => {
+    fs.writeFileSync('/tmp/bad.json', '{ invalid json }');
+    expect(() => loadConfig('/tmp/bad.json'))
+      .toThrow('Invalid JSON');
+  });
+  
+  it('should throw when required field is missing', () => {
+    fs.writeFileSync('/tmp/incomplete.json', '{"database":{}}');
+    expect(() => loadConfig('/tmp/incomplete.json'))
+      .toThrow(ValidationError);
+  });
+});
+
+// 4. CLI Argument Validation
+describe('CLI - Argument Validation', () => {
+  it('should exit with code 1 when direction is invalid', async () => {
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation();
+    
+    await program.parseAsync(['node', 'cli', 'migrate', '--direction', 'sideways']);
+    
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+  
+  it('should show error message for missing required option', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    
+    await program.parseAsync(['node', 'cli', 'migrate']);
+    
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect.stringContaining('required option')
+    );
+  });
+});
+```
+
+#### Step 4: Test Edge Cases
+**Edge cases that commonly have untested branches:**
+
+```typescript
+// Empty inputs
+it('should handle empty array', () => {
+  expect(processUsers([])).toEqual([]);
+});
+
+// Null/undefined
+it('should handle null input', () => {
+  expect(() => validateUser(null)).toThrow(ValidationError);
+});
+
+// Boundary values
+it('should accept minimum valid age', () => {
+  expect(validateAge(13)).toBe(true);
+});
+
+it('should reject below minimum age', () => {
+  expect(validateAge(12)).toBe(false);
+});
+
+// Type coercion issues (TypeScript strict mode catches these)
+it('should reject string when number expected', () => {
+  expect(() => validateAge('18' as any)).toThrow(TypeError);
+});
+```
+
+### Branch Coverage Monitoring
+
+**Jest Configuration for Coverage Thresholds:**
+```javascript
+// jest.config.js
+module.exports = {
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      branches: 70,    // Focus on branches!
+      functions: 80,
+      lines: 80,
+    },
+  },
+};
+```
+
+**Running Coverage Reports:**
+```bash
+# Generate detailed coverage report
+npm test -- --coverage
+
+# View HTML report (shows untested branches)
+open coverage/lcov-report/index.html
+
+# Focus on specific file
+npm test -- --coverage --testPathPattern=userService
+```
+
+**Interpreting Coverage Reports:**
+```
+File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+------------------|---------|----------|---------|---------|-------------------
+userService.ts    |   95.00 |   80.00  |  100.00 |   95.00 | 45-47,89
+database.ts       |   88.23 |   62.50  |   85.71 |   88.23 | 123,145-150,201
+                                  ⬆️
+                           FOCUS HERE FIRST
+```
+
+### Common Branch Coverage Pitfalls (migrate-cli lessons)
+
+**Pitfall 1: Testing only happy paths**
+```typescript
+// ❌ Only tests success case
+it('should connect to database', async () => {
+  await client.connect();
+  expect(client.isConnected()).toBe(true);
+});
+
+// ✅ Also test failure case
+it('should throw on connection failure', async () => {
+  const badClient = new DatabaseClient({ connectionString: 'invalid' });
+  await expect(badClient.connect()).rejects.toThrow(DatabaseConnectionError);
+});
+```
+
+**Pitfall 2: Not testing error type correctly**
+```typescript
+// ❌ Catches error but doesn't validate type
+it('should handle duplicate email', async () => {
+  try {
+    await createUser({ email: 'existing@example.com' });
+  } catch (error) {
+    // Test passes even if wrong error thrown
+  }
+});
+
+// ✅ Validates specific error type
+it('should throw DuplicateUserError for duplicate email', async () => {
+  await expect(createUser({ email: 'existing@example.com' }))
+    .rejects.toThrow(DuplicateUserError);
+});
+```
+
+**Pitfall 3: Over-mocking (hides real branches)**
+```typescript
+// ❌ Mocks so much that branches aren't exercised
+it('should create user', async () => {
+  const mockRepo = {
+    save: jest.fn().mockResolvedValue({ id: '123' })
+  };
+  // Never tests validation logic branches!
+  const result = await createUser({ email: 'test@example.com' });
+});
+
+// ✅ Test real validation branches
+it('should validate email before saving', async () => {
+  await expect(createUser({ email: 'invalid' }))
+    .rejects.toThrow(ValidationError);
+});
+```
+
+**Pitfall 4: Forgetting finally blocks**
+```typescript
+// ❌ Doesn't test cleanup path
+it('should run migrations', async () => {
+  await runner.run(migrations);
+  // Never tests if disconnect() is called
+});
+
+// ✅ Test cleanup even on error
+it('should cleanup connection on migration failure', async () => {
+  const disconnectSpy = jest.spyOn(client, 'disconnect');
+  
+  try {
+    await runner.run([badMigration]);
+  } catch {
+    // Expected
+  }
+  
+  expect(disconnectSpy).toHaveBeenCalled();
+});
+```
+
+### Achieving 70%+ Branch Coverage Checklist
+
+When branch coverage is below threshold, systematically check:
+
+- [ ] **Error paths tested?** (try/catch blocks, error handling)
+- [ ] **All if/else branches covered?** (both true and false paths)
+- [ ] **Switch statement cases tested?** (including default case)
+- [ ] **Ternary operators tested?** (both branches of `condition ? a : b`)
+- [ ] **Early returns tested?** (guard clauses)
+- [ ] **Async error handling tested?** (Promise rejections)
+- [ ] **Null/undefined checks tested?** (optional chaining, null checks)
+- [ ] **Validation logic tested?** (all validation failure paths)
+- [ ] **Edge cases tested?** (empty arrays, null, boundary values)
+- [ ] **Finally blocks tested?** (cleanup code execution)
+
+### migrate-cli Branch Coverage Achievement Timeline
+
+**Initial state:** 67.62% (FAIL - below 70% threshold)
+- 42 untested branches in database clients
+- Missing error path tests
+- No async error handling tests
+
+**Iteration 1:** Added database error tests → 69.12%
+- Tested connection failures
+- Tested query errors
+- Still below threshold
+
+**Iteration 2:** Added validation tests → 71.23%
+- Tested all validation failure paths
+- Tested CLI argument validation
+- Exceeded threshold! ✅
+
+**Iteration 3:** Edge case cleanup → 72.95% (FINAL)
+- Tested null/undefined handling
+- Tested empty input cases
+- Added finally block tests
+
+**Key Learning:** Focus on error paths first - they have the most untested branches.
+
 ## Test Organization
 
 ### Directory Structure
