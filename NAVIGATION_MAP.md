@@ -109,6 +109,8 @@ Start here:
 | `.agents/skills/ENHANCEMENT_ANALYSIS.md` | Lessons learned + improvement plan | Want rationale behind skill changes |
 | `.agents/skills/SKILL_ENHANCEMENTS.md` | Summary of recent skill updates | Want a quick digest of updates |
 | `.agents/skills/domain/cli-expert/skill.md` | CLI development patterns | Building or reviewing CLI tools |
+| `.agents/skills/domain/database-expert/skill.md` | Database architecture patterns | Designing schema, migrations, transactions |
+| `.agents/skills/domain/bundler-expert/skill.md` | Build and bundling strategy | Optimizing builds and distribution |
 
 ---
 

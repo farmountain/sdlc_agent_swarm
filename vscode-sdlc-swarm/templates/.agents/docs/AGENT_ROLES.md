@@ -278,7 +278,50 @@ Each agent role has a specific responsibility in the swarm. All roles are declar
 
 ---
 
-#### 6f. Data Architect
+#### 6f. Database Expert
+
+**Type**: Specialist  
+**Permissions**: read, propose  
+**Skill**: `.agents/skills/domain/database-expert/skill.md`
+
+**Responsibility**:
+- Schema design and constraints
+- Transaction safety and isolation
+- Migration strategy (reversible, zero-downtime)
+- Indexing and query optimization
+- Backup, restore, and retention strategy
+
+**Position Card Includes**:
+- Schema recommendations
+- Index strategy for top queries
+- Migration risk analysis
+- Transaction boundaries
+- Operational readiness checklist
+
+---
+
+#### 6g. Bundler Expert
+
+**Type**: Specialist  
+**Permissions**: read, propose  
+**Skill**: `.agents/skills/domain/bundler-expert/skill.md`
+
+**Responsibility**:
+- Bundler selection (ESBuild, Rollup, Webpack, Vite)
+- Build configuration for target runtime
+- Bundle optimization and size budgets
+- External dependency strategy
+- Distribution readiness for CLI/libraries
+
+**Position Card Includes**:
+- Bundler choice and rationale
+- Config snippet (entry, target, output)
+- Optimization checklist
+- Risk notes (native deps, sourcemaps)
+
+---
+
+#### 6h. Data Architect
 
 **Type**: Specialist  
 **Permissions**: read, propose  

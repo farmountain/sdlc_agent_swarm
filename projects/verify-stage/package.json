@@ -1,0 +1,14 @@
+{
+  "name": "verify-stage",
+  "version": "0.1.0",
+  "description": "Generate SDLC verification receipt templates",
+  "type": "commonjs",
+  "bin": {
+    "verify-stage": "src/verify-stage.js"
+  },
+  "scripts": {
+    "verify": "node src/verify-stage.js --stage CODE",
+    "lint": "node -c src/verify-stage.js"
+  },
+  "license": "MIT"
+}
