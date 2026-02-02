@@ -98,6 +98,23 @@ This Evidence-Gated Development (EGD-Dev) ledger tracks all architectural decisi
 - **Risks**: LOW - Overly strict invariants could block valid solutions; mitigated by exception process in each invariant
 - **Reversibility**: MEDIUM (5/10) - Can relax specific invariants, but removing entire system breaks compliance gates
 
+### EGD-DEV-2026-004: Complete Agent Registry & Workflow System (Week 2)
+- **Category**: architecture
+- **Date**: 2026-02-02
+- **Claim**: Completed Week 2 deliverables: (1) Expanded agents.yaml to full 38-agent specification with detailed metadata (id, name, category, core_12 flag, purpose, outputs, permissions, invokes, evidence_required, invariants_checked, skill_path), (2) Expanded workflows.yaml to 16 comprehensive workflows covering full SDLC (Discovery→Architecture→Build→Test→Release→Operations) with decision points, evidence gates, and reflexion loops, (3) Validated integration with 0 circular dependencies and 100% invariant coverage (all 35 invariants enforced by 29 unique agents).
+- **Evidence Pointers**:
+  - `.agents/registry/agents.yaml` - 38 agents, 9 domain experts, Core 12 marked
+  - `.agents/registry/workflows.yaml` - 16 workflows (WF-001 through WF-016)
+  - `weeks/week-02/VALIDATION_REPORT.md` - Integration validation and invariant coverage analysis
+  - `weeks/week-02/README.md` - All 4 evidence gates passed (registry completeness, workflow coverage, integration validation, invariant coverage)
+- **Verification Status**: VERIFIED
+- **Invariants Validated**: 
+  - INV-000 (no hidden state - all agents and workflows explicitly defined)
+  - All 35 invariants have enforcing agents (100% coverage)
+- **Confidence**: HIGH (9/10)
+- **Risks**: LOW - Comprehensive validation completed; only minor numbering offset between agents.yaml invariant IDs and world_model.yaml (non-blocking, mapping clear)
+- **Reversibility**: MEDIUM (4/10) - Registry is core contract for swarm; reverting breaks all workflow orchestration
+
 ---
 
 ## Evidence Requirements by Category

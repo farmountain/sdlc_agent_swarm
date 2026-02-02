@@ -1,136 +1,583 @@
+# Workflow Registry v2.0
+# Complete SDLC workflow catalog
+# Generated: 2026-02-02
+
+version: "2.0"
+total_workflows: 16
+
+# ==============================================================================
+# DISCOVERY & PRODUCT WORKFLOWS (2)
+# ==============================================================================
+
 workflows:
   plan_to_prd:
+    id: "WF-001"
+    category: discovery
     intent: "Spec-first PRD with TDD"
+    trigger: "Stakeholder requests new feature or product"
     steps:
       - driver
-      - spec_agent
-      - test_agent
-      - solver
+      - prd_generator
+      - stakeholder_agent
+      - nfr_agent
+      - domain_modeler
       - skeptic
       - verifier
       - approval_gate
       - memory_agent
+    decision_points:
+      - step: approval_gate
+        criteria: "Stakeholder approval + PRD validation receipt"
+        on_reject: "Return to prd_generator with feedback"
+    outputs:
+      - "PRD.md"
+      - "User stories"
+      - "Success metrics"
+      - "Verification receipt"
+    evidence_gates:
+      - "PRD validation receipt from verifier"
+      - "Stakeholder approval logged"
+      - "Success metrics defined"
+    reflexion:
+      trigger_on: ["approval_rejected", "validation_failed"]
+      max_iterations: 3
     approvals: [prd_signoff]
 
-  architecture_review:
-    intent: "Enterprise architecture validation"
+  backlog_prioritization:
+    id: "WF-002"
+    category: discovery
+    intent: "Prioritize backlog and plan sprints"
+    trigger: "New PRD approved or sprint planning cycle"
     steps:
       - driver
-      - spec_agent
-      - test_agent
+      - backlog_manager
+      - cost_estimator
+      - tech_radar
+      - stakeholder_agent
+      - verifier
+      - memory_agent
+    decision_points:
+      - step: stakeholder_agent
+        criteria: "Priority alignment with business goals"
+        on_reject: "Re-prioritize with new criteria"
+    outputs:
+      - "Prioritized backlog"
+      - "Sprint plan"
+      - "Story point estimates"
+      - "Cost projections"
+    evidence_gates:
+      - "Backlog review approval"
+      - "Sprint capacity validated"
+      - "Cost estimates reviewed"
+    reflexion:
+      trigger_on: ["capacity_exceeded", "priority_conflict"]
+      max_iterations: 2
+    approvals: [backlog_approval]
+
+# ==============================================================================
+# ARCHITECTURE & DESIGN WORKFLOWS (4)
+# ==============================================================================
+
+  architecture_design:
+    id: "WF-003"
+    category: architecture
+    intent: "Enterprise architecture validation"
+    trigger: "PRD approved, ready for system design"
+    steps:
+      - driver
+      - solution_architect
+      - domain_modeler
       - nfr_agent
-      - domain_experts.backend_architect
-      - domain_experts.security_iam
-      - domain_experts.devops_platform
+      - backend_architect
+      - devops_platform
       - skeptic
       - experience_agent
       - risk_scorer
       - collapse_agent
       - verifier
-      - metrics_agent
-      - confidence_agent
-      - drift_detector
-      - dashboard_agent
       - approval_gate
       - memory_agent
+    decision_points:
+      - step: collapse_agent
+        criteria: "Weighted score >= 0 AND no critical risks"
+        on_reject: "Reflexion loop with skeptic feedback"
+    outputs:
+      - "ARCHITECTURE.md with C4 diagrams"
+      - "Architecture Decision Records (ADRs)"
+      - "Component interaction diagrams"
+      - "Verification receipt"
+    evidence_gates:
+      - "Architecture validation receipt"
+      - "C4 diagrams complete"
+      - "ADRs for key decisions"
+      - "No invariant violations"
+    reflexion:
+      trigger_on: ["invariant_violation", "risk_score_high", "collapse_failed"]
+      max_iterations: 3
+    approvals: [architecture_signoff]
+
+  threat_modeling:
+    id: "WF-004"
+    category: architecture
+    intent: "Security threat modeling and attack surface analysis"
+    trigger: "Architecture design completed"
+    steps:
+      - driver
+      - threat_modeler
+      - iam_agent
+      - secrets_manager
+      - vulnerability_scanner
+      - skeptic
+      - risk_scorer
+      - verifier
+      - approval_gate
+      - memory_agent
+    decision_points:
+      - step: approval_gate
+        criteria: "All threats mitigated or accepted + security signoff"
+        on_reject: "Return to threat_modeler with additional mitigations"
+    outputs:
+      - "Threat model document"
+      - "Attack tree analysis"
+      - "Mitigation strategies"
+      - "Security validation receipt"
+    evidence_gates:
+      - "Threat model reviewed"
+      - "Security signoff obtained"
+      - "Invariants INV-003 through INV-006 validated"
+      - "Secrets strategy defined (INV-015 through INV-017)"
+    reflexion:
+      trigger_on: ["critical_threat_unmitigated", "security_rejection"]
+      max_iterations: 3
     approvals: [security_signoff]
 
-  release_readiness:
-    intent: "Evidence-gated production release"
+  cost_estimation:
+    id: "WF-005"
+    category: architecture
+    intent: "Cloud cost estimation and budget planning"
+    trigger: "Architecture design completed"
     steps:
       - driver
-      - test_agent
+      - cost_estimator
+      - devops_platform
       - nfr_agent
-      - cicd_agent
-      - prod_safety
-      - domain_experts.devops_platform
-      - skeptic
-      - experience_agent
-      - risk_scorer
-      - collapse_agent
+      - stakeholder_agent
       - verifier
-      - metrics_agent
-      - confidence_agent
-      - drift_detector
-      - dashboard_agent
-      - release_manager
       - memory_agent
-    approvals: [prod_deploy]
+    decision_points:
+      - step: stakeholder_agent
+        criteria: "Budget approved + cost optimization reviewed"
+        on_reject: "Return to cost_estimator for optimization"
+    outputs:
+      - "Cost estimate report"
+      - "Budget forecast"
+      - "Cost optimization recommendations"
+      - "Resource allocation plan"
+    evidence_gates:
+      - "Cost model validated"
+      - "Budget approval obtained"
+      - "Optimization opportunities documented"
+    reflexion:
+      trigger_on: ["budget_exceeded"]
+      max_iterations: 2
+    approvals: [budget_approval]
 
-  # Code Generation & Implementation Workflows
-  build_feature:
-    intent: "End-to-end feature implementation from PRD to working code"
+  api_contract_design:
+    id: "WF-006"
+    category: architecture
+    intent: "Design API contracts with OpenAPI specs"
+    trigger: "Architecture design defines API boundaries"
     steps:
       - driver
-      - spec_agent
+      - api_designer
+      - backend_architect
+      - integration_builder
+      - test_generator
+      - verifier
+      - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "OpenAPI validation + contract tests passing"
+        on_reject: "Return to api_designer with validation errors"
+    outputs:
+      - "OpenAPI specification"
+      - "API contract tests"
+      - "API documentation"
+      - "Validation receipt"
+    evidence_gates:
+      - "OpenAPI spec validated"
+      - "Contract tests passing"
+      - "Backward compatibility ensured (INV-023)"
+    reflexion:
+      trigger_on: ["validation_failed", "contract_violation"]
+      max_iterations: 2
+    approvals: []
+
+# ==============================================================================
+# BUILD WORKFLOWS (4)
+# ==============================================================================
+
+  build_feature:
+    id: "WF-007"
+    category: build
+    intent: "End-to-end feature implementation from PRD to working code"
+    trigger: "PRD and architecture approved"
+    steps:
+      - driver
       - test_generator
       - code_generator
-      - language_experts.typescript_expert
-      - language_experts.rust_expert
-      - language_experts.python_expert
+      - typescript_expert
+      - rust_expert
+      - python_expert
       - skeptic
       - build_validator
       - verifier
       - memory_agent
+    decision_points:
+      - step: build_validator
+        criteria: "Build successful + tests passing + coverage >= 80%"
+        on_reject: "Return to code_generator with errors"
+    outputs:
+      - "Source code"
+      - "Test suite"
+      - "Build artifacts"
+      - "Verification receipt"
+    evidence_gates:
+      - "Code validation receipt"
+      - "Test validation receipt"
+      - "Coverage >= 80% (INV-024)"
+      - "All tests passing (INV-025)"
+    reflexion:
+      trigger_on: ["build_failed", "tests_failed", "coverage_insufficient"]
+      max_iterations: 3
     approvals: [code_review]
 
   generate_code:
+    id: "WF-008"
+    category: build
     intent: "Generate production-ready code with tests"
+    trigger: "Spec or architecture document available"
     steps:
       - driver
-      - spec_agent
       - test_generator
       - code_generator
-      - language_experts.typescript_expert
-      - language_experts.frontend_expert
-      - language_experts.database_expert
+      - typescript_expert
+      - frontend_expert
+      - database_expert
+      - cli_expert
+      - bundler_expert
       - build_validator
       - verifier
       - memory_agent
+    decision_points:
+      - step: build_validator
+        criteria: "Zero type errors + linting passed + build successful"
+        on_reject: "Return to code_generator"
+    outputs:
+      - "Source code files"
+      - "Type definitions"
+      - "Test files"
+      - "Bundler configuration"
+    evidence_gates:
+      - "Type checking passed"
+      - "Linting passed"
+      - "Tests passing"
+    reflexion:
+      trigger_on: ["type_errors", "linting_errors", "build_failed"]
+      max_iterations: 3
     approvals: []
 
   refactor_code:
+    id: "WF-009"
+    category: build
     intent: "Refactor existing code with safety checks"
+    trigger: "Technical debt identified or code quality issues"
     steps:
       - driver
-      - test_agent
+      - test_generator
       - refactor_agent
-      - language_experts.typescript_expert
+      - typescript_expert
       - skeptic
       - build_validator
       - verifier
       - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "All tests still passing + no behavior changes + coverage maintained"
+        on_reject: "Rollback refactoring"
+    outputs:
+      - "Refactored code"
+      - "Refactoring report"
+      - "Regression test results"
+    evidence_gates:
+      - "Refactoring validation"
+      - "All tests passing"
+      - "Coverage >= original"
+    reflexion:
+      trigger_on: ["tests_failed", "behavior_changed"]
+      max_iterations: 2
     approvals: []
 
   build_integration:
+    id: "WF-010"
+    category: build
     intent: "Build API integrations and service connections"
+    trigger: "API contracts defined"
     steps:
       - driver
       - api_designer
       - integration_builder
       - test_generator
-      - language_experts.backend_architect
-      - domain_experts.security_iam
+      - backend_architect
+      - iam_agent
       - skeptic
       - build_validator
       - verifier
       - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "Integration tests passing + contract tests validated"
+        on_reject: "Return to integration_builder"
+    outputs:
+      - "Integration code"
+      - "API client libraries"
+      - "Integration tests"
+      - "Validation receipt"
+    evidence_gates:
+      - "Integration tests passing"
+      - "Contract tests validated"
+      - "Backward compatibility maintained (INV-023)"
+    reflexion:
+      trigger_on: ["contract_violation", "tests_failed"]
+      max_iterations: 2
     approvals: [security_review]
 
-  multi_language_project:
-    intent: "Orchestrate multi-language project (e.g., TypeScript + Rust + Python)"
+# ==============================================================================
+# TEST & QUALITY WORKFLOWS (2)
+# ==============================================================================
+
+  comprehensive_testing:
+    id: "WF-011"
+    category: test
+    intent: "Execute full test suite across all levels"
+    trigger: "Code implementation complete"
     steps:
       - driver
-      - spec_agent
-      - domain_experts.backend_architect
-      - language_experts.typescript_expert
-      - language_experts.rust_expert
-      - language_experts.python_expert
-      - test_generator
-      - code_generator
-      - integration_builder
-      - skeptic
-      - build_validator
+      - unit_test_runner
+      - integration_test_runner
+      - e2e_test_runner
+      - performance_tester
+      - test_data_factory
+      - test_reporter
       - verifier
       - memory_agent
-    approvals: [architecture_review]
+    decision_points:
+      - step: verifier
+        criteria: "All tests passing + coverage >= 80% + performance targets met"
+        on_reject: "Return to test_generator with failures"
+    outputs:
+      - "Test summary report"
+      - "Coverage report"
+      - "Performance test results"
+      - "Quality metrics dashboard"
+    evidence_gates:
+      - "Unit test coverage >= 80% (INV-024)"
+      - "All tests passing (INV-025)"
+      - "Performance targets met"
+      - "Test validation receipt"
+    reflexion:
+      trigger_on: ["tests_failed", "coverage_insufficient", "performance_degraded"]
+      max_iterations: 3
+    approvals: []
+
+  chaos_testing:
+    id: "WF-012"
+    category: test
+    intent: "Chaos engineering and resilience testing"
+    trigger: "NFRs defined requiring resilience validation"
+    steps:
+      - driver
+      - nfr_agent
+      - reliability_tester
+      - observability_agent
+      - sre_agent
+      - test_reporter
+      - verifier
+      - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "Chaos tests passed + graceful degradation validated + SLO met"
+        on_reject: "Return to reliability_tester with failure scenarios"
+    outputs:
+      - "Chaos test results"
+      - "Resilience metrics"
+      - "Failure scenario analysis"
+      - "SLO validation"
+    evidence_gates:
+      - "Chaos tests passed"
+      - "Graceful degradation demonstrated"
+      - "99.9% SLO met (INV-036)"
+    reflexion:
+      trigger_on: ["resilience_failed", "slo_violated"]
+      max_iterations: 2
+    approvals: []
+
+# ==============================================================================
+# RELEASE & DEVOPS WORKFLOWS (2)
+# ==============================================================================
+
+  release_readiness:
+    id: "WF-013"
+    category: release
+    intent: "Evidence-gated production release readiness"
+    trigger: "All tests passing + compliance validated"
+    steps:
+      - driver
+      - test_reporter
+      - compliance_checker
+      - sbom_generator
+      - vulnerability_scanner
+      - cicd_agent
+      - devops_platform
+      - skeptic
+      - risk_scorer
+      - collapse_agent
+      - verifier
+      - release_manager
+      - approval_gate
+      - memory_agent
+    decision_points:
+      - step: collapse_agent
+        criteria: "All quality gates passed + no critical vulnerabilities + compliance validated"
+        on_reject: "Block release, return to remediation"
+      - step: approval_gate
+        criteria: "Release manager + stakeholder approval"
+        on_reject: "Release blocked"
+    outputs:
+      - "Release readiness report"
+      - "Compliance validation"
+      - "SBOM"
+      - "Vulnerability scan results"
+      - "Release approval"
+    evidence_gates:
+      - "All tests passing (INV-025)"
+      - "Coverage >= 80% (INV-024)"
+      - "No critical vulnerabilities (INV-026, INV-027, INV-028)"
+      - "Compliance validated (INV-009, INV-010)"
+      - "Pipeline validated (INV-020)"
+      - "Rollback plan documented (INV-021)"
+    reflexion:
+      trigger_on: ["quality_gate_failed", "vulnerability_critical", "compliance_failed"]
+      max_iterations: 2
+    approvals: [prod_deploy]
+
+  deploy_to_production:
+    id: "WF-014"
+    category: release
+    intent: "Deploy to production with monitoring"
+    trigger: "Release readiness approved"
+    steps:
+      - driver
+      - deployment_manager
+      - observability_agent
+      - sre_agent
+      - release_manager
+      - change_approver
+      - verifier
+      - memory_agent
+    decision_points:
+      - step: change_approver
+        criteria: "Deployment window approved + change ticket validated"
+        on_reject: "Deployment blocked"
+      - step: verifier
+        criteria: "Health checks passing + monitoring active"
+        on_reject: "Trigger rollback_orchestrator"
+    outputs:
+      - "Deployment status"
+      - "Health check results"
+      - "Monitoring dashboard"
+      - "Deployment receipt"
+    evidence_gates:
+      - "Deployment successful"
+      - "Health endpoints active (INV-034)"
+      - "Monitoring active (INV-033, INV-035)"
+      - "SLO targets met (INV-036)"
+    reflexion:
+      trigger_on: ["deployment_failed", "health_check_failed"]
+      max_iterations: 1
+      fallback: "Trigger automatic rollback"
+    approvals: [change_approval]
+
+# ==============================================================================
+# OPERATIONS & LEARNING WORKFLOWS (2)
+# ==============================================================================
+
+  incident_response:
+    id: "WF-015"
+    category: operations
+    intent: "Respond to incidents and restore service"
+    trigger: "Alert triggered or incident reported"
+    steps:
+      - driver
+      - incident_responder
+      - observability_agent
+      - sre_agent
+      - rollback_orchestrator
+      - devops_platform
+      - stakeholder_agent
+      - memory_agent
+    decision_points:
+      - step: incident_responder
+        criteria: "Root cause identified + mitigation applied"
+        on_reject: "Escalate to on-call team"
+      - step: rollback_orchestrator
+        criteria: "Rollback needed?"
+        on_yes: "Execute rollback to last known good state"
+    outputs:
+      - "Incident report"
+      - "Root cause analysis"
+      - "Service restoration status"
+      - "Action items"
+    evidence_gates:
+      - "Incident resolved"
+      - "Service restored"
+      - "Root cause documented"
+      - "Runbooks followed (INV-031)"
+    reflexion:
+      trigger_on: ["mitigation_failed", "service_not_restored"]
+      max_iterations: 3
+      escalation: "Page senior SRE"
+    approvals: []
+
+  continuous_improvement:
+    id: "WF-016"
+    category: operations
+    intent: "Learn from incidents and improve system"
+    trigger: "Incident resolved or postmortem scheduled"
+    steps:
+      - driver
+      - postmortem_agent
+      - experience_agent
+      - tech_debt_tracker
+      - sre_agent
+      - memory_agent
+      - stakeholder_agent
+    decision_points:
+      - step: postmortem_agent
+        criteria: "Postmortem completed within 5 days (INV-032)"
+        on_reject: "Escalate to management"
+    outputs:
+      - "Postmortem document"
+      - "Lessons learned"
+      - "Prevention measures"
+      - "Tech debt items"
+      - "Action plan"
+    evidence_gates:
+      - "Postmortem completed within 5 days (INV-032)"
+      - "All action items assigned"
+      - "Lessons captured in memory"
+      - "Prevention measures implemented"
+    reflexion:
+      trigger_on: ["action_items_incomplete"]
+      max_iterations: 1
+    approvals: []
