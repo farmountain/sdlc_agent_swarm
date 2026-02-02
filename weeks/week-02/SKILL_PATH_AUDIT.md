@@ -126,7 +126,7 @@ These skills exist in `.agents/skills/` but are NOT referenced in agents.yaml:
 
 ## Domain Experts Path Validation
 
-### ✅ MATCHING DOMAIN EXPERTS (4)
+### ✅ MATCHING DOMAIN EXPERTS (5)
 
 | Agent ID | Name | Registry Path | Actual Path | Status |
 |----------|------|---------------|-------------|--------|
@@ -134,12 +134,11 @@ These skills exist in `.agents/skills/` but are NOT referenced in agents.yaml:
 | AGT-032 | rust_expert | skills/domain/rust-expert | domain/rust-expert | ✅ |
 | AGT-033 | python_expert | skills/domain/python-expert | domain/python-expert | ✅ |
 | AGT-034 | backend_architect | skills/domain/backend-architect | domain/backend-architect | ✅ |
+| AGT-035 | frontend_expert | skills/domain/frontend-expert | domain/frontend-expert | ✅ |
 
-### ⚠️ DOMAIN EXPERTS - MISSING (1)
+### ⚠️ DOMAIN EXPERTS - MISSING (0)
 
-| Agent ID | Name | Registry Path | Action Required |
-|----------|------|---------------|-----------------|
-| AGT-035 | frontend_expert | skills/domain/frontend-expert | Create skill |
+All domain experts now have skill implementations.
 
 ---
 
