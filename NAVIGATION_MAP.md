@@ -102,6 +102,16 @@ Start here:
 
 ---
 
+### `.agents/skills/` (Skill Library)
+
+| File | Purpose | Read If |
+|------|---------|---------|
+| `.agents/skills/ENHANCEMENT_ANALYSIS.md` | Lessons learned + improvement plan | Want rationale behind skill changes |
+| `.agents/skills/SKILL_ENHANCEMENTS.md` | Summary of recent skill updates | Want a quick digest of updates |
+| `.agents/skills/domain/cli-expert/skill.md` | CLI development patterns | Building or reviewing CLI tools |
+
+---
+
 ## Content Map by Topic
 
 ### 🤖 **Agent Swarm**
@@ -199,7 +209,7 @@ sdlc_agent_swarm/
 │  ├─ driver/                          ← [Coming Week 1]
 │  ├─ registry/                        ← [Coming Week 1]
 │  ├─ memory/                          ← [Coming Week 1]
-│  └─ skills/                          ← [Coming Weeks 4-15]
+│  └─ skills/                          ← Agent skills library (active)
 │
 ├─ capabilities/                       ← [Coming Week 4]
 ├─ weeks/                              ← [Coming Week 1+]

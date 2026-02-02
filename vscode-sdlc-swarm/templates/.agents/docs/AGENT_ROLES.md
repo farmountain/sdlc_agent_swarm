@@ -254,7 +254,31 @@ Each agent role has a specific responsibility in the swarm. All roles are declar
 
 ---
 
-#### 6e. Data Architect
+#### 6e. CLI Development Expert
+
+**Type**: Specialist  
+**Permissions**: read, propose  
+**Skill**: `.agents/skills/domain/cli-expert/skill.md`
+
+**Responsibility**:
+- Command structure (single vs multi-command)
+- Argument parsing & validation
+- Help text and usage examples
+- Exit codes and error handling
+- CLI UX (progress indicators, JSON output)
+- Build & distribution (bundling, packaging)
+
+**Position Card Includes**:
+- Command definitions and options schema
+- Validation rules and defaults
+- Help text examples
+- Exit code map (0-7)
+- Packaging & distribution notes
+- CLI test strategy
+
+---
+
+#### 6f. Data Architect
 
 **Type**: Specialist  
 **Permissions**: read, propose  
