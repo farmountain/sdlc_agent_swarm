@@ -68,17 +68,17 @@
 | AGT-001 | prd_generator | skills/prd-generator | prd-agent | Update to `skills/prd-agent` |
 | AGT-007 | domain_modeler | skills/domain-modeler | domain-model | Update to `skills/domain-model` |
 
-### ⚠️ MISSING SKILLS - TO BE CREATED (13 agents)
+### ⚠️ MISSING SKILLS - TO BE CREATED (8 agents)
 
 | Agent ID | Name | Registry Path | Action Required | Status |
 |----------|------|---------------|-----------------|--------|
 | AGT-002 | backlog_manager | skills/backlog-manager | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-003 | stakeholder_agent | skills/stakeholder-agent | Create skill | ✅ CREATED (2026-02-02) |
-| AGT-004 | competitor_analyst | skills/competitor-analyst | Create skill | PENDING (Week 4) |
-| AGT-005 | tech_radar | skills/tech-radar | Create skill | PENDING (Week 4) |
+| AGT-004 | competitor_analyst | skills/competitor-analyst | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-005 | tech_radar | skills/tech-radar | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-009 | threat_modeler | skills/threat-modeler | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-010 | api_designer | skills/api-designer | Create skill | ✅ CREATED (2026-02-02) |
-| AGT-011 | cost_estimator | skills/cost-estimator | Create skill | PENDING (Week 4) |
+| AGT-011 | cost_estimator | skills/cost-estimator | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-013 | refactor_agent | skills/refactor-agent | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-014 | integration_builder | skills/integration-builder | Create skill | PENDING (Week 5) |
 | AGT-015 | build_validator | skills/build-validator | Create skill | PENDING (Week 5) |
@@ -89,17 +89,18 @@
 | AGT-021 | reliability_tester | skills/reliability-tester | Create skill | PENDING (Week 6) |
 | AGT-022 | test_data_factory | skills/test-data-factory | Create skill | PENDING (Week 6) |
 | AGT-023 | test_reporter | skills/test-reporter | Create skill | PENDING (Week 6) |
-| AGT-024 | secrets_manager | skills/secrets-manager | Create skill | PENDING (Week 4) |
-| AGT-025 | compliance_checker | skills/compliance-checker | Create skill | PENDING (Week 4) |
+| AGT-024 | secrets_manager | skills/secrets-manager | Create skill | ✅ CREATED (2026-02-02) |
+| AGT-025 | compliance_checker | skills/compliance-checker | Create skill | ✅ CREATED (2026-02-02) |
 | AGT-026 | sbom_generator | skills/sbom-generator | Create skill | PENDING (Week 4) |
 | AGT-027 | vulnerability_scanner | skills/vulnerability-scanner | Create skill | PENDING (Week 4) |
 | AGT-028 | deployment_manager | skills/deployment-manager | Create skill | PENDING (Week 8) |
 | AGT-029 | rollback_orchestrator | skills/rollback-orchestrator | Create skill | PENDING (Week 8) |
 | AGT-030 | change_approver | skills/change-approver | Create skill | PENDING (Week 8) |
 
-**Progress**: 5 of 18 critical skills created (27.8% complete)  
+**Progress**: 10 of 18 critical skills created (55.6% complete)  
 **Newly Created (2026-02-02)**: backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent  
-**Remaining**: 13 skills (phased creation in Weeks 4-8)
+**Newly Created (2026-02-02 Evening)**: cost_estimator, competitor_analyst, tech_radar, secrets_manager, compliance_checker  
+**Remaining**: 8 skills (phased creation in Weeks 4-8)
 
 ### 📁 EXISTING SKILLS NOT IN REGISTRY (9 skills)
 
@@ -164,7 +165,7 @@ All Core 12 skills verified present with substantial content:
 - ✅ verifier: 49.4KB
 - ✅ driver: 34.5KB
 
-### Phase 3: Create Missing Core Skills (Week 3-4) 🔄 IN PROGRESS (5 of 18 complete)
+### Phase 3: Create Missing Core Skills (Week 3-4) 🔄 IN PROGRESS (10 of 18 complete)
 Priority order for workflow enablement:
 
 **✅ Completed (2026-02-02)**:
@@ -174,12 +175,16 @@ Priority order for workflow enablement:
 4. ✅ api_designer (13.8KB) - Enables WF-006 (API contract design)
 5. ✅ refactor_agent (12.6KB) - Enables WF-007 (code refactoring)
 
+**✅ Completed (2026-02-02 Evening)**:
+6. ✅ competitor_analyst (13KB) - Product discovery workflows (WF-003, WF-002, WF-010)
+7. ✅ tech_radar (14KB) - Technology evaluation workflows (WF-004, WF-006, WF-011)
+8. ✅ cost_estimator (14KB) - Architecture cost analysis (WF-005, WF-002)
+9. ✅ secrets_manager (13KB) - Security workflows (WF-004, WF-008, WF-012)
+10. ✅ compliance_checker (15KB) - Compliance validation workflows (WF-008, WF-004, WF-013)
+
 **Next Priority (Week 4)**:
-6. ⏳ competitor_analyst - Product discovery workflows
-7. ⏳ tech_radar - Technology evaluation workflows
-8. ⏳ cost_estimator - Architecture cost analysis (WF-005)
-9. ⏳ secrets_manager - Security workflows
-10. ⏳ compliance_checker - Compliance validation workflows
+11. ⏳ sbom_generator - Software bill of materials generation
+12. ⏳ vulnerability_scanner - Security vulnerability scanning
 
 **Week 5 (Build Agents)**:
 - integration_builder, build_validator
@@ -243,6 +248,38 @@ Decision needed:
 **Confidence:** 9/10 (skills complete with full protocol documentation)
 
 ---
+
+### EGD-DEV-2026-010: Created 5 Additional Critical Skills (Cost, Security, Compliance)
+**Claim:** Created cost_estimator, competitor_analyst, tech_radar, secrets_manager, compliance_checker to enable advanced workflows
+
+**Evidence Pointers:**
+- `.agents/skills/cost-estimator/skill.md` - 14KB, COCOMO II cost estimation and ROI analysis
+- `.agents/skills/competitor-analyst/skill.md` - 13KB, competitive intelligence with SWOT analysis
+- `.agents/skills/tech-radar/skill.md` - 14KB, technology evaluation with ThoughtWorks quadrants
+- `.agents/skills/secrets-manager/skill.md` - 13KB, secure secrets management and compliance
+- `.agents/skills/compliance-checker/skill.md` - 15KB, regulatory compliance verification
+- Updated `weeks/week-02/SKILL_PATH_AUDIT.md` - Progress tracked (13 missing → 8 missing)
+- Updated `.agents/memory/evidence_dev.md` - EGD-DEV-2026-010 entry added
+
+**Verification Status:** ✅ VERIFIED (2026-02-02)
+
+**Workflows Enabled:**
+- WF-002: backlog_prioritization (cost_estimator, competitor_analyst)
+- WF-003: market_analysis (competitor_analyst)
+- WF-004: security_implementation (secrets_manager, compliance_checker, tech_radar)
+- WF-005: cost_estimation (cost_estimator)
+- WF-006: architecture_design (tech_radar)
+- WF-008: compliance_audit (compliance_checker, secrets_manager)
+- WF-010: product_launch (competitor_analyst)
+- WF-011: modernization (tech_radar)
+- WF-012: incident_response (secrets_manager)
+- WF-013: risk_management (compliance_checker)
+
+**Risks:**
+- LOW: Skills follow established Core 12 patterns (validated against templates)
+- MEDIUM: Skills untested in runtime workflows (mitigated by planned integration testing)
+
+**Confidence:** 9/10 (skills complete with comprehensive failure modes and integration protocols)
 
 ## Appendix: Skill Directory Structure
 
@@ -312,7 +349,9 @@ Decision needed:
 - [x] EGD-DEV-2026-005 entry created
 - [x] 5 critical missing skills created (backlog_manager, stakeholder_agent, threat_modeler, api_designer, refactor_agent)
 - [x] EGD-DEV-2026-006 entry created
-- [ ] Remaining 13 skills created (phased in Weeks 4-8)
+- [x] 5 additional critical skills created (cost_estimator, competitor_analyst, tech_radar, secrets_manager, compliance_checker)
+- [x] EGD-DEV-2026-010 entry created
+- [ ] Remaining 8 skills created (phased in Weeks 4-8)
 - [ ] Integration testing of new skills in workflows
 
 **Next Actions**:
