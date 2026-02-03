@@ -3,6 +3,15 @@
 An agentic SDLC assistant for VS Code.  
 Spec-first. Test-first. Evidence-gated.
 
+## Prerequisites
+
+**Required:**
+- **VS Code**: Version 1.85.0 or higher
+- **GitHub Copilot**: Active subscription with Agent Mode enabled
+- **Git**: For evidence tracking and version control
+
+**Note:** This extension routes all requests to GitHub Copilot Agent Mode. A Copilot subscription is required for the swarm to function.
+
 ## What it does
 
 - Helps teams plan, review, and release safely

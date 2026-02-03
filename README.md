@@ -38,6 +38,15 @@ More examples: "Build e-commerce platform with multi-tenancy", "Create data pipe
 
 **SDLC Swarm is now packaged as a thin VS Code extension!**
 
+### Prerequisites
+
+**Required:**
+- **VS Code**: Version 1.85.0 or higher
+- **GitHub Copilot**: Active subscription with Agent Mode enabled
+- **Git**: For evidence tracking and version control
+
+**Note:** The extension routes all requests to GitHub Copilot Agent Mode. A Copilot subscription is required for the swarm to function.
+
 The extension provides:
 - ✅ One-command workspace initialization
 - ✅ 13 registered commands (Planning + Code Generation)

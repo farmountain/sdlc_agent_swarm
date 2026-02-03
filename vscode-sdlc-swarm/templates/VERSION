@@ -23,10 +23,14 @@ This version includes:
 
 ### Version Compatibility
 
+**VS Code Requirements:**
+- Minimum VS Code: 1.85.0
+- GitHub Copilot: Required (Agent Mode enabled)
+- Git: Required (for evidence tracking)
+
 **Extension Version Compatibility:**
 - VS Code Extension v0.1.0+ compatible
-- Minimum VS Code: 1.85.0
-- Requires: GitHub Copilot Agent Mode
+- Swarm content version: Independent versioning
 
 ### Upgrade Notes
 

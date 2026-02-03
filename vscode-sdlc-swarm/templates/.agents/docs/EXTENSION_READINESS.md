@@ -48,7 +48,7 @@ These artifacts map directly to extension equivalents with **zero redesign**:
 | `world_model.yaml` | Read-only resource | None | Expose as workspace config |
 | `evidence_dev.md` | Evidence ledger | None | Open in Markdown viewer |
 | `evidence_prod.md` | Evidence ledger | None | Open in Markdown viewer |
-| Copilot prompts | Chat participant instructions | None | Register as `@SDLC-Driver` |
+| Copilot prompts | Chat participant instructions | None | Register workflow agents (@PlanToPRD, etc.) |
 
 ---
 

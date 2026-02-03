@@ -1,8 +1,351 @@
-invariants:
-  - "No hidden state"
-  - "No memory write without verification"
-  - "Extension compatibility preserved"
+# Enterprise World Model v1.0
+# Purpose: Define enterprise-wide invariants, requirements, and constraints
+# that ALL project decisions must respect.
 
+# Core System Invariants
+system_invariants:
+  - id: INV-000
+    rule: "No hidden state in swarm execution"
+    rationale: "Transparency and debuggability"
+    
+  - id: INV-001
+    rule: "No memory write without verification receipt"
+    rationale: "Evidence-gated memory discipline"
+    
+  - id: INV-002
+    rule: "Extension compatibility preserved"
+    rationale: "No breaking changes to skill API"
+
+# Authentication & Identity
+authentication:
+  - id: INV-003
+    category: security
+    rule: "All services MUST use enterprise SSO (OIDC/SAML)"
+    rationale: "Single sign-on for security and user experience"
+    evidence_required:
+      - "OIDC/SAML integration tests passing"
+      - "No local password storage"
+    exceptions: []
+    
+  - id: INV-004
+    category: security
+    rule: "MFA MUST be enforced for production access"
+    rationale: "Defense in depth for privileged operations"
+    evidence_required:
+      - "MFA configuration verified"
+      - "Production access audit logs"
+    exceptions: []
+
+# Authorization & Access Control
+authorization:
+  - id: INV-005
+    category: security
+    rule: "All APIs MUST enforce Role-Based Access Control (RBAC)"
+    rationale: "Least privilege principle"
+    evidence_required:
+      - "Authorization middleware in place"
+      - "RBAC tests passing"
+      - "Permission matrix documented"
+    exceptions: []
+    
+  - id: INV-006
+    category: security
+    rule: "Service-to-service calls MUST use service accounts with minimal permissions"
+    rationale: "Zero-trust architecture"
+    evidence_required:
+      - "Service account configuration"
+      - "Permission boundary tests"
+    exceptions: []
+
+# Multi-Tenancy & Data Isolation
+multi_tenancy:
+  - id: INV-007
+    category: architecture
+    rule: "All data access MUST be tenant-scoped (no cross-tenant leaks)"
+    rationale: "Customer data isolation"
+    evidence_required:
+      - "Tenant isolation tests passing"
+      - "Database row-level security configured"
+      - "Cross-tenant access tests fail"
+    exceptions: []
+    
+  - id: INV-008
+    category: architecture
+    rule: "Tenant ID MUST be propagated through all service calls"
+    rationale: "Context preservation"
+    evidence_required:
+      - "Context middleware tests"
+      - "Tenant context in all logs"
+    exceptions: []
+
+# Audit Logging & Compliance
+audit_logging:
+  - id: INV-009
+    category: compliance
+    rule: "All data mutations MUST generate immutable audit logs"
+    rationale: "Compliance (SOC2, GDPR, HIPAA)"
+    evidence_required:
+      - "Audit log coverage > 95%"
+      - "Audit log immutability tests"
+      - "Retention policy implemented"
+    exceptions: []
+    
+  - id: INV-010
+    category: compliance
+    rule: "PII access MUST be audit logged with purpose"
+    rationale: "GDPR Article 30"
+    evidence_required:
+      - "PII access logs"
+      - "Purpose documentation"
+    exceptions: []
+
+# PII & Data Protection
+pii_protection:
+  - id: INV-011
+    category: compliance
+    rule: "PII MUST be encrypted at rest and in transit"
+    rationale: "GDPR, CCPA requirements"
+    evidence_required:
+      - "Encryption verification tests"
+      - "TLS 1.3 enforced"
+      - "Key rotation schedule"
+    exceptions: []
+    
+  - id: INV-012
+    category: compliance
+    rule: "PII MUST be classified and tagged in data stores"
+    rationale: "Data governance, right to deletion"
+    evidence_required:
+      - "Data classification map"
+      - "PII tagging tests"
+    exceptions: []
+    
+  - id: INV-013
+    category: compliance
+    rule: "User data deletion MUST be completed within 30 days of request"
+    rationale: "GDPR right to erasure"
+    evidence_required:
+      - "Deletion workflow tests"
+      - "Verification procedure"
+    exceptions: []
+
+# Secrets Management
+secrets_management:
+  - id: INV-014
+    category: security
+    rule: "Secrets MUST NOT be committed to source control"
+    rationale: "Credential exposure prevention"
+    evidence_required:
+      - "Git hooks preventing secrets"
+      - "Secret scanning in CI/CD"
+    exceptions: []
+    
+  - id: INV-015
+    category: security
+    rule: "Secrets MUST be stored in vault (Azure Key Vault, HashiCorp Vault)"
+    rationale: "Centralized secret management"
+    evidence_required:
+      - "Vault integration tests"
+      - "Secret rotation configured"
+    exceptions: []
+    
+  - id: INV-016
+    category: security
+    rule: "Secrets MUST be rotated every 90 days"
+    rationale: "Limit exposure window"
+    evidence_required:
+      - "Rotation schedule"
+      - "Rotation success logs"
+    exceptions: ["Long-lived API keys with approval"]
+
+# Multi-Cluster & High Availability
+multi_cluster:
+  - id: INV-017
+    category: architecture
+    rule: "Services MUST support deployment to multiple regions"
+    rationale: "Disaster recovery, compliance (data residency)"
+    evidence_required:
+      - "Multi-region deployment tested"
+      - "Failover procedure documented"
+    exceptions: ["Non-critical internal tools"]
+    
+  - id: INV-018
+    category: architecture
+    rule: "Critical services MUST have SLO >= 99.9%"
+    rationale: "Customer reliability expectations"
+    evidence_required:
+      - "SLO defined and monitored"
+      - "Error budget tracked"
+    exceptions: []
+
+# CI/CD & Deployment
+cicd:
+  - id: INV-019
+    category: devops
+    rule: "All code changes MUST go through CI/CD pipeline (no manual deploys)"
+    rationale: "Consistency, audit trail"
+    evidence_required:
+      - "Deployment logs"
+      - "Manual deploy prevention"
+    exceptions: ["Emergency hotfixes with post-approval"]
+    
+  - id: INV-020
+    category: devops
+    rule: "Production deployments MUST have tested rollback procedure"
+    rationale: "Blast radius limitation"
+    evidence_required:
+      - "Rollback rehearsal passed"
+      - "Rollback automation tested"
+    exceptions: []
+    
+  - id: INV-021
+    category: devops
+    rule: "Breaking changes MUST have migration plan and backward compatibility period"
+    rationale: "Zero-downtime deployments"
+    evidence_required:
+      - "Migration script tested"
+      - "Compatibility matrix"
+    exceptions: []
+
+# Observability & Monitoring
+observability:
+  - id: INV-022
+    category: operations
+    rule: "All services MUST emit structured logs (JSON)"
+    rationale: "Log aggregation, searchability"
+    evidence_required:
+      - "Log format validation"
+      - "Log aggregation configured"
+    exceptions: []
+    
+  - id: INV-023
+    category: operations
+    rule: "All services MUST expose health/readiness endpoints"
+    rationale: "Load balancer integration, self-healing"
+    evidence_required:
+      - "Health check tests"
+      - "Kubernetes probes configured"
+    exceptions: []
+    
+  - id: INV-024
+    category: operations
+    rule: "Critical metrics MUST have alerting configured"
+    rationale: "Proactive incident detection"
+    evidence_required:
+      - "Alert definitions"
+      - "Alert routing configured"
+      - "Alert runbooks created"
+    exceptions: []
+
+# Incident Response & SRE
+incident_response:
+  - id: INV-025
+    category: operations
+    rule: "All services MUST have incident runbooks"
+    rationale: "Faster MTTR"
+    evidence_required:
+      - "Runbook created"
+      - "Runbook tested in drill"
+    exceptions: []
+    
+  - id: INV-026
+    category: operations
+    rule: "All SEV1/SEV2 incidents MUST have postmortem within 5 business days"
+    rationale: "Learning from failures"
+    evidence_required:
+      - "Postmortem document"
+      - "Action items tracked"
+    exceptions: []
+
+# Testing & Quality
+testing:
+  - id: INV-027
+    category: quality
+    rule: "Critical paths MUST have >= 80% test coverage"
+    rationale: "Regression prevention"
+    evidence_required:
+      - "Coverage report"
+      - "Critical path identification"
+    exceptions: []
+    
+  - id: INV-028
+    category: quality
+    rule: "All PRs MUST pass automated tests before merge"
+    rationale: "Quality gate"
+    evidence_required:
+      - "Branch protection rules"
+      - "CI/CD pass required"
+    exceptions: []
+
+# Security Scanning
+security:
+  - id: INV-029
+    category: security
+    rule: "All code MUST pass SAST (Static Application Security Testing)"
+    rationale: "Vulnerability prevention"
+    evidence_required:
+      - "SAST scan results"
+      - "No critical/high findings"
+    exceptions: ["False positives with security review approval"]
+    
+  - id: INV-030
+    category: security
+    rule: "All dependencies MUST be scanned for known vulnerabilities"
+    rationale: "Supply chain security"
+    evidence_required:
+      - "Dependency scan results"
+      - "Vulnerability remediation plan"
+    exceptions: []
+    
+  - id: INV-031
+    category: security
+    rule: "Production MUST have DAST (Dynamic Application Security Testing) before release"
+    rationale: "Runtime vulnerability detection"
+    evidence_required:
+      - "DAST scan report"
+      - "Penetration test results"
+    exceptions: ["Internal tools with limited exposure"]
+
+# Data Retention & Archival
+data_retention:
+  - id: INV-032
+    category: compliance
+    rule: "Audit logs MUST be retained for 7 years"
+    rationale: "SOC2, legal requirements"
+    evidence_required:
+      - "Retention policy configured"
+      - "Archive verification"
+    exceptions: []
+    
+  - id: INV-033
+    category: compliance
+    rule: "User activity data MUST NOT be retained beyond 2 years without consent"
+    rationale: "GDPR data minimization"
+    evidence_required:
+      - "Data retention schedule"
+      - "Purge automation tested"
+    exceptions: ["Aggregated analytics"]
+
+# Dependency & Licensing
+dependencies:
+  - id: INV-034
+    category: legal
+    rule: "All dependencies MUST have approved licenses (MIT, Apache 2.0, BSD)"
+    rationale: "Legal risk management"
+    evidence_required:
+      - "SBOM (Software Bill of Materials)"
+      - "License compliance scan"
+    exceptions: ["GPL with legal approval"]
+    
+  - id: INV-035
+    category: legal
+    rule: "Copyleft licenses (GPL, AGPL) MUST be avoided"
+    rationale: "IP protection"
+    evidence_required:
+      - "License scan results"
+    exceptions: ["Isolated tools with legal approval"]
+
+# Extension System Principles (from W05)
 extension_principles:
   architecture: "Registry-based plugin system"
   versioning: "Semantic versioning with pinning required"
@@ -11,3 +354,11 @@ extension_principles:
   safety: "Failed extensions must not crash core swarm"
   decided: "2026-01-29 (W05 Dry Run A)"
   risk_score: 65
+
+# World Model Metadata
+metadata:
+  version: "1.0"
+  last_updated: "2026-01-30"
+  total_invariants: 35
+  next_review: "2026-04-30"
+  maintainer: "Knowledge Curator Agent"

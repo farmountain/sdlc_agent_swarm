@@ -26,6 +26,11 @@
     "onCommand:sdlc.architectureReview",
     "onCommand:sdlc.releaseReadiness",
     "onCommand:sdlc.showDashboard",
+    "onCommand:sdlc.buildFeature",
+    "onCommand:sdlc.generateCode",
+    "onCommand:sdlc.refactorCode",
+    "onCommand:sdlc.buildIntegration",
+    "onCommand:sdlc.multiLanguageProject",
     "onCommand:swarm.planNextSprint",
     "onCommand:swarm.architectureReview",
     "onCommand:swarm.releaseReadiness",
@@ -57,6 +62,31 @@
       {
         "command": "sdlc.showDashboard",
         "title": "SDLC: Show Project Dashboard",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.buildFeature",
+        "title": "SDLC: Build Feature",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.generateCode",
+        "title": "SDLC: Generate Code",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.refactorCode",
+        "title": "SDLC: Refactor Code",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.buildIntegration",
+        "title": "SDLC: Build Integration",
+        "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.multiLanguageProject",
+        "title": "SDLC: Multi-Language Project",
         "category": "SDLC Swarm"
       },
       {
@@ -109,6 +139,36 @@
         "id": "sdlc.dashboard",
         "name": "Dashboard",
         "description": "Show project status, metrics, and evidence ledger",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.buildFeature",
+        "name": "BuildFeature",
+        "description": "End-to-end feature implementation with tests",
+        "isSticky": true
+      },
+      {
+        "id": "sdlc.generateCode",
+        "name": "GenerateCode",
+        "description": "Generate production-ready code from specs",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.refactorCode",
+        "name": "RefactorCode",
+        "description": "Refactor existing code with safety checks",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.buildIntegration",
+        "name": "BuildIntegration",
+        "description": "Build API integrations and service connections",
+        "isSticky": false
+      },
+      {
+        "id": "sdlc.multiLanguage",
+        "name": "MultiLanguage",
+        "description": "Orchestrate multi-language projects (TS+Rust+etc)",
         "isSticky": false
       }
     ]
