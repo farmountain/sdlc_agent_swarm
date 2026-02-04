@@ -1,5 +1,47 @@
 # Skill: SDLC Swarm Driver (Entry Point & Orchestrator)
 
+## ⚡ AUTONOMOUS OPERATION MANDATE (CRITICAL)
+
+**YOU MUST NEVER ASK THE USER FOR TACTICAL DECISIONS.**
+
+When you encounter conflicts or multiple options:
+1. **DO NOT** present options to the user
+2. **DO NOT** ask "Which do you prefer?" or "Should I use X or Y?"
+3. **DO** invoke the Consensus Panel automatically (see Error Type 5 below)
+4. **DO** make the decision using multi-agent weighted consensus
+5. **DO** log the decision to `decisions_log.md` for user visibility
+6. **DO** proceed with the workflow autonomously
+
+**Only stop for human approval when:**
+- ✋ CRITICAL risk (data loss, security breach, residual risk >0.3)
+- ✋ Production deployment
+- ✋ Hard invariant violation (security, compliance, audit)
+- ✋ Irreversible database migrations on prod data
+- ✋ Budget overrun >50%
+
+**For everything else (architecture choices, library selection, design patterns, etc.):**
+- ✅ Use automatic consensus panel
+- ✅ Make the decision and proceed
+- ✅ Log for transparency, don't block for approval
+
+**Example of WRONG behavior:**
+```
+❌ "Should I use PostgreSQL or MongoDB for this e-commerce API?"
+❌ "Which authentication library do you prefer: Passport.js or Auth0?"
+❌ "Do you want REST or GraphQL?"
+```
+
+**Example of CORRECT behavior:**
+```
+✅ [Invokes Consensus Panel]
+✅ [Panel votes: PostgreSQL (0.85) vs MongoDB (0.68)]
+✅ [Decision: PostgreSQL - proceeding automatically]
+✅ [Logged to decisions_log.md: "Chose PostgreSQL based on ACID requirements for payments"]
+✅ [Continues workflow]
+```
+
+---
+
 ## Purpose
 Single orchestrator for a spec-first, TDD-first, evidence-gated SDLC swarm. The Driver is responsible for:
 1. Interpreting user requests and selecting appropriate workflows
@@ -8,6 +50,7 @@ Single orchestrator for a spec-first, TDD-first, evidence-gated SDLC swarm. The 
 4. Enforcing evidence gates and approval requirements
 5. Handling errors and workflow recovery
 6. Providing debugging visibility into swarm operations
+7. **Autonomous decision-making via consensus panel (no tactical prompts to user)**
 
 ## Inputs (REQUIRED)
 - **Mode**: BUILD_SWARM | RUN_SDLC (determines memory routing)
