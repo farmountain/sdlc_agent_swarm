@@ -1,7 +1,7 @@
-# SDLC Swarm (No-Code, Evidence-Gated)
+# SDLC Swarm (No-Code, Evidence-Gated, Autonomous)
 
 An agentic SDLC assistant for VS Code.  
-Spec-first. Test-first. Evidence-gated.
+Spec-first. Test-first. Evidence-gated. **Autonomous by default.**
 
 ## Prerequisites
 
@@ -16,18 +16,63 @@ Spec-first. Test-first. Evidence-gated.
 
 - Helps teams plan, review, and release safely
 - Makes risks and evidence explicit
-- Keeps humans in control
+- **Automates tactical decisions** using multi-agent consensus
+- Keeps humans in control for critical approvals only
 
 ## What it does NOT do
 
-- No auto-approvals
+- No auto-approvals for critical risks (security, prod deploy, data loss)
 - No hidden logic
 - No vendor lock-in
 
+## Key Design Principles
+
+### 1. Framework Isolation
+- All SDLC Swarm framework files live in `.sdlc/` directory
+- Your project files stay in workspace root or `projects/`
+- **No mixing**: Your README.md never conflicts with framework docs
+
+### 2. Autonomous Operation
+- **Multi-agent consensus** for tactical decisions (architecture, design patterns, libraries)
+- **Automatic recovery** from errors, timeouts, and conflicts
+- **Human approval gates** only for critical risks:
+  - Production deployments
+  - Security/compliance violations
+  - Data loss risks
+  - Budget/timeline overruns >50%
+
+### 3. Collective Intelligence
+When conflicts arise, the swarm automatically invokes a **Consensus Panel**:
+- **Minimalist**: Simplicity, cost, reversibility
+- **Skeptic**: Risk mitigation, edge cases
+- **Domain Expert(s)**: Technical correctness
+- **Verifier**: Evidence quality, invariants
+- **Collective Intelligence**: Historical patterns
+- **Risk/Compliance Watcher**: Security, regulatory
+- **User Value Advocate**: Business value, ROI
+
+The panel reaches weighted consensus (threshold: 0.70) and proceeds automatically. You're informed via decision logs, but **not prompted for every choice**.
+
 ## How it works
 
-All intelligence lives in your repo under `.agents/`.  
+All intelligence lives in your repo under `.sdlc/`.  
 This extension only exposes it.
+
+**File Structure After Initialization:**
+```
+<workspace_root>/
+├─ .sdlc/                    # ← Framework (agents, skills, evidence)
+│  ├─ .agents/
+│  ├─ capabilities/
+│  ├─ weeks/
+│  └─ adoption/
+├─ projects/                 # ← Your generated projects
+│  ├─ my-api/
+│  ├─ my-cli/
+│  └─ ...
+├─ README.md                 # ← Your project README
+└─ ...                       # ← Your other files
+```
 
 ## Get started
 
@@ -35,10 +80,12 @@ This extension only exposes it.
 2. Run: "SDLC: Initialize Workspace"
 3. Run: "SDLC: Plan to PRD"
 
+The swarm will work autonomously, pausing only for critical approvals.
+
 ## Available Commands
 
 ### RUN_SDLC Mode
-- **SDLC: Initialize Workspace** - Set up SDLC Swarm structure in your project
+- **SDLC: Initialize Workspace** - Set up SDLC Swarm structure (installs to `.sdlc/`)
 - **SDLC: Plan to PRD** - Convert ideas to Product Requirements Document
 - **SDLC: Architecture Review** - Review architecture with evidence gates
 - **SDLC: Release Readiness** - Check if ready for release

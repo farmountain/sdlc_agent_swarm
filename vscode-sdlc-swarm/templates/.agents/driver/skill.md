@@ -445,13 +445,20 @@ if (verifierCard.status === "FAIL") {
       }
     });
   } else {
-    // Max retries exceeded → escalate to user
-    await escalateToUser({
+    // Max retries exceeded → invoke Consensus Panel for automatic recovery
+    await invokeConsensusPanel({
       workflow: workflowId,
       agent: targetAgent,
-      error: "Max retries exceeded (3), agent cannot satisfy verifier requirements",
-      failedChecks: corrections
+      context: "Agent exceeded max retries (3), failed to satisfy verifier requirements",
+      failedChecks: corrections,
+      options: [
+        { id: "skip_agent", description: "Skip agent and continue with partial evidence" },
+        { id: "use_fallback", description: "Use fallback agent or simpler approach" },
+        { id: "relax_requirements", description: "Relax non-critical evidence requirements" },
+        { id: "abort", description: "Abort workflow (only if critical failure)" }
+      ]
     });
+    // Panel automatically selects safest option, driver proceeds without user prompt
   }
 }
 ```
@@ -735,7 +742,11 @@ class SDLCDriver {
 **SPEC Card must exist before any execution.**
 - Spec defines WHAT to build (requirements, constraints, success criteria)
 - No agent may start implementation without approved SPEC
-- If SPEC is ambiguous, return to user for clarification
+- If SPEC is ambiguous:
+  1. **First:** SpecAgent attempts to infer from context (user memory, past projects)
+  2. **Then:** Stakeholder Agent synthesizes clarifications from domain context
+  3. **Finally:** If critical ambiguity remains (affects security/compliance), escalate to human approval gate
+  4. **Otherwise:** Consensus Panel recommends safest interpretation, proceed automatically
 
 ### 2. TDD-First Rule
 **TEST Card must exist before any build steps.**
@@ -750,10 +761,29 @@ class SDLCDriver {
 - PENDING or FAIL receipts block memory writes
 
 ### 4. Approval-Gated Rule
-**High-risk actions require Decision Card + human approval.**
-- Risk levels: LOW (<10% failure impact) | MED (10-50% impact) | HIGH (>50% impact) | CRITICAL (data loss, security breach)
-- HIGH/CRITICAL require explicit human approval before execution
-- Approvals tracked in decisions_log.md
+**High-risk actions require Decision Card + human approval. Tactical decisions use automatic consensus.**
+
+**Human Approval Required (Non-Negotiable):**
+- **CRITICAL Risk:** Data loss, security breach, regulatory violation (residual risk > 0.3)
+- **Production Deployment:** Any deployment to production environment
+- **Hard Invariant Violation:** Security, compliance, audit requirements
+- **Irreversible Changes:** Database migrations affecting production data (reversibility < 0.3)
+- **Budget/Timeline Overrun:** >50% over approved budget or timeline
+
+**Automatic Consensus Panel (No Human Prompt):**
+- **Technical Trade-offs:** Architecture choices (PostgreSQL vs MongoDB, REST vs GraphQL)
+- **Implementation Approaches:** Design patterns, code structure, library selection
+- **LOW/MED Risk Decisions:** Reversible changes, dev/staging environments
+- **Ambiguity Resolution:** Spec clarifications, requirement interpretations
+- **Recovery Decisions:** Retry strategies, fallback options, error handling
+
+**Risk Levels:**
+- LOW (<10% failure impact) → Automatic consensus
+- MED (10-50% impact) → Automatic consensus (with stakeholder notification)
+- HIGH (>50% impact) → Automatic consensus (with risk mitigation plan + stakeholder review)
+- CRITICAL (data loss, security) → Human approval gate (blocking)
+
+**Approvals tracked in:** `.sdlc/.agents/memory/decisions_log.md` or `.sdlc/.agents/user_memory/decisions_log.md`
 
 ### 5. Transparency Rule
 **No hidden state. Repository is source of truth.**
@@ -808,33 +838,48 @@ class SDLCDriver {
 ### Error Type 1: Agent Timeout
 **Symptom:** Agent takes >5 minutes without producing position card
 
-**Recovery:**
+**Recovery (AUTOMATIC):**
 1. Driver logs timeout to decisions_log.md
 2. Driver retries agent with simplified scope (e.g., break large task into smaller chunks)
-3. If retry fails, Driver escalates to user with error details
-4. User may choose to: skip agent, provide manual input, or abort workflow
+3. If retry fails after 3 attempts:
+   - Driver analyzes partial progress from previous agents
+   - Driver invokes Consensus Panel with partial context
+   - Panel recommends: (a) skip agent and continue, (b) use fallback agent, or (c) abort workflow
+4. Driver proceeds automatically with panel recommendation
+5. Driver logs decision for user visibility (informational only)
 
 **Example:**
 ```markdown
-## Decision: Agent Timeout Recovery
+## Decision: Agent Timeout Recovery (Automatic)
 - Timestamp: 2026-01-31T14:23:00Z
 - Agent: DomainModelerAgent
 - Workflow: build_feature
 - Error: Timeout after 5 minutes (no position card produced)
 - Recovery Action: Retry with scope limited to 3 aggregates instead of 8
 - Outcome: SUCCESS (completed in 2 minutes on retry)
+
+## Alternative: Timeout After 3 Retries
+- Consensus Panel Invoked: Minimalist, Skeptic, Verifier, Domain Expert
+- Panel Recommendation: Skip detailed domain model, proceed with simplified ER diagram
+- Rationale: Domain model optional for MVP, can refine later (reversible decision)
+- Decision: Automatically skip DomainModeler, continue workflow
+- User Notification: Decision logged for visibility, no action required
 ```
 
 ### Error Type 2: Verifier FAIL
 **Symptom:** Verifier receipt status = FAIL (evidence missing, invariants violated)
 
-**Recovery:**
+**Recovery (AUTOMATIC):**
 1. Driver halts workflow before memory write
 2. Driver reviews Verifier receipt for failed checks
 3. Driver returns to failing agent with specific corrections needed
 4. Agent produces revised position card
 5. Verifier re-validates
-6. If still FAIL after 3 attempts, Driver escalates to user
+6. If still FAIL after 3 attempts:
+   - Driver invokes Consensus Panel to analyze root cause
+   - Panel recommends: (a) alternative approach, (b) relax evidence requirement (if non-critical), or (c) escalate to human (only for hard invariants)
+   - Driver proceeds automatically with panel recommendation
+7. Only escalate to human if hard invariant violated (security, compliance, audit)
 
 **Example:**
 ```markdown
@@ -905,22 +950,49 @@ class SDLCDriver {
 ### Error Type 5: Consensus Failure
 **Symptom:** Solver and Skeptic have conflicting positions, CollapseAgent cannot reach consensus
 
-**Recovery:**
-1. Driver logs conflict to decisions_log.md
-2. Driver presents both positions to user
-3. User chooses one position, or provides tiebreaker guidance
-4. Driver proceeds with user-selected position
-5. MemoryAgent records user decision for future reference
+**Recovery (AUTOMATIC - NO USER PROMPT):**
+1. Driver invokes **Consensus Panel** (7 specialized agents)
+2. Panel evaluates all positions in parallel:
+   - **Minimalist:** Simplicity, cost, reversibility
+   - **Skeptic:** Risk mitigation, edge  cases
+   - **Domain Expert(s):** Technical correctness
+   - **Verifier:** Evidence quality, invariants
+   - **Collective Intelligence:** Historical patterns
+   - **Risk/Compliance Watcher:** Security, regulatory
+   - **User Value Advocate:** Business value, ROI
+3. Driver computes weighted consensus score (see `.agents/registry/collapse_policy.md`)
+4. If consensus ≥ 0.70: **Accept winning position automatically**
+5. If consensus 0.50-0.69: **Fallback to safest option** (lowest risk score)
+6. If consensus < 0.50: **Synthesize hybrid** or escalate to human (rare)
+7. MemoryAgent records consensus decision for future reference
 
 **Example:**
 ```markdown
-## Consensus Failure: PostgreSQL vs MongoDB
-- Solver Position: Use PostgreSQL with RLS for multi-tenancy (structured data, ACID)
-- Skeptic Challenge: MongoDB more flexible for product catalog (schema-less, horizontal scaling)
-- CollapseAgent: Unable to converge (both positions scored 0.75)
-- User Decision: Choose PostgreSQL (user values ACID guarantees over schema flexibility)
-- Rationale: E-commerce requires transactional integrity for orders and payments
+## Automatic Consensus Resolution: PostgreSQL vs MongoDB
+- Solver Position: PostgreSQL with RLS (ACID, structured)
+- Skeptic Challenge: MongoDB (schema-less, horizontal scaling)
+- CollapseAgent: Unable to converge (both scored 0.75)
+
+### Consensus Panel Invoked (Automatic)
+- **Minimalist:** PostgreSQL (0.85) - Simpler, reversible
+- **Skeptic:** PostgreSQL (0.78) - Lower risk for payments
+- **Backend Expert:** PostgreSQL (0.88) - Transactional best practice
+- **Verifier:** PostgreSQL (0.92) - All evidence valid
+- **Experience Agent:** PostgreSQL (0.80) - 60% historical success rate
+- **Risk Watcher:** PostgreSQL (0.95) - ACID compliance critical
+- **User Value:** MongoDB (0.70) - Faster initial velocity
+
+### Final Consensus
+- **Winning Position:** PostgreSQL (consensus score: 0.85 / 1.0)
+- **Rationale:** Strong agreement across 6/7 agents, ACID critical for payments
+- **Trade-off Accepted:** Use PostgreSQL JSONB for schema flexibility
+- **Decision:** Automatically proceed with PostgreSQL (no user prompt)
+- **Status:** CONSENSUS_REACHED
+
+Driver proceeds automatically with PostgreSQL plan. User is informed of decision via decision log, but not prompted to choose.
 ```
+
+**Key Principle:** Consensus Panel automates tactical decisions. Only escalate to human for approval gates (security signoff, prod deploy, etc.), not for technical trade-offs.
 
 ---
 

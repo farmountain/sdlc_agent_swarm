@@ -79,23 +79,29 @@ async function initializeWorkspace(context: vscode.ExtensionContext): Promise<vo
     }
 
     const workspacePath = workspaceFolder.uri.fsPath;
-    const agentsPath = path.join(workspacePath, '.agents');
+    const sdlcPath = path.join(workspacePath, '.sdlc');
     
-    // Check if .agents/ already exists
-    if (fs.existsSync(agentsPath)) {
+    // Check if .sdlc/ already exists
+    if (fs.existsSync(sdlcPath)) {
         vscode.window.showInformationMessage('SDLC Swarm already initialized in this workspace.');
         return;
     }
 
-    // Copy templates
+    // Create .sdlc directory
+    fs.mkdirSync(sdlcPath, { recursive: true });
+
+    // Copy templates to .sdlc/ (framework files stay separate from project files)
     const templatePath = path.join(context.extensionPath, 'templates');
     const results: string[] = [];
 
     try {
-        copyDirectory(templatePath, workspacePath, results);
+        copyDirectory(templatePath, sdlcPath, results);
         
         const message = [
             'SDLC Swarm initialized successfully!',
+            '',
+            'Framework installed to: .sdlc/',
+            'Your project files remain in workspace root.',
             '',
             'Installed:',
             ...results,
@@ -168,9 +174,9 @@ async function executeWorkflow(mode: string, workflow: string, title: string): P
         return;
     }
 
-    // Check if .agents/ exists
-    const agentsPath = path.join(workspaceFolder.uri.fsPath, '.agents');
-    if (!fs.existsSync(agentsPath)) {
+    // Check if .sdlc/ exists
+    const sdlcPath = path.join(workspaceFolder.uri.fsPath, '.sdlc');
+    if (!fs.existsSync(sdlcPath)) {
         const response = await vscode.window.showWarningMessage(
             'SDLC Swarm not initialized. Initialize now?',
             'Yes',
@@ -222,14 +228,29 @@ async function executeWorkflow(mode: string, workflow: string, title: string): P
 }
 
 async function detectEvidenceFiles(workspacePath: string): Promise<string> {
-    const agentsPath = path.join(workspacePath, '.agents');
+    const sdlcPath = path.join(workspacePath, '.sdlc');
     const evidenceFiles: string[] = [];
 
     try {
-        const files = fs.readdirSync(agentsPath);
-        for (const file of files) {
-            if (file.startsWith('evidence_') && file.endsWith('.md')) {
-                evidenceFiles.push(`.agents/${file}`);
+        // Check .sdlc/.agents/ for framework evidence
+        const agentsPath = path.join(sdlcPath, '.agents');
+        if (fs.existsSync(agentsPath)) {
+            const files = fs.readdirSync(agentsPath);
+            for (const file of files) {
+                if (file.startsWith('evidence_') && file.endsWith('.md')) {
+                    evidenceFiles.push(`.sdlc/.agents/${file}`);
+                }
+            }
+        }
+
+        // Check .sdlc/.agents/user_memory/ for user project evidence
+        const userMemoryPath = path.join(agentsPath, 'user_memory');
+        if (fs.existsSync(userMemoryPath)) {
+            const files = fs.readdirSync(userMemoryPath);
+            for (const file of files) {
+                if (file.startsWith('evidence_') && file.endsWith('.md')) {
+                    evidenceFiles.push(`.sdlc/.agents/user_memory/${file}`);
+                }
             }
         }
     } catch {
