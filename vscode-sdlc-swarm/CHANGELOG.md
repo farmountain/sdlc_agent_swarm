@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.4] - 2026-02-04
+
+### 🧹 Template Cleanup
+
+#### Removed Framework Development History
+- **Removed:** `weeks/` folder (9 weeks of internal framework development journal) from extension templates
+- **Benefit:** Cleaner user workspace in `.sdlc/` - users only see content relevant to building their apps
+- **Impact:** Package size reduced from 502KB to 477KB (5% smaller)
+
+### Changed
+- Updated `templates/README.md` to reflect new structure without `weeks/` folder
+- Installation now copies only: `.agents/`, `capabilities/`, `adoption/`
+
+### Why This Matters
+The `weeks/` folder documented our framework's evolution (invariants, collapse agent, extension architecture) but provides no value to users building applications. Users should focus on writing specs and building products, not studying how the framework was constructed.
+
+---
+
 ## [2.0.0] - 2026-02-04
 
 ### 🎯 Major Changes
