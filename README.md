@@ -196,14 +196,50 @@ Output: Next 3 Actions + Evidence Log
 | **Compliance-Risk** | Risk | Flags regulatory/security risks |
 | **Specialized Agents** | Contextual | User Research, Documentation, IaC, Postmortem, Feedback, Code Generator, Refactoring |
 
-## 🔄 Workflows
+## 🔄 Workflows (21 Total)
 
-Four core SDLC workflows (extensible):
+Complete SDLC workflow catalog organized by category:
 
+### 🔍 Discovery & Product (2 workflows)
 1. **`plan_to_prd`** — Generate PRD with full risk assessment → `prd_signoff` gate
-2. **`code_change`** — Plan implementation with minimal ceremony → `merge_approval` gate
-3. **`infra_deploy`** — Deploy to production with high governance → `prod_deploy` gate
-4. **`security_review`** — Security assessment of changes → `security_signoff` gate
+2. **`backlog_prioritization`** — Prioritize backlog and plan sprints → `backlog_approval` gate
+
+### 🏗️ Architecture & Design (4 workflows)
+3. **`architecture_design`** — Enterprise architecture validation → `architecture_approval` gate
+4. **`threat_modeling`** — Security threat assessment → `security_signoff` gate
+5. **`cost_estimation`** — Resource and budget planning
+6. **`api_contract_design`** — API contract-first design
+
+### ⚙️ Implementation & Build (4 workflows)
+7. **`build_feature`** — Plan implementation with minimal ceremony → `merge_approval` gate
+8. **`generate_code`** — Production code generation (multi-language)
+9. **`refactor_code`** — Code improvement and optimization
+10. **`build_integration`** — API and service integration
+
+### 🧪 Testing & Quality (2 workflows)
+11. **`comprehensive_testing`** — Unit, integration, e2e test generation
+12. **`chaos_testing`** — Resilience and failure testing
+
+### 🚀 Release & Operations (3 workflows)
+13. **`release_readiness`** — Pre-deployment validation checklist
+14. **`deploy_to_production`** — Deploy to production with high governance → `prod_deploy` gate
+15. **`incident_response`** — Production incident triage and resolution
+
+### 📊 Continuous Improvement (4 workflows)
+16. **`continuous_improvement`** — Retrospectives and process optimization
+17. **`assess_project`** — Project health assessment and dashboard
+18. **`technical_debt_audit`** — Technical debt identification and prioritization
+19. **`incremental_improvement`** — Small-batch improvements
+
+### 🔄 Modernization (2 workflows)
+20. **`legacy_modernization`** — Legacy system refactoring and migration
+21. **`openspec_feature_development`** — OpenSpec-driven feature development
+
+**All workflows support:**
+- Evidence-based decision making
+- Weighted consensus collapse
+- Human approval gates for critical decisions
+- Reflexion triggers for iterative refinement
 
 ## 🚀 How to Use (Once Built)
 
