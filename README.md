@@ -50,9 +50,11 @@ More examples: "Build e-commerce platform with multi-tenancy", "Create data pipe
 The extension provides:
 - ✅ One-command workspace initialization
 - ✅ 13 registered commands (Planning + Code Generation)
+- ✅ **Autonomous operation enforcement** — Injects autonomous operation mandate into every prompt (v0.1.7)
 - ✅ Chat participants (@PlanToPRD, @BuildFeature, @MultiLanguage, @RefactorCode, etc.)
 - ✅ Protected file safety (never overwrites evidence or ledgers)
 - ✅ **Zero intelligence** — all logic stays in `.agents/`
+- ✅ **Clean uninstall** — No persistent state, leaves no traces when removed
 
 **Key principle:** The extension is removable. If you uninstall it, your `.agents/` folder still works with Copilot.
 
@@ -63,8 +65,11 @@ The extension provides:
 - [Command Mapping](distribution/EXTENSION_MAPPING.md) — Canonical mappings
 - [Validation Report](weeks/week-09/VALIDATION_REPORT.md) — DoD validation
 - [Quick Reference](weeks/week-09/QUICK_REFERENCE.md) — Cheat sheet
+- [Changelog](vscode-sdlc-swarm/CHANGELOG.md) — Release history (current: v0.1.7)
 
-**Status:** ✅ **Week 9 COMPLETE** — Extension built and packaged (`sdlc-swarm-0.1.0.vsix`, 159KB). Ready for installation and user testing.
+**Status:** ✅ **v0.1.7 RELEASED** — Extension built and packaged (`sdlc-swarm-0.1.7.vsix`, 551KB, 142 files). 
+
+**Latest:** Autonomous operation enforcement - Extension automatically injects autonomous operation mandate into every Copilot Chat prompt, eliminating "Should I..." prompts for routine decisions.
 
 ## 🏗️ Architecture
 
@@ -177,18 +182,19 @@ Output: Next 3 Actions + Evidence Log
 16. **[adoption/anti_patterns.md](adoption/anti_patterns.md)** — Anti-patterns to avoid
 17. **[adoption/success_metrics.md](adoption/success_metrics.md)** — Adoption success metrics
 
-## 🤖 Agent Roles
+## 🤖 Agent Roles (40 Agents — 105% Coverage)
 
 | Role | Type | Responsibility |
-|------|------|-----------------|
+|------|------|----------------|
 | **Driver** | Orchestrator | Entry point; manages workflow orchestration & consensus |
 | **Solver** | Generator | Proposes solution + plan |
 | **Skeptic** | Critic | Challenges assumptions; finds failure modes |
 | **Minimalist** | Simplifier | Reduces to smallest viable solution |
 | **Verifier** | Validator | Validates against world model invariants |
-| **Domain Experts** | Specialist | Backend, Frontend, DevOps, Security, Data architects |
+| **Domain Experts** | Specialist | Backend, Frontend, DevOps, Security, Data, TypeScript, Rust, Python, Java, Go |
 | **Memory Agent** | Memory | Persists decisions (with Verifier receipt only) |
 | **Compliance-Risk** | Risk | Flags regulatory/security risks |
+| **Specialized Agents** | Contextual | User Research, Documentation, IaC, Postmortem, Feedback, Code Generator, Refactoring |
 
 ## 🔄 Workflows
 
