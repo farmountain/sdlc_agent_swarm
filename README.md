@@ -65,11 +65,11 @@ The extension provides:
 - [Command Mapping](distribution/EXTENSION_MAPPING.md) — Canonical mappings
 - [Validation Report](weeks/week-09/VALIDATION_REPORT.md) — DoD validation
 - [Quick Reference](weeks/week-09/QUICK_REFERENCE.md) — Cheat sheet
-- [Changelog](vscode-sdlc-swarm/CHANGELOG.md) — Release history (current: v0.1.7)
+- [Changelog](vscode-sdlc-swarm/CHANGELOG.md) — Release history (current: v0.1.8)
 
-**Status:** ✅ **v0.1.7 RELEASED** — Extension built and packaged (`sdlc-swarm-0.1.7.vsix`, 551KB, 142 files). 
+**Status:** ✅ **v0.1.8 RELEASED** — Extension built and packaged (`sdlc-swarm-0.1.8.vsix`, 553KB, 142 files). 
 
-**Latest:** Autonomous operation enforcement - Extension automatically injects autonomous operation mandate into every Copilot Chat prompt, eliminating "Should I..." prompts for routine decisions.
+**Latest:** Strengthened autonomous mandate - Enhanced embedded mandate with decision framework, concrete examples, and GPT-4o mini-specific reminders to eliminate "Should I..." prompts more effectively (95-line mandate with step-by-step guidance).
 
 ## 🏗️ Architecture
 
@@ -312,7 +312,7 @@ Human responds: ✅ APPROVE | ❌ REJECT | 🔁 REVISE
 - **Phase 2** ✅ **COMPLETE** — Registry (5 files: agents.yaml, workflows.yaml, collapse_policy.md, risk_policy.yaml, personas.yaml) + World Model + Driver skill (5 files: skill.md, runbook.md, implementation_runbook.md, approval.md, WORKFLOW_VERIFICATION.md)
 - **Phase 3** ✅ **COMPLETE** — 65 agent skill files (40 agents: Solver, Skeptic, Verifier, Domain Experts, Memory Agent, Specialized Agents)
 - **Phase 4** 💭 **POTENTIAL EXPANSION** — Operational excellence (CI/CD automation, monitoring dashboards, telemetry, REST APIs, marketplace analytics)
-  - ⚠️ **Note:** This phase would require traditional software engineering (TypeScript/Python code), which conflicts with the core "no-code" principle. The copyright owner is **not pursuing this expansion** due to limited time and resources. The system is considered **complete and production-ready** at Phase 3 + Extension v0.1.7.
+  - ⚠️ **Note:** This phase would require traditional software engineering (TypeScript/Python code), which conflicts with the core "no-code" principle. The copyright owner is **not pursuing this expansion** due to limited time and resources. The system is considered **complete and production-ready** at Phase 3 + Extension v0.1.8.
 
 ## 🔗 Quick Links
 
