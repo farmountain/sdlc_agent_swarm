@@ -2,7 +2,7 @@
   "name": "sdlc-swarm",
   "displayName": "SDLC Swarm (No-Code, Evidence-Gated, Autonomous)",
   "description": "Agentic SDLC assistant for VS Code. Spec-first. Test-first. Evidence-gated. Autonomous by default.",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "publisher": "sdlc-swarm",
   "engines": {
     "vscode": "^1.85.0"
@@ -88,6 +88,26 @@
         "command": "sdlc.multiLanguageProject",
         "title": "SDLC: Multi-Language Project",
         "category": "SDLC Swarm"
+      },
+      {
+        "command": "sdlc.assessProject",
+        "title": "SDLC: Assess Existing Project",
+        "category": "SDLC Swarm (Brownfield)"
+      },
+      {
+        "command": "sdlc.technicalDebtAudit",
+        "title": "SDLC: Technical Debt Audit",
+        "category": "SDLC Swarm (Brownfield)"
+      },
+      {
+        "command": "sdlc.incrementalImprovement",
+        "title": "SDLC: Incremental Improvement",
+        "category": "SDLC Swarm (Brownfield)"
+      },
+      {
+        "command": "sdlc.legacyModernization",
+        "title": "SDLC: Legacy Modernization",
+        "category": "SDLC Swarm (Brownfield)"
       },
       {
         "command": "swarm.planNextSprint",

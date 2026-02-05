@@ -581,3 +581,177 @@ workflows:
       trigger_on: ["action_items_incomplete"]
       max_iterations: 1
     approvals: []
+
+# ==============================================================================
+# BROWNFIELD / EXISTING PROJECT WORKFLOWS (4)
+# Purpose: For halfway developed, legacy, or existing codebases
+# ==============================================================================
+
+  assess_project:
+    id: "WF-017"
+    category: brownfield
+    intent: "Assess existing/halfway project health and create improvement roadmap"
+    trigger: "Inheriting legacy code, halfway project, or technical health check"
+    steps:
+      - driver
+      - code_analyzer  # Static analysis, metrics
+      - refactor_agent  # Code smells, debt
+      - test_generator  # Coverage analysis
+      - vulnerability_scanner  # Security issues
+      - performance_tester  # Bottlenecks
+      - domain_modeler  # Reverse-engineer architecture
+      - tech_radar  # Dependency audit
+      - risk_scorer  # Overall health score
+      - stakeholder_agent  # Report to team
+      - memory_agent
+    decision_points:
+      - step: risk_scorer
+        criteria: "Overall health score calculated (0-100)"
+        on_reject: "Re-analyze with more data"
+    outputs:
+      - "Project health report (0-100 score)"
+      - "Technical debt register"
+      - "Security vulnerability list"
+      - "Test coverage report"
+      - "Performance baseline"
+      - "Improvement roadmap"
+      - "Quick wins list"
+    evidence_gates:
+      - "Health score validated"
+      - "All critical issues identified"
+      - "Roadmap approved by stakeholders"
+    reflexion:
+      trigger_on: ["incomplete_analysis", "missing_metrics"]
+      max_iterations: 2
+    approvals: [health_report_approval]
+    context_required:
+      - existing_codebase: true
+      - test_suite: optional
+      - documentation: optional
+
+  technical_debt_audit:
+    id: "WF-018"
+    category: brownfield
+    intent: "Comprehensive technical debt audit with ROI calculation"
+    trigger: "Planning debt reduction sprint or quarterly review"
+    steps:
+      - driver
+      - refactor_agent  # Identify debt
+      - cost_estimator  # Time to fix
+      - risk_scorer  # Risk if ignored
+      - backend_architect  # Architecture debt
+      - devops_platform  # Infrastructure debt
+      - iam_agent  # Security debt
+      - experience_agent  # Historical debt impact
+      - stakeholder_agent  # Prioritization
+      - memory_agent
+    decision_points:
+      - step: stakeholder_agent
+        criteria: "Debt prioritized by business impact"
+        on_reject: "Re-prioritize with new criteria"
+    outputs:
+      - "Debt register with ROI scores"
+      - "Prioritized debt backlog"
+      - "Recommended debt sprint plan"
+      - "Cost/benefit analysis"
+      - "Risk assessment per debt item"
+    evidence_gates:
+      - "All debt quantified (time to fix)"
+      - "ROI calculated per item"
+      - "Prioritization approved"
+    reflexion:
+      trigger_on: ["roi_unclear", "priority_conflict"]
+      max_iterations: 2
+    approvals: [debt_sprint_approval]
+    context_required:
+      - existing_codebase: true
+      - performance_baseline: recommended
+
+  incremental_improvement:
+    id: "WF-019"
+    category: brownfield
+    intent: "Improve halfway project incrementally (MVP to production-ready)"
+    trigger: "Project at 50-80% complete, needs quality improvement"
+    steps:
+      - driver
+      - spec_agent  # Document existing features
+      - test_generator  # Add missing tests
+      - refactor_agent  # Improve code quality
+      - observability_agent  # Add logging/metrics
+      - iam_agent  # Secure authentication
+      - deployment_safety  # Add safety checks
+      - devops_platform  # CI/CD setup
+      - skeptic  # Risk assessment
+      - verifier  # Validate improvements
+      - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "Test coverage >= 70%, security baseline met"
+        on_reject: "Continue improvement iterations"
+    outputs:
+      - "Feature documentation (specs)"
+      - "Improved test suite (70%+ coverage)"
+      - "Refactored codebase"
+      - "Production-ready checklist"
+      - "CI/CD pipeline"
+      - "Security audit report"
+    evidence_gates:
+      - "Test coverage >= 70%"
+      - "Security scan passed"
+      - "CI/CD pipeline functional"
+      - "Documentation complete"
+    reflexion:
+      trigger_on: ["coverage_insufficient", "security_issues"]
+      max_iterations: 3
+    approvals: [production_readiness_approval]
+    context_required:
+      - existing_codebase: true
+      - partial_tests: optional
+      - deployment_target: required
+
+  legacy_modernization:
+    id: "WF-020"
+    category: brownfield
+    intent: "Modernize legacy codebase (old frameworks, patterns, dependencies)"
+    trigger: "Legacy system needs update to modern stack"
+    steps:
+      - driver
+      - domain_modeler  # Reverse-engineer business logic
+      - test_generator  # Characterization tests
+      - solution_architect  # Target architecture
+      - tech_radar  # Modern stack recommendations
+      - refactor_agent  # Incremental migration plan
+      - typescript_expert  # Modern language features
+      - backend_architect  # API modernization
+      - skeptic  # Migration risks
+      - build_validator  # Dual-running validation
+      - verifier  # Feature parity check
+      - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "Feature parity validated + performance >= legacy"
+        on_reject: "Iterate on migration approach"
+      - step: skeptic
+        criteria: "Migration risks mitigated"
+        on_reject: "Add more safety checks"
+    outputs:
+      - "Legacy analysis report"
+      - "Target architecture design"
+      - "Incremental migration plan"
+      - "Characterization test suite"
+      - "Modernized codebase"
+      - "Rollback plan"
+      - "Feature parity validation"
+    evidence_gates:
+      - "Characterization tests passing"
+      - "Feature parity validated"
+      - "Performance >= legacy baseline"
+      - "Rollback plan tested"
+    reflexion:
+      trigger_on: ["feature_parity_failed", "performance_regression"]
+      max_iterations: 4
+    approvals: [migration_approval, production_cutover_approval]
+    context_required:
+      - legacy_codebase: true
+      - documentation: optional
+      - deployment_plan: required

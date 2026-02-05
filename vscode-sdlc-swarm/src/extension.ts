@@ -55,6 +55,23 @@ export function activate(context: vscode.ExtensionContext) {
         await executeWorkflow('BUILD_SWARM', 'dashboard_view', 'Show Swarm Dashboard');
     });
 
+    // Register BROWNFIELD commands (for existing/halfway projects)
+    const assessProjectCommand = vscode.commands.registerCommand('sdlc.assessProject', async () => {
+        await executeWorkflow('RUN_SDLC', 'assess_project', 'Assess Existing Project');
+    });
+
+    const technicalDebtAuditCommand = vscode.commands.registerCommand('sdlc.technicalDebtAudit', async () => {
+        await executeWorkflow('RUN_SDLC', 'technical_debt_audit', 'Technical Debt Audit');
+    });
+
+    const incrementalImprovementCommand = vscode.commands.registerCommand('sdlc.incrementalImprovement', async () => {
+        await executeWorkflow('RUN_SDLC', 'incremental_improvement', 'Incremental Improvement');
+    });
+
+    const legacyModernizationCommand = vscode.commands.registerCommand('sdlc.legacyModernization', async () => {
+        await executeWorkflow('RUN_SDLC', 'legacy_modernization', 'Legacy Modernization');
+    });
+
     // Register chat participants (aliases)
     registerChatParticipants(context);
 
@@ -67,7 +84,11 @@ export function activate(context: vscode.ExtensionContext) {
         planNextSprintCommand,
         swarmArchitectureReviewCommand,
         swarmReleaseReadinessCommand,
-        swarmShowDashboardCommand
+        swarmShowDashboardCommand,
+        assessProjectCommand,
+        technicalDebtAuditCommand,
+        incrementalImprovementCommand,
+        legacyModernizationCommand
     );
 }
 

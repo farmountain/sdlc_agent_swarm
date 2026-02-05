@@ -84,14 +84,23 @@ The swarm will work autonomously, pausing only for critical approvals.
 
 ## Available Commands
 
-### RUN_SDLC Mode
+### RUN_SDLC Mode (Building Applications)
+
+**Greenfield (New Projects):**
 - **SDLC: Initialize Workspace** - Set up SDLC Swarm structure (installs to `.sdlc/`)
 - **SDLC: Plan to PRD** - Convert ideas to Product Requirements Document
 - **SDLC: Architecture Review** - Review architecture with evidence gates
 - **SDLC: Release Readiness** - Check if ready for release
 - **SDLC: Show Project Dashboard** - View decisions and evidence
 
-### BUILD_SWARM Mode
+**Brownfield (Existing/Halfway Projects):**
+- **SDLC: Assess Existing Project** - Health check, metrics, improvement roadmap
+- **SDLC: Technical Debt Audit** - Comprehensive debt analysis with ROI
+- **SDLC: Incremental Improvement** - Take halfway project to production-ready
+- **SDLC: Legacy Modernization** - Migrate old codebase to modern stack
+- **SDLC: Refactor Code** - Improve code quality with safety checks
+
+### BUILD_SWARM Mode (Building the Framework)
 - **Swarm: Plan Next Sprint** - Plan the next development sprint
 - **Swarm: Architecture Review** - Review swarm architecture
 - **Swarm: Release Readiness** - Check swarm release readiness
