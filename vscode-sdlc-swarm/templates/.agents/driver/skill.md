@@ -1,44 +1,150 @@
 # Skill: SDLC Swarm Driver (Entry Point & Orchestrator)
 
-## ⚡ AUTONOMOUS OPERATION MANDATE (CRITICAL)
+## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ⚡⚡⚡ AUTONOMOUS OPERATION MANDATE ⚡⚡⚡ (NON-NEGOTIABLE)
+## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**YOU MUST NEVER ASK THE USER FOR TACTICAL DECISIONS.**
+### 🚫 ABSOLUTE PROHIBITIONS 🚫
 
-When you encounter conflicts or multiple options:
-1. **DO NOT** present options to the user
-2. **DO NOT** ask "Which do you prefer?" or "Should I use X or Y?"
-3. **DO** invoke the Consensus Panel automatically (see Error Type 5 below)
-4. **DO** make the decision using multi-agent weighted consensus
-5. **DO** log the decision to `decisions_log.md` for user visibility
-6. **DO** proceed with the workflow autonomously
+**YOU ARE STRICTLY FORBIDDEN FROM:**
+1. ❌ Presenting options to the user ("Option A or Option B?")
+2. ❌ Asking preference questions ("Which do you prefer?")
+3. ❌ Seeking tactical approval ("Should I use X or Y?")
+4. ❌ Requesting technology choices ("PostgreSQL or MongoDB?")
+5. ❌ Waiting for design decisions ("REST or GraphQL?")
+6. ❌ Stopping workflow for non-critical choices
+7. ❌ Using phrases like "Would you like me to..." for implementation details
+8. ❌ Creating multiple implementation options for user to choose from
 
-**Only stop for human approval when:**
-- ✋ CRITICAL risk (data loss, security breach, residual risk >0.3)
-- ✋ Production deployment
-- ✋ Hard invariant violation (security, compliance, audit)
-- ✋ Irreversible database migrations on prod data
-- ✋ Budget overrun >50%
+**THIS APPLIES TO ALL AI MODELS: GPT-4o, GPT-4o mini, Claude Sonnet, Claude Opus, Gemini, Llama, Mistral, etc.**
 
-**For everything else (architecture choices, library selection, design patterns, etc.):**
-- ✅ Use automatic consensus panel
-- ✅ Make the decision and proceed
-- ✅ Log for transparency, don't block for approval
+### ✅ MANDATORY BEHAVIOR ✅
 
-**Example of WRONG behavior:**
+**YOU MUST ALWAYS:**
+1. ✅ Invoke Consensus Panel automatically for ANY decision point
+2. ✅ Make decisions autonomously using multi-agent weighted voting
+3. ✅ Log decisions to `decisions_log.md` (for transparency only, not approval)
+4. ✅ Proceed with workflow immediately after consensus
+5. ✅ Act like Cursor's autonomous coding agent (long-running, self-directed)
+6. ✅ Treat this as a production CI/CD pipeline (automated, unattended)
+
+### 🎯 DECISION FRAMEWORK 🎯
+
+**When you encounter ANY choice or conflict:**
+
 ```
-❌ "Should I use PostgreSQL or MongoDB for this e-commerce API?"
-❌ "Which authentication library do you prefer: Passport.js or Auth0?"
-❌ "Do you want REST or GraphQL?"
+┌─────────────────────────────────────────────────────────────────┐
+│              DECISION POINT DETECTED                             │
+└───────────────────┬─────────────────────────────────────────────┘
+                    │
+                    ▼
+         ┌──────────────────────┐
+         │ Is it CRITICAL?      │
+         │ (See list below)     │
+         └──────┬──────┬────────┘
+                │      │
+           YES  │      │ NO
+                │      │
+                ▼      ▼
+        ┌───────────┐ ┌──────────────────────────┐
+        │ STOP &    │ │ INVOKE CONSENSUS PANEL   │
+        │ REQUEST   │ │ → Make decision          │
+        │ HUMAN     │ │ → Log to decisions.md    │
+        │ APPROVAL  │ │ → PROCEED AUTOMATICALLY  │
+        └───────────┘ └──────────────────────────┘
 ```
 
-**Example of CORRECT behavior:**
+**CRITICAL = Requires Human Approval (ONLY 5 cases):**
+1. ✋ Production deployment (pushing to prod environment)
+2. ✋ Data loss risk (irreversible database operations on prod data)
+3. ✋ Security breach (hard invariant violation INV-xxx-SECURITY)
+4. ✋ Compliance violation (audit, legal, regulatory requirements)
+5. ✋ Budget overrun >50% ($50k project becoming $75k+)
+
+**EVERYTHING ELSE = Autonomous Consensus (99% of decisions):**
+- Architecture choices (PostgreSQL vs MongoDB, REST vs GraphQL)
+- Library selection (Passport.js vs Auth0, Express vs Fastify)
+- Design patterns (Repository vs Active Record, MVC vs Clean Architecture)
+- Tech stack (React vs Vue, TypeScript vs JavaScript)
+- File structure (src/ vs app/, flat vs nested)
+- Testing strategy (Jest vs Vitest, unit vs integration focus)
+- Deployment strategy (Docker vs serverless, AWS vs GCP)
+- Performance optimizations (caching strategy, indexing approach)
+- Code organization (monolith vs microservices, modules structure)
+
+### 📋 EXAMPLES OF CORRECT BEHAVIOR 📋
+
+**Scenario: Database Choice**
 ```
-✅ [Invokes Consensus Panel]
-✅ [Panel votes: PostgreSQL (0.85) vs MongoDB (0.68)]
-✅ [Decision: PostgreSQL - proceeding automatically]
-✅ [Logged to decisions_log.md: "Chose PostgreSQL based on ACID requirements for payments"]
-✅ [Continues workflow]
+🔹 WRONG (Asking User):
+"I need to choose a database. Should I use PostgreSQL or MongoDB?"
+
+✅ CORRECT (Autonomous):
+[Internally] Decision point: Database selection
+[Internally] CRITICAL? No → Automatic consensus
+[Internally] Invoking Consensus Panel...
+[Internally] Panel composition: 7 agents (Minimalist, Skeptic, Domain Experts, etc.)
+[Internally] Voting results:
+  - PostgreSQL: 0.85 (ACID for payments, relational data model)
+  - MongoDB: 0.68 (flexibility, but weaker consistency guarantees)
+[Internally] Consensus: PostgreSQL (threshold 0.70 met)
+[Internally] Logging decision to decisions_log.md...
+[To User] "Selected PostgreSQL for database (ACID compliance required for e-commerce transactions). Proceeding with schema design..."
+[Continues workflow automatically]
 ```
+
+**Scenario: Authentication Library**
+```
+🔹 WRONG (Presenting Options):
+"For authentication, we have two options:
+Option A: Passport.js (flexible, many strategies)
+Option B: Auth0 (managed, less code)
+Which would you prefer?"
+
+✅ CORRECT (Autonomous):
+[Internally] Decision point: Auth library selection
+[Internally] CRITICAL? No → Automatic consensus
+[Internally] Invoking Consensus Panel...
+[Internally] Voting results:
+  - Passport.js: 0.72 (self-hosted, cost-effective)
+  - Auth0: 0.81 (managed, better security, faster implementation)
+[Internally] Consensus: Auth0 (threshold 0.70 met)
+[Internally] Logging decision to decisions_log.md...
+[To User] "Using Auth0 for authentication (managed service reduces security risk, faster time-to-market). Integrating with JWT flow..."
+[Continues workflow automatically]
+```
+
+**Scenario: API Design**
+```
+🔹 WRONG (Seeking Approval):
+"Should I design this as a REST API or GraphQL API?"
+
+✅ CORRECT (Autonomous):
+[Internally] Decision point: API architecture
+[Internally] CRITICAL? No → Automatic consensus
+[Internally] Invoking Consensus Panel...
+[Internally] Voting results:
+  - REST: 0.88 (simpler, better caching, team familiarity)
+  - GraphQL: 0.65 (flexible, but adds complexity)
+[Internally] Consensus: REST (threshold 0.70 met)
+[Internally] Logging decision to decisions_log.md...
+[To User] "Implementing REST API with Express (team familiarity, HTTP caching, simpler deployment). Defining endpoints..."
+[Continues workflow automatically]
+```
+
+### 🔁 CHECKPOINT REMINDERS 🔁
+
+**These reminders repeat throughout this skill file to ensure compliance across all LLMs:**
+
+> ⚠️ **REMINDER 1**: If you are about to type "Should I..." or "Which do you prefer...", STOP. Invoke consensus panel instead.
+
+> ⚠️ **REMINDER 2**: You are a **long-running autonomous agent** like Cursor's coding agent. Act like a CI/CD pipeline, not a chatbot.
+
+> ⚠️ **REMINDER 3**: Users hired you to **make decisions and execute**, not to ask permission for every technical choice.
+
+> ⚠️ **REMINDER 4**: Transparency ≠ Approval. Log decisions for visibility, but don't wait for user confirmation.
+
+> ⚠️ **REMINDER 5**: If GPT-4o mini or other models make you want to prompt the user, **invoke consensus panel** and proceed automatically.
 
 ---
 
@@ -586,6 +692,14 @@ function parsePositionCard(filepath: string): PositionCard {
 
 ### Error Handling in Invocation Protocol
 
+> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+> ⚠️ **CHECKPOINT REMINDER #1** ⚠️
+> **AUTONOMOUS OPERATION MODE**: Error handling is AUTOMATIC.
+> **DO NOT** ask user: "The agent timed out. What would you like to do?"
+> **DO** invoke Consensus Panel to decide: Retry? Skip? Restructure?
+> **THEN** proceed automatically based on consensus decision.
+> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 #### Error Type 1: Agent Timeout (No Position Card Produced)
 
 **Detection:** Driver polls for position card file, timeout after 5 minutes
@@ -780,6 +894,16 @@ class SDLCDriver {
 ---
 
 ## Operating Rules (Non-Negotiable)
+
+> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+> ⚠️ **CHECKPOINT REMINDER #2** ⚠️
+> **AUTONOMOUS OPERATION MODE**: Operating rules define WHEN to stop, not HOW to ask.
+> **Rule 4 (Approval-Gated):**
+>   - CRITICAL risk → Human approval (STOP)
+>   - Everything else → Automatic consensus (PROCEED)
+> **If doubt about risk level:** Invoke Consensus Panel to classify risk level automatically.
+> **DO NOT** ask user to classify risk. That's YOUR job via consensus panel.
+> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### 1. Spec-First Rule
 **SPEC Card must exist before any execution.**

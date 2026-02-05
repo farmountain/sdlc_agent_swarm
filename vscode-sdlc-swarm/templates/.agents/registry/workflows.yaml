@@ -1,9 +1,9 @@
 # Workflow Registry v2.0
 # Complete SDLC workflow catalog
-# Generated: 2026-02-02
+# Generated: 2026-02-05
 
 version: "2.0"
-total_workflows: 16
+total_workflows: 21
 
 # ==============================================================================
 # DISCOVERY & PRODUCT WORKFLOWS (2)
@@ -755,3 +755,68 @@ workflows:
       - legacy_codebase: true
       - documentation: optional
       - deployment_plan: required
+# ==============================================================================
+# OPENSPEC INTEGRATION WORKFLOWS (1)
+# ==============================================================================
+
+  openspec_feature_development:
+    id: "WF-021"
+    category: openspec_integration
+    intent: "Implement feature using existing OpenSpec artifacts as intent contract"
+    trigger: "User has OpenSpec change folder with proposal, specs, design, tasks"
+    steps:
+      - driver
+      - openspec_reader  # Reads OpenSpec artifacts
+      - solution_architect  # Supplements design with diagrams
+      - test_generator  # Generates tests from specs/scenarios.md
+      - typescript_expert  # Implements tasks.md checklist
+      - build_validator  # Validates build against OpenSpec design
+      - verifier  # Validates against OpenSpec specs/
+      - memory_agent
+    decision_points:
+      - step: verifier
+        criteria: "All OpenSpec requirements met + all tasks.md items checked off"
+        on_reject: "Return to implementation with gaps list"
+      - step: test_generator
+        criteria: "All specs/scenarios.md covered by tests"
+        on_reject: "Add missing test cases"
+    outputs:
+      - "Implementation code (per tasks.md)"
+      - "Test suite (per specs/scenarios.md)"
+      - "Evidence log pointing to OpenSpec artifacts"
+      - "Verification receipt (OpenSpec-aware)"
+    evidence_gates:
+      - "All OpenSpec requirements implemented"
+      - "All tasks.md items checked off"
+      - "All scenarios covered by tests"
+      - "Design decisions match OpenSpec design.md"
+    reflexion:
+      trigger_on: ["requirements_not_met", "test_coverage_insufficient"]
+      max_iterations: 3
+    approvals: [openspec_implementation_approval]
+    context_required:
+      - openspec_folder: true
+      - openspec_change_folder: true
+      - proposal_md: true
+      - specs_folder: true
+      - design_md: true
+      - tasks_md: true
+    openspec_artifact_mapping:
+      proposal_md: "Intent contract (replaces PRD)"
+      specs_requirements_md: "User stories and acceptance criteria"
+      specs_scenarios_md: "Test cases and test scenarios"
+      design_md: "Architecture and tech stack decisions"
+      tasks_md: "Implementation checklist"
+    notes: |
+      This workflow respects OpenSpec as the primary source of truth.
+      SDLC swarm supplements OpenSpec with:
+      - Verification (evidence-gated validation)
+      - Test generation (from scenarios)
+      - Implementation (autonomous coding)
+      - Architecture diagrams (supplementing design.md)
+      
+      Does NOT duplicate:
+      - PRD (uses OpenSpec proposal.md)
+      - Requirements (uses OpenSpec specs/)
+      - Design (uses OpenSpec design.md)
+      - Task breakdown (uses OpenSpec tasks.md)

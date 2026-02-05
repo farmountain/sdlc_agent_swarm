@@ -2,7 +2,7 @@
   "name": "sdlc-swarm",
   "displayName": "SDLC Swarm (No-Code, Evidence-Gated, Autonomous)",
   "description": "Agentic SDLC assistant for VS Code. Spec-first. Test-first. Evidence-gated. Autonomous by default.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "publisher": "sdlc-swarm",
   "engines": {
     "vscode": "^1.85.0"
@@ -108,6 +108,11 @@
         "command": "sdlc.legacyModernization",
         "title": "SDLC: Legacy Modernization",
         "category": "SDLC Swarm (Brownfield)"
+      },
+      {
+        "command": "sdlc.openspecFeatureDevelopment",
+        "title": "SDLC: Feature Development (OpenSpec)",
+        "category": "SDLC Swarm (OpenSpec)"
       },
       {
         "command": "swarm.planNextSprint",

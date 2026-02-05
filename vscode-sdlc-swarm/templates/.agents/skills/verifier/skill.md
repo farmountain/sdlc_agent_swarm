@@ -1279,6 +1279,302 @@ npx verify-stage CODE --project . --output VERIFICATION_RECEIPT_CODE.md
 
 ---
 
+## OpenSpec Integration (Spec-Driven Development Framework)
+
+### Overview
+
+When a project uses [OpenSpec](https://github.com/Fission-AI/OpenSpec) for spec-driven development, the verifier **MUST respect OpenSpec artifacts as the primary source of truth**. OpenSpec provides:
+- `openspec/changes/<change-name>/proposal.md`: Intent contract (replaces PRD)
+- `openspec/changes/<change-name>/specs/`: Requirements and scenarios
+- `openspec/changes/<change-name>/design.md`: Technical architecture
+- `openspec/changes/<change-name>/tasks.md`: Implementation checklist
+
+### Detection Logic
+
+**Step 1: Detect OpenSpec Project**
+```yaml
+openspec_detection:
+  indicators:
+    - folder_exists: "openspec/" or ".openspec/"
+    - package_json: "dependencies['@fission-ai/openspec']" exists
+    - change_folders: "openspec/changes/" contains active changes
+  
+  detection_result:
+    is_openspec_project: true
+    active_changes:
+      - "add-payment-gateway"
+      - "implement-dark-mode"
+```
+
+**Step 2: Identify Active Change Context**
+```yaml
+active_change_context:
+  change_name: "add-payment-gateway"
+  change_path: "openspec/changes/add-payment-gateway"
+  artifacts_present:
+    proposal_md: true
+    specs_folder: true
+    design_md: true
+    tasks_md: true
+  spec_files:
+    requirements: "openspec/changes/add-payment-gateway/specs/requirements.md"
+    scenarios: "openspec/changes/add-payment-gateway/specs/scenarios.md"
+```
+
+### OpenSpec-Aware Verification
+
+When OpenSpec is detected, verification logic adapts:
+
+#### Verification Mapping
+
+| Standard SDLC | OpenSpec Equivalent | Verification Approach |
+|---------------|---------------------|----------------------|
+| PRD.md | proposal.md | Verify proposal exists, has intent/scope/approach |
+| FEATURES.md | specs/requirements.md | Verify all requirements implemented |
+| TEST_PLAN.md | specs/scenarios.md | Verify all scenarios have tests |
+| ARCHITECTURE.md | design.md | Verify code matches design decisions |
+| Implementation | tasks.md | Verify all tasks checked off |
+
+#### Template 6: OpenSpec Feature Verification
+
+**Purpose:** Validate implementation against OpenSpec change artifacts.
+
+**Checklist (15 items):**
+```yaml
+openspec_verification:
+  # Artifact validation (5 checks)
+  - check: "Proposal exists"
+    path: "openspec/changes/{change-name}/proposal.md"
+    validation: "File size >1KB, has Intent/Scope/Approach sections"
+    
+  - check: "Requirements defined"
+    path: "openspec/changes/{change-name}/specs/requirements.md"
+    validation: "≥3 requirements with SHALL/MUST/SHOULD keywords (RFC 2119)"
+    
+  - check: "Scenarios defined"
+    path: "openspec/changes/{change-name}/specs/scenarios.md"
+    validation: "≥5 scenarios with GIVEN/WHEN/THEN format"
+    
+  - check: "Design documented"
+    path: "openspec/changes/{change-name}/design.md"
+    validation: "Technical approach, architecture decisions, file changes listed"
+    
+  - check: "Tasks defined"
+    path: "openspec/changes/{change-name}/tasks.md"
+    validation: "≥5 tasks with hierarchical numbering (1.1, 1.2, etc.)"
+  
+  # Implementation validation (5 checks)
+  - check: "All requirements implemented"
+    validation: "For each requirement in specs/requirements.md, corresponding code exists"
+    mapping: |
+      Requirement: "The system SHALL issue JWT token upon login"
+      Code: src/auth/login.ts implements JWT.sign()
+      Test: tests/auth.test.ts validates token issuance
+    
+  - check: "All scenarios covered by tests"
+    validation: "For each scenario in specs/scenarios.md, corresponding test exists"
+    mapping: |
+      Scenario: "GIVEN valid credentials WHEN user submits login THEN JWT returned"
+      Test: tests/auth.test.ts describe('Login with valid credentials', ...)
+    
+  - check: "Architecture matches design"
+    validation: "File structure, tech stack, patterns match design.md decisions"
+    example: |
+      Design.md: "Use Express + Stripe SDK + PostgreSQL"
+      Code: package.json has express@4.18, stripe@11.1, pg@8.10
+    
+  - check: "All tasks checked off"
+    validation: "All [x] checkboxes in tasks.md are checked"
+    current: "15/15 tasks completed (100%)"
+    
+ - check: "No spec drift"
+    validation: "Code doesn't implement features NOT in OpenSpec specs"
+    anti_pattern: "Code has 'admin panel' but specs don't mention admin features"
+  
+  # OpenSpec metadata (5 checks)
+  - check: "Change not archived prematurely"
+    validation: "Change still in openspec/changes/, not in openspec/changes/archive/"
+    
+  - check: "Delta specs format"
+    validation: "If modifying existing specs, use ADDED/MODIFIED/REMOVED sections"
+    
+  - check: "Proposal scope respected"
+    validation: "Implementation doesn't exceed 'In Scope' or implement 'Out of Scope'"
+    
+  - check: "Design decisions justified"
+    validation: "All tech stack choices in code match design.md rationale"
+    
+  - check: "OpenSpec CLI version"
+    validation: "package.json has @fission-ai/openspec ≥1.0.0 (latest stable)"
+```
+
+#### Example PASS Receipt (OpenSpec Project)
+
+```yaml
+verification_receipt:
+  status: PASS
+  verification_id: "VER-2026-OPENSPEC-001"
+  timestamp: "2026-02-05T10:15:00Z"
+  project_type: "openspec_integration"
+  
+  openspec_context:
+    change_name: "add-payment-gateway"
+    change_path: "openspec/changes/add-payment-gateway"
+    artifacts_verified:
+      proposal_md: "openspec/changes/add-payment-gateway/proposal.md (3.5KB)"
+      requirements_md: "openspec/changes/add-payment-gateway/specs/requirements.md (8 requirements)"
+      scenarios_md: "openspec/changes/add-payment-gateway/specs/scenarios.md (12 scenarios)"
+      design_md: "openspec/changes/add-payment-gateway/design.md (Architecture decisions)"
+      tasks_md: "openspec/changes/add-payment-gateway/tasks.md (15/15 tasks completed)"
+  
+  checks_performed:
+    - check: "All OpenSpec requirements implemented"
+      status: PASS
+      evidence: |
+        Requirement #1: "System SHALL integrate Stripe API for payments"
+        → Code: src/payment-gateway.ts uses Stripe SDK v11.1
+        → Test: tests/payment-gateway.test.ts validates Stripe API calls
+        
+        Requirement #2: "System MUST store payment records in PostgreSQL"
+        → Code: prisma/schema.prisma has Payment model
+        → Test: tests/payment.test.ts validates database writes
+        
+        ... (6 more requirements verified)
+      
+    - check: "All OpenSpec scenarios covered by tests"
+      status: PASS
+      evidence: |
+        Scenario #1: "GIVEN valid card WHEN user pays THEN payment succeeds"
+        → Test: tests/payment-gateway.test.ts describe('Successful payment', ...)
+        
+        Scenario #2: "GIVEN invalid card WHEN user pays THEN error returned"
+        → Test: tests/payment-gateway.test.ts describe('Card declined', ...)
+        
+        ... (10 more scenarios verified)
+      
+    - check: "Architecture matches OpenSpec design.md"
+      status: PASS
+      evidence: |
+        Design Decision #1: "Use Express + Stripe SDK + PostgreSQL"
+        → package.json: express@4.18, stripe@11.1, pg@8.10 ✅
+        
+        Design Decision #2: "Implement webhook handler for async events"
+        → Code: src/webhooks/stripe.ts handles payment.succeeded ✅
+        
+        Design Decision #3: "Use Prisma ORM for type-safe queries"
+        → prisma/schema.prisma exists, TypeScript types generated ✅
+      
+    - check: "All tasks.md items completed"
+      status: PASS
+      evidence: |
+        Tasks completed: 15/15 (100%)
+        [x] 1.1 Install Stripe SDK
+        [x] 1.2 Configure Stripe API keys
+        [x] 2.1 Implement payment endpoint
+        [x] 2.2 Add Prisma Payment model
+        ... (11 more tasks checked off)
+  
+  evidence_verified:
+    intent_contract: "openspec/changes/add-payment-gateway/proposal.md"
+    requirements: "openspec/changes/add-payment-gateway/specs/requirements.md"
+    test_scenarios: "openspec/changes/add-payment-gateway/specs/scenarios.md"
+    architecture: "openspec/changes/add-payment-gateway/design.md"
+    implementation: "src/payment-gateway.ts, src/webhooks/stripe.ts"
+    tests: "tests/payment-gateway.test.ts, tests/webhooks.test.ts"
+    database: "prisma/schema.prisma (Payment model)"
+  
+  recommendation: |
+    ✅ PASS - Feature fully implemented per OpenSpec change artifacts.
+    
+    Next steps:
+    1. Archive OpenSpec change: `npx openspec archive add-payment-gateway`
+    2. Merge delta specs into main specs: `openspec/changes/archive/`
+    3. Deploy to production: Ready for release
+  
+  notes: |
+    This verification used OpenSpec artifacts as primary source of truth instead of 
+    generating PRD/ARCHITECTURE.md. SDLC swarm supplemented OpenSpec with:
+    - Evidence-gated validation (this receipt)
+    - Test generation from scenarios (automated)
+    - Invariant compliance checking (INV-001 to INV-042)
+```
+
+#### Example FAIL Receipt (OpenSpec Project)
+
+```yaml
+verification_receipt:
+  status: FAIL
+  verification_id: "VER-2026-OPENSPEC-002"
+  timestamp: "2026-02-05T10:30:00Z"
+  project_type: "openspec_integration"
+  
+  openspec_context:
+    change_name: "add-dark-mode"
+    change_path: "openspec/changes/add-dark-mode"
+  
+  checks_performed:
+    - check: "All OpenSpec requirements implemented"
+      status: FAIL
+      violations:
+        - requirement: "System MUST persist theme preference in localStorage"
+          missing: "No localStorage code found in src/contexts/ThemeContext.tsx"
+          remediation: "Add localStorage.setItem('theme', theme) in ThemeProvider"
+        
+        - requirement: "System MUST detect system preference on first load"
+          missing: "No window.matchMedia('(prefers-color-scheme: dark)') check"
+          remediation: "Add system preference detection in useEffect hook"
+    
+    - check: "All OpenSpec scenarios covered by tests"
+      status: FAIL
+      violations:
+        - scenario: "GIVEN user toggles theme WHEN page reloads THEN preference persists"
+          missing: "No test for localStorage persistence in tests/ThemeContext.test.tsx"
+          remediation: "Add test: 'should persist theme preference across page reloads'"
+    
+    - check: "All tasks.md items completed"
+      status: FAIL
+      current: "7/10 tasks completed (70%)"
+      uncompleted_tasks:
+        - "[ ] 2.2 Add CSS custom properties for dark theme colors"
+        - "[ ] 3.1 Test contrast ratios for accessibility"
+        - "[ ] 3.2 Add ThemeToggle to settings page"
+      remediation: "Complete remaining 3 tasks before re-verification"
+  
+  recommendation: |
+    ❌ FAIL - Implementation incomplete. 3 requirements not met, 1 scenario missing tests, 3 tasks uncompleted.
+    
+    Next actions:
+    1. Add localStorage persistence (2 hours)
+    2. Add system preference detection (1 hour)
+    3. Add missing test case (30 min)
+    4. Complete tasks 2.2, 3.1, 3.2 (3 hours)
+    5. Re-verify after fixes (ETA: 1 day)
+```
+
+### Key Differences: Standard vs OpenSpec
+
+| Aspect | Standard SDLC | OpenSpec Integration |
+|--------|---------------|---------------------|
+| **Intent Source** | PRD.md (generated by PRD Agent) | proposal.md (from OpenSpec) |
+| **Requirements** | FEATURES.md (from user stories) | specs/requirements.md (OpenSpec) |
+| **Test Cases** | TEST_PLAN.md (from acceptance criteria) | specs/scenarios.md (OpenSpec) |
+| **Architecture** | ARCHITECTURE.md (from Solver Agent) | design.md (OpenSpec) + diagrams (SDLC supplement) |
+| **Implementation** | Code Generator Agent autonomous | Code Generator uses tasks.md checklist |
+| **Verification** | Validate against SDLC artifacts | Validate against OpenSpec artifacts |
+| **Duplication** | None (generates all artifacts) | None (uses OpenSpec, no PRD generation) |
+| **Workflow** | Linear (PRD → Arch → Code → Test) | Iterative (OpenSpec /opsx:ff → SDLC implementation) |
+
+### Notes for Verifier
+
+1. **Artifact Source Detection**: Always check for `openspec/changes/` first before assuming standard SDLC structure
+2. **No Duplicate Specs**: When OpenSpec detected, DO NOT verify PRD.md/FEATURES.md (doesn't exist, not needed)
+3. **Respect OpenSpec Workflow**: OpenSpec uses `/opsx:new` → `/opsx:ff` → `/opsx:apply` → `/opsx:archive`. SDLC inserts at `/opsx:apply` stage.
+4. **Evidence Pointers**: Point to OpenSpec artifacts (e.g., `openspec/changes/add-feature/proposal.md`) not SDLC artifacts
+5. **Archive Status**: If change in `openspec/changes/archive/`, it's completed (don't re-verify)
+6. **Delta Specs**: OpenSpec uses ADDED/MODIFIED/REMOVED sections for spec changes (validate format if modifying existing specs)
+
+---
+
 ## Summary
 
 The Verifier is the **quality gate** ensuring evidence-based progression through the SDLC. Key responsibilities:

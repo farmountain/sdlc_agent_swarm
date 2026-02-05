@@ -72,6 +72,11 @@ export function activate(context: vscode.ExtensionContext) {
         await executeWorkflow('RUN_SDLC', 'legacy_modernization', 'Legacy Modernization');
     });
 
+    // Register OPENSPEC INTEGRATION command
+    const openspecFeatureDevCommand = vscode.commands.registerCommand('sdlc.openspecFeatureDevelopment', async () => {
+        await executeOpenSpecWorkflow();
+    });
+
     // Register chat participants (aliases)
     registerChatParticipants(context);
 
@@ -88,7 +93,8 @@ export function activate(context: vscode.ExtensionContext) {
         assessProjectCommand,
         technicalDebtAuditCommand,
         incrementalImprovementCommand,
-        legacyModernizationCommand
+        legacyModernizationCommand,
+        openspecFeatureDevCommand
     );
 }
 
@@ -279,6 +285,116 @@ async function detectEvidenceFiles(workspacePath: string): Promise<string> {
     }
 
     return evidenceFiles.join(', ');
+}
+
+async function detectOpenSpec(workspacePath: string): Promise<{detected: boolean, changeFolders: string[]}> {
+    const openspecPath = path.join(workspacePath, 'openspec');
+    const dotOpenspecPath = path.join(workspacePath, '.openspec');
+    
+    // Check for openspec/ or .openspec/ folders
+    const hasOpenspecFolder = fs.existsSync(openspecPath);
+    const hasDotOpenspec = fs.existsSync(dotOpenspecPath);
+    
+    if (!hasOpenspecFolder && !hasDotOpenspec) {
+        return { detected: false, changeFolders: [] };
+    }
+    
+    // Find change folders in openspec/changes/
+    const changeFolders: string[] = [];
+    const changesPath = path.join(openspecPath, 'changes');
+    if (fs.existsSync(changesPath)) {
+        const entries = fs.readdirSync(changesPath, { withFileTypes: true });
+        for (const entry of entries) {
+            if (entry.isDirectory() && entry.name !== 'archive') {
+                // Check if it has OpenSpec artifacts
+                const changePath = path.join(changesPath, entry.name);
+                const hasProposal = fs.existsSync(path.join(changePath, 'proposal.md'));
+                const hasSpecs = fs.existsSync(path.join(changePath, 'specs'));
+                const hasDesign = fs.existsSync(path.join(changePath, 'design.md'));
+                const hasTasks = fs.existsSync(path.join(changePath, 'tasks.md'));
+                
+                if (hasProposal || hasSpecs || hasDesign || hasTasks) {
+                    changeFolders.push(entry.name);
+                }
+            }
+        }
+    }
+    
+    return { detected: true, changeFolders };
+}
+
+async function executeOpenSpecWorkflow(): Promise<void> {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) {
+        vscode.window.showErrorMessage('No workspace folder open.');
+        return;
+    }
+    
+    const workspacePath = workspaceFolder.uri.fsPath;
+    
+    // Check if .sdlc/ exists
+    const sdlcPath = path.join(workspacePath, '.sdlc');
+    if (!fs.existsSync(sdlcPath)) {
+        const response = await vscode.window.showWarningMessage(
+            'SDLC Swarm not initialized. Initialize now?',
+            'Yes',
+            'No'
+        );
+        if (response === 'Yes') {
+            await vscode.commands.executeCommand('sdlc.initializeWorkspace');
+        }
+        return;
+    }
+    
+    // Detect OpenSpec project
+    const openspecInfo = await detectOpenSpec(workspacePath);
+    if (!openspecInfo.detected) {
+        vscode.window.showErrorMessage('No OpenSpec project detected. Expected openspec/ folder with changes/.');
+        return;
+    }
+    
+    if (openspecInfo.changeFolders.length === 0) {
+        vscode.window.showWarningMessage('No active OpenSpec changes found. Create a change using `/opsx:new <feature-name>` first.');
+        return;
+    }
+    
+    // Let user select which change to implement
+    const selectedChange = await vscode.window.showQuickPick(openspecInfo.changeFolders, {
+        placeHolder: 'Select OpenSpec change to implement'
+    });
+    
+    if (!selectedChange) {
+        return; // User cancelled
+    }
+    
+    // Build prompt with OpenSpec context
+    const changePath = `openspec/changes/${selectedChange}`;
+    const promptLines = [
+        'Use the SDLC Swarm Driver skill.',
+        '',
+        'Mode=RUN_SDLC',
+        'Workflow=openspec_feature_development',
+        `Objective=Implement feature from OpenSpec change: ${selectedChange}`,
+        '',
+        '🎯 OPENSPEC INTEGRATION MODE:',
+        `- Change folder: ${changePath}`,
+        `- Use ${changePath}/proposal.md as intent contract (DO NOT create new PRD)`,
+        `- Use ${changePath}/specs/ as requirements source`,
+        `- Use ${changePath}/design.md as architecture guide`,
+        `- Use ${changePath}/tasks.md as implementation checklist`,
+        '',
+        'Your task:',
+        '1. Read all OpenSpec artifacts in change folder',
+        '2. Generate implementation code per tasks.md',
+        '3. Generate tests covering specs/scenarios.md',
+        '4. Validate against OpenSpec specs/requirements.md',
+        '5. Create verification receipt confirming all OpenSpec requirements met'
+    ];
+    
+    const prompt = promptLines.join('\n');
+    
+    // Inject into Copilot Chat
+    await injectPromptToCopilot(prompt);
 }
 
 async function injectPromptToCopilot(prompt: string): Promise<void> {

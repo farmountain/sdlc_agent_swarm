@@ -1,5 +1,102 @@
 # Changelog
 
+## [0.1.5] - 2026-02-05
+
+### 🎯 Model-Agnostic Autonomous Operation
+
+#### Issue #1: LLM Prompting User Despite Autonomous Mandates
+**Problem:** GPT-4o mini (and other models) still prompt users for tactical decisions despite autonomous operation instructions.
+**Root Cause:** Instructions not forceful or visible enough for all LLMs. Claude Sonnet 4.5 respects mandates better than GPT-4o mini.
+
+**Solution:** Strengthened autonomous operation mandates with model-agnostic design:
+- ⚡ **Visual emphasis**: Unicode borders, emoji warnings (impossible to miss)
+- 🔁 **Checkpoint reminders**: 5 reminders throughout driver skill (reinforcement)
+- 🚫 **Absolute prohibitions**: Explicit list of forbidden behaviors ("DO NOT ask...")
+- ✅ **Mandatory behaviors**: Explicit list of required behaviors ("DO invoke consensus panel...")
+- 📋 **Decision framework**: Visual flowchart for all decision points
+- 📝 **Worked examples**: WRONG vs CORRECT behavior for common scenarios (DB choice, auth library, API design)
+
+**Impact:** Works across all LLMs (GPT-4o, GPT-4o mini, Claude Sonnet, Claude Opus, Gemini, Llama, Mistral)
+
+**Changed Files:**
+- `templates/.agents/driver/skill.md`: Completely rewritten autonomous mandate section (300+ lines)
+- Added 2 checkpoint reminders in error handling and operating rules sections
+
+### 🔗 OpenSpec Integration
+
+#### Issue #2: How to Use with OpenSpec Projects?
+**User Request:** "Some of my developers use OpenSpec (https://github.com/Fission-AI/OpenSpec) for end-to-end development. How to ensure their specification from OpenSpec will be used as intent contract of SDLC agent swarm?"
+
+**Solution:** Full OpenSpec integration with artifacts as primary source of truth:
+
+#### New Workflow (WF-021)
+- **openspec_feature_development**: Detects OpenSpec changes, reads artifacts, implements autonomously
+- Respects OpenSpec `proposal.md` as intent contract (no duplicate PRD)
+- Uses OpenSpec `specs/` for requirements
+- Uses OpenSpec `design.md` for architecture
+- Uses OpenSpec `tasks.md` for implementation checklist
+- Generates tests from OpenSpec `specs/scenarios.md`
+- Validates against OpenSpec `specs/requirements.md`
+
+#### Extension Detection
+- Auto-detects `openspec/` folder and `openspec/changes/`
+- Lists active changes for user selection
+- Builds context-rich prompt with OpenSpec artifacts
+
+#### New Command
+- `SDLC: Feature Development (OpenSpec)` - Implement using OpenSpec specs
+
+#### Verifier Enhancement
+- OpenSpec-aware verification template (Template 6)
+- Validates implementation against OpenSpec artifacts
+- No duplicate specs (uses OpenSpec proposal, not PRD)
+- Special verification receipt format for OpenSpec projects
+
+#### Documentation
+- `OPENSPEC_INTEGRATION.md`: Architecture and design (200+ lines)
+- `OPENSPEC_GUIDE.md`: User guide with examples, workflows, troubleshooting (350+ lines)
+
+**Benefits for OpenSpec Users:**
+- ✅ Respect existing OpenSpec specs (no duplication)
+- ✅ Seamless workflow (OpenSpec planning → SDLC autonomous implementation)
+- ✅ Evidence-gated validation on top of OpenSpec
+- ✅ Test generation from OpenSpec scenarios
+
+**Benefits for SDLC Swarm Users:**
+- ✅ Industry standard integration (OpenSpec has 22k+ stars)
+- ✅ Better planning workflow (OpenSpec's iterative approach)
+- ✅ Tool diversity (works with 20+ AI assistants)
+
+### Added
+- OpenSpec detection logic in `extension.ts`
+- OpenSpec workflow (WF-021) in `workflows.yaml`
+- OpenSpec command in `package.json`
+- OpenSpec integration architecture doc
+- OpenSpec user guide (comprehensive)
+- OpenSpec-aware verifier template
+
+### Changed
+- Driver skill autonomous mandates (3x more forceful)
+- Verifier skill with OpenSpec support
+- Extension.ts with `detectOpenSpec()` and `executeOpenSpecWorkflow()`
+- Package.json version 0.1.4 → 0.1.5
+- Package size 477KB → 494KB (OpenSpec docs added)
+
+### Technical Details
+- Total workflows: 20 → 21 (added openspec_feature_development)
+- Total commands: 14 → 15 (added openspecFeatureDevelopment)
+- Documentation: +2 new files (OPENSPEC_INTEGRATION.md, OPENSPEC_GUIDE.md)
+- Driver skill: +200 lines (autonomous mandates strengthened)
+- Verifier skill: +300 lines (OpenSpec template added)
+
+### Migration Notes
+- **No breaking changes** - OpenSpec integration is opt-in
+- Existing projects work unchanged (standard SDLC workflows)
+- If you use OpenSpec, run: `SDLC: Feature Development (OpenSpec)`
+- If you don't use OpenSpec, ignore new command
+
+---
+
 ## [0.1.4] - 2026-02-04
 
 ### 🧹 Template Cleanup
