@@ -2,7 +2,7 @@
   "name": "sdlc-swarm",
   "displayName": "SDLC Swarm (No-Code, Evidence-Gated, Autonomous)",
   "description": "Agentic SDLC assistant for VS Code. Spec-first. Test-first. Evidence-gated. Autonomous by default.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "publisher": "sdlc-swarm",
   "engines": {
     "vscode": "^1.85.0"

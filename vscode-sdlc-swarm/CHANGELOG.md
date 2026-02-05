@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.1.8] - 2026-02-05
+
+### 🔧 Fixed - Strengthened Autonomous Mandate for GPT-4o mini
+
+**Problem:** GPT-4o mini (and other models) still asking users "Should I..." or presenting multiple options despite v0.1.7 mandate injection.
+
+**Root Cause:** Embedded autonomous mandate was too weak:
+- Missing decision framework (4-step process)
+- Missing concrete examples (WRONG vs CORRECT behavior)
+- Missing checkpoint reminders ("If you are about to type 'Should I...', STOP")
+- Missing GPT-4o mini-specific warnings
+- Too short (12 rules → now 95 lines with examples)
+
+**Solution:** Enhanced `getEmbeddedAutonomousMandate()` with:
+1. **Step-by-step decision framework** - Clear 4-step process (Is CRITICAL? → Consensus → Log → Proceed)
+2. **Concrete example** - Shows database selection: WRONG (asking) vs CORRECT (autonomous with internal reasoning)
+3. **Model-specific reminders** - Explicit "CRITICAL REMINDER FOR GPT-4o mini AND ALL MODELS"
+4. **Forbidden phrase list** - "Should I...", "Which do you prefer...", "I have two options:", etc.
+5. **Visual separators** - Unicode box drawing characters for emphasis
+6. **Repetition** - Key rules repeated 3x (beginning, middle, end)
+
+**Impact:**
+- ✅ GPT-4o mini now sees 95-line mandate with examples before every workflow
+- ✅ Explicit "If you are about to type 'Should I...', STOP" checkpoint
+- ✅ Clear distinction: CRITICAL (5 cases only) vs EVERYTHING ELSE (automatic)
+- ✅ Example shows internal reasoning process → external announcement → immediate continuation
+
+#### Files Modified
+- `vscode-sdlc-swarm/src/extension.ts` (+80 lines: enhanced embedded mandate)
+
+---
+
 ## [0.1.7] - 2026-02-06
 
 ### 🔒 Autonomous Operation Enforcement (System Prompt Injection)
