@@ -1773,4 +1773,305 @@ The Driver is the **orchestrator and safety guardian** of the SDLC swarm:
 
 ---
 
+## Specialized Agent Invocation (Collective Intelligence)
+
+### Code Generator Agent - Activation Logic
+
+**When to Invoke:** Specs exist and need implementation scaffolding
+
+```typescript
+/**
+ * Detect if Code Generator Agent should be invoked
+ */
+function shouldInvokeCodeGenerator(context: WorkflowContext): boolean {
+  // Scenario 1: OpenAPI → API Implementation
+  if (context.hasOpenAPISpec && !context.hasImplementation) {
+    return context.priorAgents.includes('openapi-expert');
+  }
+  
+  // Scenario 2: Database Schema → ORM Models
+  if (context.hasPrismaSchema || context.hasTypeORMSchema) {
+    return context.priorAgents.includes('data-architect');
+  }
+  
+  // Scenario 3: Design Tokens → UI Components
+  if (context.hasDesignTokens && context.requiresComponentLibrary) {
+    return context.priorAgents.includes('ui-ux-designer');
+  }
+  
+  // Scenario 4: Domain Model → Business Logic
+  if (context.hasDomainModel && context.architecture === 'DDD') {
+    return context.priorAgents.includes('solution-architect');
+  }
+  
+  return false;
+}
+```
+
+**Consensus Panel Decision:**
+```yaml
+# Automatic consensus when code-generator detected
+consensus_decision:
+  trigger: "OpenAPI spec complete (openapi.yaml exists)"
+  panel_composition:
+    - solution_architect: "Architecture aligned with spec"
+    - openapi_expert: "Spec validated, all endpoints defined"
+    - code_generator: "Can generate controllers, routes, DTOs, tests"
+    - typescript_expert: "Will ensure type safety"
+    - test_generator: "Will create unit + integration tests"
+    - verifier: "Require: Generated code passes type checks + tests"
+  
+  votes:
+    invoke_code_generator: 0.95 (consensus)
+    skip_and_manual_implement: 0.40
+  
+  decision: "INVOKE code_generator"
+  rationale: "OpenAPI spec exists, no implementation found, high consensus for automation"
+  
+  logged_to: .agents/memory/decisions_log.md
+  user_notified: "Detected OpenAPI spec — generating API implementation automatically..."
+  proceed: true  # No user prompt needed
+```
+
+---
+
+### Refactoring Agent - Activation Logic
+
+**When to Invoke:** Code quality issues detected
+
+```typescript
+/**
+ * Detect if Refactoring Agent should be invoked
+ */
+function shouldInvokeRefactoringAgent(context: WorkflowContext): boolean {
+  // Scenario 1: Code Review Flags Issues
+  const hasCodeSmells = context.codeReviewIssues.some(issue =>
+    ['duplicate-code', 'long-method', 'complex-conditional', 'large-class'].includes(issue.type)
+  );
+  if (hasCodeSmells && context.priorAgents.includes('code-reviewer')) {
+    return true;
+  }
+  
+  // Scenario 2: Architecture Violations
+  if (context.architectureViolations.length > 0) {
+    return context.priorAgents.includes('solution-architect');
+  }
+  
+  // Scenario 3: Naming Inconsistencies
+  if (context.namingInconsistencies.length > 0) {
+    return true;
+  }
+  
+  // Scenario 4: Large Files Need Splitting
+  if (context.files.some(file => file.lines > 500)) {
+    return context.codeReviewIssues.some(issue => issue.type === 'large-class');
+  }
+  
+  return false;
+}
+```
+
+**Consensus Panel Decision:**
+```yaml
+# Automatic consensus when refactoring-agent detected
+consensus_decision:
+  trigger: "Code review found 5 issues (duplication, long methods, complex conditionals)"
+  panel_composition:
+    - code_reviewer: "Identified technical debt, complexity score 18 (threshold 10)"
+    - refactoring_agent: "Can extract methods, reduce duplication, simplify conditionals"
+    - typescript_expert: "Will ensure type safety maintained post-refactoring"
+    - test_generator: "Will verify behavior unchanged with regression tests"
+    - verifier: "Require: All existing tests pass + cyclomatic complexity <10"
+  
+  votes:
+    invoke_refactoring_agent: 0.88 (consensus)
+    skip_refactoring: 0.45
+    defer_to_later: 0.30
+  
+  decision: "INVOKE refactoring_agent"
+  rationale: "Code quality below standards, high consensus for automated refactoring"
+  
+  logged_to: .agents/memory/decisions_log.md
+  user_notified: "Detected code quality issues — refactoring automatically..."
+  proceed: true  # No user prompt needed
+```
+
+---
+
+### Specialized Agent Workflow Integration
+
+**Driver Enhancement: Dynamic Agent Injection**
+
+```typescript
+class SDLCDriver {
+  async executeWorkflow(workflowName: string, userRequest: string) {
+    // ... existing workflow execution ...
+    
+    // After each agent completes, check if specialized agents needed
+    for (let i = 0; i < workflow.steps.length; i++) {
+      const step = workflow.steps[i];
+      const positionCard = await this.invokeAgent(workflowId, step);
+      
+      // ✨ NEW: Check for specialized agent triggers
+      const specializedAgents = await this.detectSpecializedAgents(workflowId, positionCard);
+      
+      if (specializedAgents.length > 0) {
+        // Invoke Consensus Panel automatically
+        const consensus = await this.invokeConsensusPanel(workflowId, {
+          trigger: `Specialized agents detected: ${specializedAgents.join(', ')}`,
+          options: specializedAgents.map(a => ({
+            id: `invoke_${a}`,
+            description: `Invoke ${a} (automated code generation/refactoring)`
+          }))
+        });
+        
+        // If consensus reached, inject specialized agents into workflow
+        for (const agent of consensus.approvedAgents) {
+          // Use suffix convention for dynamic injection (e.g., step 04x for code-generator)
+          const stepNumber = step.stepNumber;
+          const suffix = 'x'; // 'x' indicates dynamically injected agent
+          await this.invokeAgent(workflowId, {
+            stepNumber,
+            stepSuffix: suffix,  // Results in filename like 04x_code_generator.md
+            agentId: agent,
+            context: "Dynamically injected by collective intelligence",
+            expectedOutput: `.agents/memory/position_cards/${workflowId}/${String(stepNumber).padStart(2, '0')}${suffix}_${agent}.md`
+          });
+        }
+      }
+    }
+  }
+  
+  /**
+   * Detect if specialized agents should be invoked
+   */
+  private async detectSpecializedAgents(
+    workflowId: string,
+    positionCard: PositionCard
+  ): Promise<string[]> {
+    const context = await this.buildProjectContext(workflowId);
+    const specializedAgents: string[] = [];
+    
+    // Check for Code Generator
+    if (shouldInvokeCodeGenerator(context)) {
+      specializedAgents.push('code-generator');
+    }
+    
+    // Check for Refactoring Agent
+    if (shouldInvokeRefactoringAgent(context)) {
+      specializedAgents.push('refactoring-agent');
+    }
+    
+    return specializedAgents;
+  }
+  
+  /**
+   * Build project context for specialized agent detection
+   */
+  private async buildProjectContext(workflowId: string): Promise<WorkflowContext> {
+    const positionCards = await this.loadAllPositionCards(workflowId);
+    
+    return {
+      hasOpenAPISpec: fs.existsSync('openapi.yaml') || fs.existsSync('openapi.json'),
+      hasImplementation: fs.existsSync('src/controllers') || fs.existsSync('src/routes'),
+      hasPrismaSchema: fs.existsSync('prisma/schema.prisma'),
+      hasTypeORMSchema: fs.existsSync('src/entities'),
+      hasDesignTokens: fs.existsSync('design-tokens.json'),
+      hasDomainModel: positionCards.some(pc => pc.agentId === 'solution-architect' && pc.claims.includes('domain model')),
+      requiresComponentLibrary: positionCards.some(pc => pc.agentId === 'prd_generator' && pc.claims.includes('component library')),
+      architecture: this.detectArchitecture(positionCards),
+      priorAgents: positionCards.map(pc => pc.agentId),
+      codeReviewIssues: this.extractCodeReviewIssues(positionCards),
+      architectureViolations: this.extractArchitectureViolations(positionCards),
+      namingInconsistencies: this.detectNamingInconsistencies(),
+      files: this.getFilesContext()
+    };
+  }
+}
+```
+
+---
+
+### Specialized Agent Detection Examples
+
+**Example 1: OpenAPI Detected → Code Generator Invoked**
+
+```
+Workflow: build_ecommerce_api
+Step 04: openapi_expert completes (openapi.yaml validated)
+
+[Driver Internal Logic]
+- Detected: openapi.yaml exists
+- Detected: No src/controllers implementation
+- Triggering: shouldInvokeCodeGenerator() → TRUE
+- Invoking: Consensus Panel
+- Panel Vote: 0.95 consensus for code_generator
+- Injecting: code_generator at step 04x (dynamically injected after openapi_expert)
+
+[User sees]
+"Detected OpenAPI specification — generating API implementation automatically...
+✨ Dynamically added: Code Generator Agent (step 04x)
+[Generating controllers, routes, services, DTOs, tests...]"
+
+[Position Card Created]
+File: .agents/memory/position_cards/build_ecommerce_api_20260205/04x_code_generator.md
+(Checkpoint-compatible: Resume will detect 04x exists and skip re-generation)
+
+[Result]
+- 12 new files generated (controllers, services, routes, tests)
+- TypeScript type checks pass
+- Tests pass (95% coverage)
+- Workflow proceeds to step 05 (typescript_expert)
+```
+
+**Example 2: Code Review Issues → Refactoring Agent Invoked**
+
+```
+Workflow: build_feature_x
+Step 07: code_reviewer completes (found 5 issues)
+
+[Driver Internal Logic]
+- Detected: code_review_issues = ['duplicate-code', 'long-method', 'complex-conditional']
+- Detected: Cyclomatic complexity = 18 (threshold 10)
+- Triggering: shouldInvokeRefactoringAgent() → TRUE
+- Invoking: Consensus Panel
+- Panel Vote: 0.88 consensus for refactoring_agent
+- Injecting: refactoring_agent at step 07x (dynamically injected after code_reviewer)
+
+[User sees]
+"Code review identified quality issues — refactoring automatically...
+✨ Dynamically added: Refactoring Agent (step 07x)
+[Extracting methods, removing duplication, simplifying conditionals...]"
+
+[Position Card Created]
+File: .agents/memory/position_cards/build_feature_x_20260205/07x_refactoring_agent.md
+(Checkpoint-compatible: Workflow resume detects 07x exists and validates refactoring completed)
+
+[Result]
+- 3 methods extracted
+- Duplication reduced 40%
+- Cyclomatic complexity: 18 → 4
+- All existing tests still pass (behavior preserved)
+- Workflow proceeds to step 08 (verifier)
+```
+
+---
+
+### Summary: Specialized Agents Integration
+
+**Key Points:**
+1. **Automatic Detection**: Driver detects when specialized agents needed (OpenAPI exists, code smells found)
+2. **Consensus-Based**: Invokes consensus panel to verify decision (no user prompt)
+3. **Dynamic Injection**: Inserts specialized agents into workflow at runtime (step 04.5, 07.5)
+4. **Transparent Logging**: Decision logged to decisions_log.md, user notified
+5. **Behavior Preservation**: Specialized agents must maintain existing test results
+
+**Benefits:**
+- ✅ Reduces manual boilerplate code (Code Generator)
+- ✅ Improves code quality automatically (Refactoring Agent)
+- ✅ No user interruption (autonomous consensus)
+- ✅ Full audit trail (position cards for specialized agents)
+
+---
+
 **End of Driver Skill**
