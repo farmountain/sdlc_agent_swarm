@@ -11,7 +11,6 @@ When users run "SDLC: Initialize Workspace", these templates are copied to:
 ├─ .sdlc/                    # ← Framework files (isolated from user projects)
 │  ├─ .agents/               # ← Agent skills, registry, memory
 │  ├─ capabilities/          # ← Capability documentation
-│  ├─ weeks/                 # ← Week-by-week learning guides
 │  └─ adoption/              # ← Onboarding documentation
 ├─ projects/                 # ← User project files (separate from framework)
 │  ├─ my-api/
@@ -34,10 +33,6 @@ templates/
 │  └─ user_memory/
 ├─ capabilities/
 │  └─ (capability files)
-├─ weeks/
-│  ├─ week-01/
-│  ├─ week-02/
-│  └─ (other weeks)
 └─ adoption/
    └─ (adoption guides)
 ```
@@ -65,8 +60,9 @@ When building the extension for distribution:
 
 1. Copy the entire `.agents/` folder from the main repository
 2. Copy the entire `capabilities/` folder
-3. Copy relevant `weeks/` content (or all of it)
-4. Copy the entire `adoption/` folder
+3. Copy the entire `adoption/` folder
+
+**Note:** The `weeks/` folder (framework development history) is intentionally excluded from user installations. Users building applications don't need the framework's development journal.
 
 ## Safety Rules
 
