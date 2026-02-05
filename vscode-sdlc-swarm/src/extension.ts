@@ -410,6 +410,15 @@ async function executeOpenSpecWorkflow(): Promise<void> {
     await injectPromptToCopilot(prompt);
 }
 
+/**
+ * Loads autonomous operation mandate from driver skill on-demand.
+ * 
+ * Design: No caching - reads fresh from disk on every workflow execution.
+ * Rationale: 
+ * - Allows users to customize driver/skill.md without reloading extension
+ * - No persistent state = no cleanup needed on uninstall
+ * - Extension leaves no traces when uninstalled
+ */
 async function loadAutonomousOperationMandate(sdlcPath: string): Promise<string> {
     try {
         const driverSkillPath = path.join(sdlcPath, '.agents', 'driver', 'skill.md');
@@ -493,5 +502,9 @@ function registerChatParticipants(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate() {
-    // Clean up if needed
+    // No cleanup needed:
+    // - Autonomous operation mandate is read on-demand from workspace files
+    // - No caching or persistent storage used
+    // - User's .sdlc/ folder remains intact (as intended - it's user data)
+    // - Extension leaves no traces in VS Code storage
 }
