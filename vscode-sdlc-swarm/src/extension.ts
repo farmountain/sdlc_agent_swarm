@@ -232,8 +232,21 @@ async function executeWorkflow(mode: string, workflow: string, title: string): P
     // Auto-detect evidence pointers
     const evidencePointers = await detectEvidenceFiles(workspaceFolder.uri.fsPath);
 
-    // Build canonical prompt
+    // Load autonomous operation mandate from driver skill
+    const autonomousMandate = await loadAutonomousOperationMandate(sdlcPath);
+
+    // Build canonical prompt with autonomous operation mandate
     const promptLines = [
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '⚡⚡⚡ AUTONOMOUS OPERATION MANDATE ⚡⚡⚡ (NON-NEGOTIABLE)',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '',
+        autonomousMandate,
+        '',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        'WORKFLOW EXECUTION',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '',
         'Use the SDLC Swarm Driver skill.',
         '',
         `Mode=${mode}`,
@@ -395,6 +408,73 @@ async function executeOpenSpecWorkflow(): Promise<void> {
     
     // Inject into Copilot Chat
     await injectPromptToCopilot(prompt);
+}
+
+async function loadAutonomousOperationMandate(sdlcPath: string): Promise<string> {
+    try {
+        const driverSkillPath = path.join(sdlcPath, '.agents', 'driver', 'skill.md');
+        
+        if (!fs.existsSync(driverSkillPath)) {
+            // Fallback: Use embedded mandate if driver skill not found
+            return getEmbeddedAutonomousMandate();
+        }
+
+        const driverContent = fs.readFileSync(driverSkillPath, 'utf8');
+        
+        // Extract autonomous operation mandate section (lines 1-150)
+        const lines = driverContent.split('\n');
+        const mandateEnd = lines.findIndex((line, idx) => idx > 50 && line.includes('---'));
+        
+        if (mandateEnd > 0) {
+            return lines.slice(0, mandateEnd).join('\n');
+        }
+        
+        // Fallback if parsing fails
+        return getEmbeddedAutonomousMandate();
+    } catch (error) {
+        console.error('Failed to load autonomous operation mandate:', error);
+        return getEmbeddedAutonomousMandate();
+    }
+}
+
+function getEmbeddedAutonomousMandate(): string {
+    return `
+🚫 ABSOLUTE PROHIBITIONS 🚫
+
+YOU ARE STRICTLY FORBIDDEN FROM:
+1. ❌ Presenting options to the user ("Option A or Option B?")
+2. ❌ Asking preference questions ("Which do you prefer?")
+3. ❌ Seeking tactical approval ("Should I use X or Y?")
+4. ❌ Requesting technology choices ("PostgreSQL or MongoDB?")
+5. ❌ Waiting for design decisions ("REST or GraphQL?")
+6. ❌ Stopping workflow for non-critical choices
+7. ❌ Using phrases like "Would you like me to..." for implementation details
+8. ❌ Creating multiple implementation options for user to choose from
+
+✅ MANDATORY BEHAVIOR ✅
+
+YOU MUST ALWAYS:
+1. ✅ Invoke Consensus Panel automatically for ANY decision point
+2. ✅ Make decisions autonomously using multi-agent weighted voting
+3. ✅ Log decisions to decisions_log.md (for transparency only, not approval)
+4. ✅ Proceed with workflow immediately after consensus
+5. ✅ Act like a long-running autonomous agent (CI/CD pipeline, not chatbot)
+6. ✅ Treat this as production automation (automated, unattended)
+
+🎯 CRITICAL = Requires Human Approval (ONLY 5 cases):
+1. ✋ Production deployment (pushing to prod environment)
+2. ✋ Data loss risk (irreversible database operations on prod data)
+3. ✋ Security breach (hard invariant violation INV-xxx-SECURITY)
+4. ✋ Compliance violation (audit, legal, regulatory requirements)
+5. ✋ Budget overrun >50% ($50k project becoming $75k+)
+
+EVERYTHING ELSE = Autonomous Consensus (99% of decisions):
+- Architecture choices (PostgreSQL vs MongoDB, REST vs GraphQL)
+- Library selection (Passport.js vs Auth0, Express vs Fastify)
+- Design patterns (Repository vs Active Record, MVC vs Clean Architecture)
+- Tech stack (React vs Vue, TypeScript vs JavaScript)
+- File structure, testing strategy, deployment strategy, code organization
+`;
 }
 
 async function injectPromptToCopilot(prompt: string): Promise<void> {

@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.1.7] - 2026-02-06
+
+### 🔒 Autonomous Operation Enforcement (System Prompt Injection)
+
+**Context:** User asked "when installing the sdlc swarm extension, can we make the driver's autonomous operation mandate to its system prompts?"
+
+**Problem:** Extension told Copilot Chat to "use SDLC Swarm Driver skill" but didn't inject the autonomous operation mandate into the prompt. Result: AI could still ask "Should I..." for routine decisions.
+
+**Solution:** Modified `extension.ts` to automatically inject autonomous operation mandate into every Copilot Chat prompt:
+
+#### Implementation
+1. **`loadAutonomousOperationMandate()`** - Loads driver/skill.md lines 1-150 (autonomous operation section)
+2. **`getEmbeddedAutonomousMandate()`** - Fallback if driver skill not found
+3. **`executeWorkflow()`** - Prepends mandate to every prompt before injection:
+   ```
+   ⚡⚡⚡ AUTONOMOUS OPERATION MANDATE ⚡⚡⚡
+   
+   🚫 ABSOLUTE PROHIBITIONS: No "Should I...", no options, no tactical approval
+   ✅ MANDATORY BEHAVIOR: Auto-invoke Consensus Panel, make decisions autonomously
+   🎯 ONLY 5 CRITICAL: Prod deployment, data loss, security, compliance, budget
+   
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   WORKFLOW EXECUTION
+   Use the SDLC Swarm Driver skill.
+   Mode=RUN_SDLC
+   Workflow=plan_to_prd
+   Objective=...
+   ```
+
+#### Impact
+- ✅ AI models (GPT-4o, Claude, etc.) see autonomous operation rules **before** workflow execution
+- ✅ Eliminates "Should I..." prompts by enforcing rules at system prompt level
+- ✅ Autonomous operation mandate now enforced for all 13 SDLC commands
+- ✅ Ensures consistent autonomous behavior across all AI backends
+
+#### Files Modified
+- `vscode-sdlc-swarm/src/extension.ts` (+50 lines: mandate loading/injection logic)
+
+---
+
 ## [0.1.6] - 2026-02-05
 
 ### 🎨 Complete Agent Architecture (6 New Priority Agents)
